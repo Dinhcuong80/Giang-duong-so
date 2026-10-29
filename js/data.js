@@ -9,59 +9,69 @@ const KHOA = [
   { id: 'K61', ten: 'Khóa 61', nien: '2026 – 2030', nam: 1, siso: 1532 }
 ];
 
-/* 10 môn học của Bộ môn Lý luận TDTT */
+/* 11 môn của Bộ môn Lý luận TDTT. Quy đổi: 15 tiết = 1 tín chỉ.
+   Việc phân môn cho từng khóa hiện là tạm, thầy sửa lại cho đúng kế hoạch đào tạo. */
 const MON = [
   {
-    id: 'LLPP',  ma: 'LL101', ten: 'Lý luận và Phương pháp thể dục thể thao',
-    tc: 3, khoa: ['K61'], ky: 'Học kỳ 1',
-    tomtat: 'Những khái niệm nền tảng của ngành: thể dục thể thao, giáo dục thể chất, huấn luyện thể thao và mối quan hệ giữa chúng trong hệ thống TDTT nước ta.'
+    id: 'LLPP', ma: 'LL101', ten: 'Lý luận và phương pháp thể dục thể thao',
+    tiet: 45, khoa: ['K61'], ky: 'Học kỳ 1',
+    tomtat: 'Những khái niệm nền tảng của ngành: thể dục thể thao, giáo dục thể chất, huấn luyện thể thao và quan hệ giữa chúng trong hệ thống TDTT nước ta.'
   },
   {
-    id: 'HLTT1', ma: 'LL201', ten: 'Lý luận và Phương pháp huấn luyện thể thao 1',
-    tc: 3, khoa: ['K60'], ky: 'Học kỳ 1',
+    id: 'LSTDTT', ma: 'LL102', ten: 'Lịch sử thể dục thể thao',
+    tiet: 30, khoa: ['K61'], ky: 'Học kỳ 1',
+    tomtat: 'Quá trình hình thành và phát triển của thể dục thể thao thế giới và Việt Nam qua các thời kỳ.'
+  },
+  {
+    id: 'HDTN', ma: 'LL103', ten: 'Hoạt động trải nghiệm thể dục thể thao',
+    tiet: 30, khoa: ['K61'], ky: 'Học kỳ 2',
+    tomtat: 'Tổ chức các hoạt động trải nghiệm TDTT cho người học: thiết kế, triển khai và đánh giá hoạt động.'
+  },
+  {
+    id: 'GDTC1', ma: 'LL201', ten: 'Lý luận và phương pháp giáo dục thể chất 1',
+    tiet: 30, khoa: ['K60'], ky: 'Học kỳ 1',
+    tomtat: 'Cơ sở lý luận của giáo dục thể chất: mục tiêu, nhiệm vụ, nguyên tắc và các phương tiện giáo dục thể chất.'
+  },
+  {
+    id: 'HLTT1', ma: 'LL202', ten: 'Lý luận và phương pháp huấn luyện thể thao 1',
+    tiet: 30, khoa: ['K60'], ky: 'Học kỳ 1',
     tomtat: 'Bản chất của huấn luyện thể thao, các nguyên tắc huấn luyện, lượng vận động và quá trình thích nghi của cơ thể vận động viên.'
   },
   {
-    id: 'HLTT2', ma: 'LL202', ten: 'Lý luận và Phương pháp huấn luyện thể thao 2',
-    tc: 3, khoa: ['K59'], ky: 'Học kỳ 1',
+    id: 'GDTC', ma: 'LL203', ten: 'Lý luận và phương pháp giáo dục thể chất',
+    tiet: 30, khoa: ['K60'], ky: 'Học kỳ 2',
+    tomtat: 'Nội dung và phương pháp giáo dục thể chất cho các đối tượng khác nhau, gắn với thực tiễn nghề nghiệp.'
+  },
+  {
+    id: 'GDTC2', ma: 'LL204', ten: 'Lý luận và phương pháp giáo dục thể chất 2',
+    tiet: 30, khoa: ['K59'], ky: 'Học kỳ 1',
+    tomtat: 'Phương pháp dạy học động tác và phát triển tố chất thể lực trong giáo dục thể chất.'
+  },
+  {
+    id: 'HLTT2', ma: 'LL205', ten: 'Lý luận và phương pháp huấn luyện thể thao 2',
+    tiet: 30, khoa: ['K59'], ky: 'Học kỳ 1',
     tomtat: 'Cấu trúc chu kỳ huấn luyện, kế hoạch huấn luyện nhiều năm và điều khiển trạng thái sung sức thể thao.'
   },
   {
-    id: 'GDTC',  ma: 'LL203', ten: 'Lý luận và Phương pháp giáo dục thể chất',
-    tc: 2, khoa: ['K60', 'K61'], ky: 'Học kỳ 2',
-    tomtat: 'Mục tiêu, nội dung và phương pháp giáo dục thể chất trong trường học các cấp.'
+    id: 'GDTCTH', ma: 'LL206', ten: 'Lý luận và phương pháp giáo dục thể chất trong trường học',
+    tiet: 30, khoa: ['K59'], ky: 'Học kỳ 2',
+    tomtat: 'Tổ chức công tác giáo dục thể chất trong trường học các cấp: chương trình, giờ học chính khóa và hoạt động ngoại khóa.'
   },
   {
-    id: 'DOLUONG', ma: 'LL301', ten: 'Đo lường thể thao',
-    tc: 2, khoa: ['K59'], ky: 'Học kỳ 2',
-    tomtat: 'Lý thuyết test, tính thông báo và độ tin cậy của test; đánh giá trình độ tập luyện bằng thang điểm.'
+    id: 'HTHL', ma: 'LL301', ten: 'Học thuyết huấn luyện',
+    tiet: 45, khoa: ['K58'], ky: 'Học kỳ 1',
+    tomtat: 'Cơ sở khoa học của huấn luyện thể thao: thích nghi, tải trọng và hồi phục, kiểm tra đánh giá trình độ tập luyện.'
   },
   {
-    id: 'TUYENCHON', ma: 'LL302', ten: 'Tuyển chọn tài năng thể thao',
-    tc: 2, khoa: ['K58'], ky: 'Học kỳ 1',
-    tomtat: 'Tiêu chí và quy trình tuyển chọn tài năng thể thao qua các giai đoạn huấn luyện ban đầu đến chuyên sâu.'
-  },
-  {
-    id: 'QUANLY', ma: 'LL303', ten: 'Quản lý thể dục thể thao',
-    tc: 2, khoa: ['K58'], ky: 'Học kỳ 1',
-    tomtat: 'Chức năng quản lý trong lĩnh vực TDTT: lập kế hoạch, tổ chức, điều hành và kiểm tra hoạt động TDTT.'
-  },
-  {
-    id: 'XAHOI', ma: 'LL304', ten: 'Xã hội học thể dục thể thao',
-    tc: 2, khoa: ['K59'], ky: 'Học kỳ 2',
-    tomtat: 'TDTT như một hiện tượng xã hội: thể thao và văn hóa, thể thao và truyền thông, phong trào TDTT quần chúng.'
-  },
-  {
-    id: 'NCKH',  ma: 'LL401', ten: 'Phương pháp nghiên cứu khoa học thể dục thể thao',
-    tc: 3, khoa: ['K58'], ky: 'Học kỳ 1',
-    tomtat: 'Chọn đề tài, xây dựng giả thuyết, các phương pháp nghiên cứu thường dùng và cách xử lý số liệu trong nghiên cứu TDTT.'
-  },
-  {
-    id: 'OLYMPIC', ma: 'LL305', ten: 'Olympic và phong trào thể thao quốc tế',
-    tc: 2, khoa: ['K60'], ky: 'Học kỳ 2',
-    tomtat: 'Lịch sử phong trào Olympic hiện đại, hệ thống tổ chức thể thao quốc tế và vị thế của Việt Nam.'
+    id: 'HLTTCC', ma: 'LL302', ten: 'Lý luận và phương pháp huấn luyện thể thao thành tích cao',
+    tiet: 45, khoa: ['K58'], ky: 'Học kỳ 1',
+    tomtat: 'Đặc điểm huấn luyện vận động viên trình độ cao: tuyển chọn, chuyên môn hóa sâu và chuẩn bị cho thi đấu đỉnh cao.'
   }
 ];
+
+/* Quy đổi tiết sang tín chỉ theo quy định của trường */
+const TIET_MOI_TC = 15;
+const soTC = tiet => tiet / TIET_MOI_TC;
 
 /* Bài học — mỗi môn một chương mẫu; thầy thêm chương và bài qua trang quản lý */
 const BAI = [
@@ -115,8 +125,8 @@ const BAI = [
 <h3>Ba thời kỳ trong chu kỳ lớn</h3>
 <p>Thời kỳ chuẩn bị xây nền thể lực chung rồi chuyển sang chuyên môn. Thời kỳ thi đấu duy trì sung sức và dồn vào các giải chính. Thời kỳ chuyển tiếp giảm tải để cơ thể hồi phục, chuẩn bị cho chu kỳ sau.</p>` },
 
-  /* --- Đo lường thể thao --- */
-  { id: 'b5', mon: 'DOLUONG', chuong: 'Chương 1. Lý thuyết test', so: 1,
+  /* --- Học thuyết huấn luyện --- */
+  { id: 'b5', mon: 'HTHL', chuong: 'Chương 1. Kiểm tra đánh giá trong huấn luyện', so: 1,
     ten: 'Test và các yêu cầu của một test tốt', phut: 45, co_video: false, co_slide: true,
     noidung: `<p>Test trong thể thao là phép đo được chuẩn hóa, dùng để đánh giá một mặt nào đó của trình độ tập luyện.</p>
 <h3>Bốn yêu cầu</h3>
@@ -140,18 +150,19 @@ const BAI = [
 <h3>Thể dục thể thao</h3>
 <p>Khái niệm rộng nhất, bao gồm toàn bộ hoạt động vận động có tổ chức của xã hội: giáo dục thể chất, thể thao thành tích cao, thể thao quần chúng, thể dục hồi phục.</p>` },
 
-  /* --- NCKH --- */
-  { id: 'b7', mon: 'NCKH', chuong: 'Chương 1. Chọn đề tài', so: 1,
-    ten: 'Vấn đề nghiên cứu và câu hỏi nghiên cứu', phut: 50, co_video: false, co_slide: true,
-    noidung: `<p>Một đề tài nghiên cứu bắt đầu từ chỗ nhận ra khoảng trống giữa điều ta đã biết và điều thực tiễn đang cần biết.</p>
-<h3>Dấu hiệu của một vấn đề nghiên cứu được</h3>
+  /* --- Lý luận và phương pháp giáo dục thể chất 1 --- */
+  { id: 'b7', mon: 'GDTC1', chuong: 'Chương 1. Cơ sở lý luận của giáo dục thể chất', so: 1,
+    ten: 'Mục tiêu và nhiệm vụ của giáo dục thể chất', phut: 45, co_video: false, co_slide: true,
+    noidung: `<p>Giáo dục thể chất là một mặt của giáo dục toàn diện, hướng tới sự phát triển hài hòa về thể chất và tinh thần của người học.</p>
+<h3>Ba nhóm nhiệm vụ</h3>
 <ul>
-<li>Có người quan tâm tới câu trả lời, nghĩa là giải quyết được thì có ích.</li>
-<li>Chưa có câu trả lời đủ thuyết phục trong tài liệu hiện có.</li>
-<li>Có thể thu được số liệu để trả lời trong điều kiện của người nghiên cứu.</li>
+<li><b>Nhiệm vụ giáo dưỡng.</b> Trang bị kỹ năng, kỹ xảo vận động và hiểu biết cần thiết để người học tự tập luyện được.</li>
+<li><b>Nhiệm vụ sức khỏe.</b> Củng cố sức khỏe, phát triển các tố chất thể lực, hình thành tư thế đúng.</li>
+<li><b>Nhiệm vụ giáo dục.</b> Rèn ý chí, tính kỷ luật, tinh thần tập thể thông qua hoạt động vận động.</li>
 </ul>
-<h3>Từ vấn đề tới câu hỏi</h3>
-<p>Vấn đề thường phát biểu rộng, ví dụ thể lực sinh viên giảm sút. Câu hỏi nghiên cứu phải hẹp và đo được, ví dụ: sau một học kỳ áp dụng bài tập bổ trợ, sức bền chung của sinh viên năm thứ nhất thay đổi như thế nào.</p>` }
+<blockquote>Một giờ thể dục chỉ dạy động tác mà không để lại thói quen vận động thì mới làm được một phần ba công việc.</blockquote>
+<h3>Quan hệ giữa ba nhiệm vụ</h3>
+<p>Ba nhiệm vụ được giải quyết đồng thời trong cùng một giờ học, không tách rời. Khi người dạy chỉ chú ý tới động tác mà bỏ qua hứng thú và thói quen tập luyện, hiệu quả lâu dài của giáo dục thể chất gần như bằng không.</p>` }
 ];
 
 /* Câu hỏi trắc nghiệm theo môn */
@@ -182,7 +193,7 @@ const QUIZ = {
         giaithich: 'Cả hai đều dùng bài tập thể chất làm phương tiện. Khác nhau ở mục tiêu: một bên là sức khỏe cho mọi người, một bên là thành tích tối đa.' }
     ]
   },
-  DOLUONG: {
+  HTHL: {
     ten: 'Kiểm tra Chương 1',
     phut: 10,
     cauhoi: [

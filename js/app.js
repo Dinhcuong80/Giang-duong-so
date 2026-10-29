@@ -64,6 +64,9 @@ const I = {
 
 /* ---------- Dữ liệu dẫn xuất ------------------------------------------ */
 
+/* "30 tiết · 2 tín chỉ" */
+const nhanTiet = m => `${m.tiet} tiết · ${soTC(m.tiet)} tín chỉ`;
+
 const tatCaBai = () => BAI.concat(D.baiThem);
 const baiCuaMon = id => tatCaBai().filter(b => b.mon === id).sort((a, b) => a.so - b.so);
 const timMon = id => MON.find(m => m.id === id);
@@ -181,7 +184,7 @@ function ketQuaTim(q) {
   const r = [];
   monCuaToi().forEach(m => {
     if ((m.ten + ' ' + m.ma).toLowerCase().includes(k))
-      r.push({ loai: 'mon', id: m.id, ten: m.ten, phu: `${m.ma} · ${m.tc} tín chỉ` });
+      r.push({ loai: 'mon', id: m.id, ten: m.ten, phu: `${m.ma} · ${nhanTiet(m)}` });
   });
   const bo = h => h.replace(/<[^>]*>/g, ' ');
   tatCaBai().forEach(b => {
@@ -235,7 +238,7 @@ function dangNhap() {
       </div>
       <div>
         <h1>Lý luận thể dục thể thao, học theo chu kỳ</h1>
-        <p>Nơi sinh viên bốn khóa theo học mười môn của Bộ môn Lý luận TDTT: đọc bài, làm bài kiểm tra và theo dõi tiến độ của chính mình qua từng tuần.</p>
+        <p>Nơi sinh viên bốn khóa theo học các môn của Bộ môn Lý luận TDTT: đọc bài, làm bài kiểm tra và theo dõi tiến độ của chính mình qua từng tuần.</p>
         <div class="cycle">${bieuDoChuKy()}
           <div class="cycle-key">
             <span><i style="background:#e0a516"></i>Lượng vận động kế hoạch</span>
@@ -382,7 +385,7 @@ function hangMon(m, i) {
   return `
   <button class="row row-subject" data-act="mo-mon" data-id="${m.id}">
     <span class="row-num">${String(i + 1).padStart(2, '0')}</span>
-    <span><b>${esc(m.ten)}</b><span class="meta">${esc(m.ma)} · ${m.tc} tín chỉ · ${bs.length} bài</span></span>
+    <span><b>${esc(m.ten)}</b><span class="meta">${esc(m.ma)} · ${nhanTiet(m)} · ${bs.length} bài</span></span>
     <span class="hide-sm"><span class="load-bar ${td === 100 ? 'go' : td ? 'accent' : ''}"><i style="width:${td}%"></i></span></span>
     <span class="hide-sm meta">${td}%</span>
     <span>${D.diem[m.id]
@@ -399,7 +402,7 @@ function svDanhSachMon() {
   return `
   <div class="page-head">
     <h1>Môn học của tôi</h1>
-    <p class="meta">Mười môn của Bộ môn Lý luận TDTT được phân cho bốn khóa. Dưới đây là các môn thuộc ${esc(S.user.khoa)}.</p>
+    <p class="meta">${MON.length} môn của Bộ môn Lý luận TDTT được phân cho bốn khóa. Dưới đây là các môn thuộc ${esc(S.user.khoa)}.</p>
   </div>
 
   <section class="panel" style="margin-bottom:24px">
@@ -415,7 +418,7 @@ function svDanhSachMon() {
       ${khac.map((m, i) => `
         <div class="row row-subject" style="opacity:.62">
           <span class="row-num">${String(i + 1).padStart(2, '0')}</span>
-          <span><b>${esc(m.ten)}</b><span class="meta">${esc(m.ma)} · ${m.tc} tín chỉ</span></span>
+          <span><b>${esc(m.ten)}</b><span class="meta">${esc(m.ma)} · ${nhanTiet(m)}</span></span>
           <span class="hide-sm meta">${m.khoa.join(', ')}</span>
           <span class="hide-sm"></span>
           <span><span class="tag">${esc(m.ky)}</span></span>
@@ -445,7 +448,7 @@ function svChiTietMon() {
   </div>
 
   <div class="stats" style="margin-bottom:18px">
-    <div class="stat"><b>${m.tc}</b><span>Tín chỉ</span></div>
+    <div class="stat"><b>${m.tiet}</b><span>Tiết</span><i>${soTC(m.tiet)} tín chỉ</i></div>
     <div class="stat"><b>${bs.length}</b><span>Bài học</span></div>
     <div class="stat"><b>${td}%</b><span>Đã hoàn thành</span></div>
     <div class="stat"><b>${dq ? dq.diem.toFixed(1) : '—'}</b><span>Điểm kiểm tra</span></div>
@@ -699,7 +702,7 @@ function svBangDiem() {
     <div class="stat"><b>${co.length}</b><span>Môn đã có điểm</span></div>
     <div class="stat"><b>${tb ? tb.toFixed(1) : '—'}</b><span>Trung bình chung</span></div>
     <div class="stat"><b>${tongTienDo()}%</b><span>Tiến độ học</span></div>
-    <div class="stat"><b>${ms.reduce((s, m) => s + m.tc, 0)}</b><span>Tổng tín chỉ</span></div>
+    <div class="stat"><b>${ms.reduce((s, m) => s + m.tiet, 0)}</b><span>Tổng số tiết</span><i>${soTC(ms.reduce((s, m) => s + m.tiet, 0))} tín chỉ</i></div>
   </div>
 
   <section class="panel">
@@ -714,7 +717,7 @@ function svBangDiem() {
         const cls = !d ? '' : d.diem >= 7 ? 'tag-go' : d.diem >= 5 ? 'tag-wait' : 'tag-stop';
         return `
         <div class="row row-grade">
-          <span><b>${esc(m.ten)}</b><span class="meta">${esc(m.ma)} · ${m.tc} tín chỉ</span></span>
+          <span><b>${esc(m.ten)}</b><span class="meta">${esc(m.ma)} · ${nhanTiet(m)}</span></span>
           <span class="hide-sm meta">${tienDo(m.id)}%</span>
           <span style="font-family:var(--ff-head);font-size:17px;font-weight:600">${d ? d.diem.toFixed(1) : '—'}</span>
           <span>${d ? `<span class="tag ${cls}">${xl}</span>` : '<span class="meta">Chưa làm</span>'}</span>
@@ -842,7 +845,7 @@ function gvQuanLy() {
 function gvBangMon() {
   return `
   <section class="panel">
-    <div class="panel-head"><h2>Mười môn của bộ môn</h2><span class="meta">Bấm vào môn để xem nội dung</span></div>
+    <div class="panel-head"><h2>${MON.length} môn của bộ môn</h2><span class="meta">Bấm vào môn để xem nội dung</span></div>
     <div class="row row-subject" style="background:var(--paper);font-size:13px;color:var(--ink-mute);border-bottom:1.5px solid var(--line)">
       <span></span><span>Môn học</span><span class="hide-sm">Khóa</span><span class="hide-sm">Bài</span><span>Đề kiểm tra</span>
     </div>
@@ -850,7 +853,7 @@ function gvBangMon() {
       ${MON.map((m, i) => `
         <button class="row row-subject" data-act="mo-mon" data-id="${m.id}">
           <span class="row-num">${String(i + 1).padStart(2, '0')}</span>
-          <span><b>${esc(m.ten)}</b><span class="meta">${esc(m.ma)} · ${m.tc} tín chỉ · ${esc(m.ky)}</span></span>
+          <span><b>${esc(m.ten)}</b><span class="meta">${esc(m.ma)} · ${nhanTiet(m)} · ${esc(m.ky)}</span></span>
           <span class="hide-sm meta">${m.khoa.join(', ')}</span>
           <span class="hide-sm meta">${baiCuaMon(m.id).length} bài</span>
           <span>${QUIZ[m.id]
