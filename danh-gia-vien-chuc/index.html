@@ -167,7 +167,7 @@ table.ys tr.tot td{background:#f8fafc;font-weight:700}
    Mẫu 2 in khổ dọc; Mẫu 3 (17 cột) in khổ ngang. */
 #printArea{display:none}
 @page{size:A4 portrait;margin:1.5cm 1.5cm 1.5cm 2cm}
-@page land{size:A4 landscape;margin:1.5cm 1.5cm 1.5cm 2cm}
+@page land{size:A4 landscape;margin:2cm 1.5cm 1.5cm 1.5cm}
 @media print{
   html,body{background:#fff}
   .top,.wrap,.footer,.noprint,#toast,#modal{display:none !important}
@@ -178,35 +178,43 @@ table.ys tr.tot td{background:#f8fafc;font-weight:700}
   tr{page-break-inside:avoid}
   thead{display:table-header-group}
 }
-.pdoc{font-family:"Times New Roman",Times,serif;color:#000;font-size:13pt;line-height:1.35}
+/* Cỡ chữ lấy theo file mẫu của Nhà trường:
+   tiêu đề phiếu 14pt đậm · quốc hiệu 12pt · thông tin cá nhân 13pt
+   · thân văn bản và bảng 12pt · dòng chấm 8pt */
+.pdoc{font-family:"Times New Roman",Times,serif;color:#000;font-size:12pt;line-height:1.35;text-align:justify}
 .pdoc .mau{text-align:right;font-size:12pt;font-weight:bold;margin-bottom:2pt}
 .pdoc .ph{width:100%;border-collapse:collapse;margin-bottom:6pt}
-.pdoc .ph td{width:50%;text-align:center;font-size:12pt;vertical-align:top;border:0;padding:0;line-height:1.25}
+.pdoc .ph td{text-align:center;font-size:12pt;vertical-align:top;border:0;padding:0;line-height:1.25}
+.pdoc .ph td:first-child{width:44%}
+.pdoc .ph td:last-child{width:56%}
 .pdoc .ph b{display:block}
 .pdoc h3{text-align:center;font-size:14pt;margin:12pt 0 3pt;text-transform:uppercase;font-weight:bold}
 .pdoc .pc{text-align:center;margin:0 0 9pt;font-size:13pt}
 .pdoc .pinfo{margin:0 0 8pt;font-size:13pt}
 .pdoc .pinfo div{margin:2.5pt 0}
-.pdoc .psec{font-weight:bold;margin:10pt 0 5pt;font-size:13pt}
-.pdoc table.pt{width:100%;border-collapse:collapse;font-size:11pt;table-layout:fixed}
-.pdoc table.pt th,.pdoc table.pt td{border:.75pt solid #000;padding:2.6pt 3.5pt;vertical-align:top;
+.pdoc .psec{font-weight:bold;margin:10pt 0 5pt;font-size:12pt}
+.pdoc .dots{font-size:8pt}
+.pdoc table.pt{width:100%;border-collapse:collapse;font-size:12pt;table-layout:fixed}
+.pdoc table.pt th,.pdoc table.pt td{border:.75pt solid #000;padding:1.4pt 2.4pt;vertical-align:top;
   word-wrap:break-word;overflow-wrap:break-word}
 .pdoc table.pt thead th{text-align:center;font-weight:bold;vertical-align:middle}
 .pdoc table.pt td.c{text-align:center}
 .pdoc table.pt tr.b td{font-weight:bold}
-.pdoc .pres{margin-top:9pt;font-size:13pt}
+.pdoc .pres{margin-top:9pt;font-size:12pt}
 .pdoc .pres div{margin:3pt 0}
-.pdoc .psign{width:100%;border-collapse:collapse;margin-top:16pt;font-size:13pt}
+.pdoc .psign{width:100%;border-collapse:collapse;margin-top:16pt;font-size:12pt;text-align:center}
 .pdoc .psign td{border:0;text-align:center;vertical-align:top;width:50%}
 .pdoc .psign i{font-size:12pt}
-.pdoc .pmarks{font-size:13pt}
-.pdoc .wide{font-size:8pt}
+.pdoc .psign td{text-align:center}
+.pdoc .pmarks{font-size:12pt}
+.pdoc .wide{font-size:9pt}
 .pdoc .wide th,.pdoc .wide td{padding:1.5pt 2pt}
-.pdoc .note-sm{font-size:11pt;margin-top:5pt}
+.pdoc .prev-note{font-size:11pt}
+.pdoc .note-sm{font-size:12pt;margin-top:5pt;font-weight:bold}
 /* xem trước trong trang: mô phỏng tờ A4 đúng lề */
 .prev .pdoc{background:#fff;margin:0 auto 20px;box-shadow:0 1px 6px rgba(0,0,0,.18);
   width:21cm;padding:1.5cm 1.5cm 1.5cm 2cm;box-sizing:border-box}
-.prev .pdoc.land{width:29.7cm}
+.prev .pdoc.land{width:29.7cm;padding:2cm 1.5cm 1.5cm 1.5cm}
 .prev{background:#eef1f5;padding:18px;overflow:auto}
 </style>
 </head>
@@ -1115,7 +1123,7 @@ function printPhieu(qi){
   return `
   <div class="pdoc">
     <div class="mau">Mẫu 2</div>
-    <table class="ph"><tr>
+    <table class="ph"><colgroup><col style="width:44%"><col style="width:56%"></colgroup><tr>
       <td>BỘ VĂN HÓA, THỂ THAO VÀ DU LỊCH<br><b>TRƯỜNG ĐẠI HỌC TDTT BẮC NINH</b></td>
       <td><b>CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM</b><br><b>Độc lập - Tự do - Hạnh phúc</b></td>
     </tr></table>
@@ -1123,14 +1131,16 @@ function printPhieu(qi){
     <div class="pc">Tháng/Quý: <b>${qi}</b> &nbsp;&nbsp; Năm: <b>${esc(i.nam)}</b></div>
     <div class="pinfo">
       <div>Họ tên: <b>${esc(i.hoTen.toUpperCase())}</b></div>
-      <div>Chức vụ: ${esc(i.chucVu)||dots(28)} &nbsp;&nbsp; Chức danh: ${mark(i.chucDanh==='GV')} Giảng viên &nbsp; ${mark(i.chucDanh==='CB')} Cán bộ</div>
-      <div>Đơn vị công tác: ${esc(i.donVi)||dots(40)}</div>
+      <div>Chức vụ: ${esc(i.chucVu)||'&nbsp;'.repeat(26)} &nbsp;&nbsp; Chức danh: ${mark(i.chucDanh==='GV')} Giảng viên &nbsp;&nbsp; ${mark(i.chucDanh==='CB')} Cán bộ</div>
+      <div>Đơn vị công tác: ${esc(i.donVi)||'&nbsp;'.repeat(40)}</div>
     </div>
     <div class="psec">A. NỘI DUNG TỰ ĐÁNH GIÁ, XẾP LOẠI</div>
     <table class="pt">
+      <colgroup><col style="width:5.4%"><col style="width:68.1%"><col style="width:5.7%">
+        <col style="width:7.1%"><col style="width:7.1%"><col style="width:6.6%"></colgroup>
       <thead>
-        <tr><th rowspan="2" style="width:30px">TT</th><th rowspan="2">Tiêu chí đánh giá</th><th colspan="4">Điểm</th></tr>
-        <tr><th style="width:42px">Tối đa</th><th style="width:42px">Tự ĐG</th><th style="width:42px">Đơn vị</th><th style="width:42px">Trường</th></tr>
+        <tr><th rowspan="2">TT</th><th rowspan="2">Tiêu chí đánh giá</th><th colspan="4">Điểm</th></tr>
+        <tr><th>Tối đa</th><th>Tự ĐG</th><th>Đơn vị</th><th>Trường</th></tr>
       </thead>
       <tbody>
         <tr class="b"><td class="c">A</td><td>TIÊU CHÍ CHUNG</td><td class="c">100</td><td class="c">${fmt(c.A,0)}</td><td></td><td></td></tr>
@@ -1168,7 +1178,7 @@ function printPhieu(qi){
     <div class="psec">B. NHẬN XÉT, ĐÁNH GIÁ CỦA CẤP CÓ THẨM QUYỀN</div>
     <div>
       <div>1.1. Nhận xét, đánh giá của người trực tiếp quản lý, phân công công việc:</div>
-      <div>${dots(80)}</div><div>${dots(80)}</div>
+      <div class="dots">${dots(80)}</div><div class="dots">${dots(80)}</div>
       <div style="margin-top:4pt">1.2. Đề nghị mức xếp loại: ☐ HTXS &nbsp; ☐ HTT &nbsp; ☐ HT &nbsp; ☐ Không HT</div>
     </div>
     <table class="psign"><tr><td></td><td>
@@ -1178,7 +1188,7 @@ function printPhieu(qi){
     <div>
       <div>2. Ý kiến thẩm định của bộ phận tham mưu công tác tổ chức cán bộ:</div>
       <div>2.1. Ý kiến thẩm định kết quả tự đánh giá của viên chức:</div>
-      <div>${dots(80)}</div><div>${dots(80)}</div>
+      <div class="dots">${dots(80)}</div><div class="dots">${dots(80)}</div>
       <div>2.2. Đánh giá chất lượng sản phẩm đầu ra, hiệu quả thực hiện nhiệm vụ của viên chức:</div>
       <div class="pmarks">☐ Chủ động tiếp cận, giải quyết hiệu quả vấn đề, có kết quả cụ thể</div>
       <div class="pmarks">☐ Cơ bản đáp ứng yêu cầu nhưng còn hạn chế, cần tiếp tục hoàn thiện</div>
@@ -1191,7 +1201,7 @@ function printPhieu(qi){
     <div class="psec">C. KẾT QUẢ XẾP LOẠI CHẤT LƯỢNG VIÊN CHỨC</div>
     <div>
       <div>Hội đồng đánh giá quyết định mức xếp loại chất lượng:</div>
-      <div>${dots(80)}</div>
+      <div class="dots">${dots(80)}</div>
       <div class="pmarks">☐ HTXS &nbsp;&nbsp; ☐ HTT &nbsp;&nbsp; ☐ HT &nbsp;&nbsp; ☐ Không HT</div>
     </div>
     <table class="psign"><tr><td></td><td>
@@ -1230,7 +1240,7 @@ function printBangTheoDoi(qi){
   return `
   <div class="pdoc land">
     <div class="mau">Mẫu ${khoi==='HC'?'3b - HC':'3a - GV'}</div>
-    <table class="ph"><tr>
+    <table class="ph"><colgroup><col style="width:44%"><col style="width:56%"></colgroup><tr>
       <td>BỘ VĂN HÓA, THỂ THAO VÀ DU LỊCH<br><b>TRƯỜNG ĐẠI HỌC TDTT BẮC NINH</b></td>
       <td><b>CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM</b><br><b>Độc lập - Tự do - Hạnh phúc</b></td>
     </tr></table>
@@ -1239,19 +1249,11 @@ function printBangTheoDoi(qi){
       Tháng/Quý: <b>${qi}</b> &nbsp;&nbsp; Năm: <b>${esc(i.nam)}</b></div>
     <div class="pinfo">
       <div>Họ tên: <b>${esc(i.hoTen.toUpperCase())}</b> &nbsp;&nbsp; Chức danh: ${mark(i.chucDanh==='GV')} Giảng viên &nbsp; ${mark(i.chucDanh==='CB')} Cán bộ</div>
-      <div>Chức vụ: ${esc(i.chucVu)||dots(24)} &nbsp;&nbsp; Đơn vị công tác: ${esc(i.donVi)||dots(30)}</div>
+      <div>Chức vụ: ${esc(i.chucVu)||'&nbsp;'.repeat(22)} &nbsp;&nbsp; Đơn vị công tác: ${esc(i.donVi)||'&nbsp;'.repeat(26)}</div>
     </div>
     <div class="psec">A. KẾT QUẢ THỰC HIỆN NHIỆM VỤ DO CÁ NHÂN TỰ ĐÁNH GIÁ VÀ ĐÁNH GIÁ CỦA ĐƠN VỊ</div>
     <table class="pt wide">
-      <colgroup>
-        <col style="width:3%"><col style="width:19%">
-        <col style="width:5%"><col style="width:5%"><col style="width:4.5%">
-        <col style="width:5%"><col style="width:5%"><col style="width:4.5%">
-        <col style="width:5%"><col style="width:4.5%">
-        <col style="width:5%"><col style="width:4.5%">
-        <col style="width:5%"><col style="width:5%"><col style="width:4.5%">
-        <col style="width:5%"><col style="width:4.5%">
-      </colgroup>
+<colgroup><col style="width:3.56%"><col style="width:26.44%"><col style="width:4.667%"><col style="width:4.667%"><col style="width:4.667%"><col style="width:4.667%"><col style="width:4.667%"><col style="width:4.667%"><col style="width:4.667%"><col style="width:4.667%"><col style="width:4.667%"><col style="width:4.667%"><col style="width:4.667%"><col style="width:4.667%"><col style="width:4.667%"><col style="width:4.667%"><col style="width:4.667%"></colgroup>
       <thead>
         <tr><th rowspan="3" style="width:26px">TT</th><th rowspan="3">Nhiệm vụ</th>
           <th colspan="8">CÁ NHÂN TỰ ĐÁNH GIÁ</th><th colspan="7">ĐƠN VỊ ĐÁNH GIÁ</th></tr>
@@ -1283,9 +1285,11 @@ function printBangTheoDoi(qi){
     </table>
     <div class="psec">B. ƯU TIÊN ĐỂ XÉT DANH HIỆU (Yêu cầu nộp kèm theo minh chứng ở lần đánh giá cả năm)</div>
     <table class="pt">
-      <thead><tr><th rowspan="2" style="width:26px">TT</th><th rowspan="2">Kết quả/Nội dung đạt mức khen thưởng</th>
+      <colgroup><col style="width:3.7%"><col style="width:55.3%"><col style="width:10.2%">
+        <col style="width:10.3%"><col style="width:10.2%"><col style="width:10.3%"></colgroup>
+      <thead><tr><th rowspan="2">TT</th><th rowspan="2">Kết quả/Nội dung đạt mức khen thưởng</th>
         <th colspan="2">CÁ NHÂN TỰ ĐÁNH GIÁ</th><th colspan="2">ĐƠN VỊ ĐÁNH GIÁ</th></tr>
-        <tr><th style="width:46px">SL ➁</th><th style="width:46px">SL ➀</th><th style="width:46px">SL ➁</th><th style="width:46px">SL ➀</th></tr></thead>
+        <tr><th>SL ➁</th><th>SL ➀</th><th>SL ➁</th><th>SL ➀</th></tr></thead>
       <tbody>${uu}
         <tr class="b"><td></td><td>Tổng số</td><td class="c">${c.tr.s2||0}</td><td class="c">${c.tr.s1||0}</td><td></td><td></td></tr>
       </tbody>
@@ -1384,10 +1388,15 @@ function saveFile(name, data, mime){
 /* --- đơn vị: 1 inch = 1440 twip; 1 cm = 566,93 twip --- */
 const TW = cm => Math.round(cm * 1440 / 2.54);
 const PAGE = {
-  portrait : {w:TW(21),   h:TW(29.7), orient:null,        content:TW(21   - 1.5 - 2)},
-  landscape: {w:TW(29.7), h:TW(21),   orient:'landscape', content:TW(29.7 - 1.5 - 2)}
+  /* Lề lấy theo file mẫu của Nhà trường: trang dọc lề trái 2cm;
+     trang ngang lề trên 2cm (cạnh đóng tập), ba lề còn lại 1,5cm. */
+  portrait : {w:TW(21),   h:TW(29.7), orient:null,
+              mar:{top:TW(1.5), bottom:TW(1.5), left:TW(2),   right:TW(1.5)},
+              content:TW(21   - 2   - 1.5)},
+  landscape: {w:TW(29.7), h:TW(21),   orient:'landscape',
+              mar:{top:TW(2),   bottom:TW(1.5), left:TW(1.5), right:TW(1.5)},
+              content:TW(29.7 - 1.5 - 1.5)}
 };
-const MAR = {top:TW(1.5), bottom:TW(1.5), right:TW(1.5), left:TW(2), header:TW(1), footer:TW(1)};
 
 const xe = s => String(s==null?'':s)
   .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -1464,13 +1473,23 @@ function runsOfNodes(nodes, st){
   let out='';
   const walk=(n, s)=>{
     if(n.nodeType===3){
-      const t=n.textContent.replace(/\s+/g,' ');
+      /* gom khoảng trắng nhưng giữ nguyên khoảng trắng cứng (&nbsp;),
+         vì mẫu dùng chúng để dóng cột "Chức vụ … Chức danh" */
+      const t=n.textContent.replace(/[^\S\u00A0]+/g,' ');
       if(!t) return;
-      out+='<w:r><w:rPr>'+
-           '<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>'+
-           (s.b?'<w:b/>':'')+(s.i?'<w:i/>':'')+(s.caps?'<w:caps/>':'')+
-           '<w:sz w:val="'+HALF(s.sz)+'"/><w:szCs w:val="'+HALF(s.sz)+'"/>'+
-           '</w:rPr><w:t xml:space="preserve">'+xe(t)+'</w:t></w:r>';
+      /* ô tích và số khoanh tròn không có trong Times New Roman,
+         nên tách riêng và dùng phông ký hiệu của hệ thống */
+      const SYM=/[\u2610\u2611\u2612\u2780-\u2789\u25A1\u25A0]/;
+      const parts=t.split(/([\u2610\u2611\u2612\u2780-\u2789\u25A1\u25A0]+)/).filter(x=>x!=='');
+      for(const pt of parts){
+        const sym=SYM.test(pt);
+        const font = sym ? 'Segoe UI Symbol' : 'Times New Roman';
+        out+='<w:r><w:rPr>'+
+             '<w:rFonts w:ascii="'+font+'" w:hAnsi="'+font+'" w:cs="'+font+'"/>'+
+             (s.b&&!sym?'<w:b/>':'')+(s.i&&!sym?'<w:i/>':'')+(s.caps&&!sym?'<w:caps/>':'')+
+             '<w:sz w:val="'+HALF(s.sz)+'"/><w:szCs w:val="'+HALF(s.sz)+'"/>'+
+             '</w:rPr><w:t xml:space="preserve">'+xe(pt)+'</w:t></w:r>';
+      }
       return;
     }
     if(n.nodeType!==1) return;
@@ -1551,8 +1570,8 @@ function tableXml(table, contentW, sz){
     .map(s=>'<w:'+s+' w:val="single" w:sz="6" w:space="0" w:color="000000"/>').join('')+'</w:tblBorders>';
   let xml='<w:tbl><w:tblPr><w:tblW w:w="'+contentW+'" w:type="dxa"/>'+bd+
     '<w:tblLayout w:type="fixed"/><w:tblCellMar>'+
-    '<w:top w:w="28" w:type="dxa"/><w:left w:w="57" w:type="dxa"/>'+
-    '<w:bottom w:w="28" w:type="dxa"/><w:right w:w="57" w:type="dxa"/></w:tblCellMar></w:tblPr>'+
+    '<w:top w:w="14" w:type="dxa"/><w:left w:w="34" w:type="dxa"/>'+
+    '<w:bottom w:w="14" w:type="dxa"/><w:right w:w="34" w:type="dxa"/></w:tblCellMar></w:tblPr>'+
     '<w:tblGrid>'+widths.map(w=>'<w:gridCol w:w="'+w+'"/>').join('')+'</w:tblGrid>';
 
   grid.forEach((line,ri)=>{
@@ -1590,25 +1609,24 @@ function getComputedStyleBold(el){
 }
 
 function sectPr(kind){
-  const p=PAGE[kind];
+  const p=PAGE[kind], m=p.mar;
   return '<w:sectPr><w:pgSz w:w="'+p.w+'" w:h="'+p.h+'"'+(p.orient?' w:orient="'+p.orient+'"':'')+'/>'+
-    '<w:pgMar w:top="'+MAR.top+'" w:right="'+MAR.right+'" w:bottom="'+MAR.bottom+'" w:left="'+MAR.left+'"'+
-    ' w:header="'+MAR.header+'" w:footer="'+MAR.footer+'" w:gutter="0"/>'+
+    '<w:pgMar w:top="'+m.top+'" w:right="'+m.right+'" w:bottom="'+m.bottom+'" w:left="'+m.left+'"'+
+    ' w:header="'+TW(1)+'" w:footer="'+TW(1)+'" w:gutter="0"/>'+
     '<w:cols w:space="708"/><w:docGrid w:linePitch="360"/></w:sectPr>';
 }
 
 /* một .pdoc -> chuỗi block OOXML */
 function docBody(root, kind){
-  const wide = root.classList.contains('land');
   const cw = PAGE[kind].content;
-  const baseSz = 13;
+  const baseSz = 12;          /* thân văn bản 12pt theo file mẫu */
   let xml='';
   const skip = new Set(['colgroup','col','thead','tbody','tfoot','tr','td','th']);
   const walk = el => {
     for(const n of el.children){
       const tag=n.tagName.toLowerCase();
       if(tag==='table'){
-        const sz = n.classList.contains('wide') ? 8 : (n.classList.contains('ph')||n.classList.contains('psign') ? 12 : 11);
+        const sz = n.classList.contains('wide') ? 9 : 12;
         if(n.classList.contains('ph')||n.classList.contains('psign')){
           /* bảng chỉ để dàn hai cột, không kẻ viền -> dựng không viền */
           xml+=tableXml(n,cw,sz).replace(/<w:tblBorders>.*?<\/w:tblBorders>/,'');
@@ -1622,13 +1640,16 @@ function docBody(root, kind){
       if(tag==='h3'){ xml+=para(n,{b:true,caps:true,sz:14,align:'center',before:160,after:60}); continue; }
       if(n.classList.contains('mau')){ xml+=para(n,{b:true,sz:12,align:'right',after:40}); continue; }
       if(n.classList.contains('pc')){ xml+=para(n,{sz:13,align:'center',after:120}); continue; }
-      if(n.classList.contains('psec')){ xml+=para(n,{b:true,sz:13,after:80,before:120}); continue; }
-      if(n.classList.contains('note-sm')){ xml+=para(n,{b:true,sz:11,after:60}); continue; }
+      if(n.classList.contains('psec')){ xml+=para(n,{b:true,sz:12,after:80,before:120}); continue; }
+      if(n.classList.contains('note-sm')){ xml+=para(n,{b:true,sz:12,after:60}); continue; }
+      if(n.classList.contains('dots')){ xml+=para(n,{sz:8,after:20}); continue; }
+      if(n.classList.contains('pinfo')||n.closest('.pinfo')){ }
       if(n.children.length && [...n.children].some(c=>['table','h3'].includes(c.tagName.toLowerCase()))){
         walk(n); continue;
       }
       const al=/text-align:\s*right/.test(n.getAttribute('style')||'')?'right':null;
-      const ps=blocksOf(n,{sz:baseSz,after:40,align:al});
+      const sz = n.classList.contains('pinfo') ? 13 : baseSz;   /* thông tin cá nhân 13pt */
+      const ps=blocksOf(n,{sz,after:40,align:al});
       xml += ps.length ? ps.join('') : '';
     }
   };

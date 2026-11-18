@@ -1,6 +1,6 @@
 /* Service worker: cho phép dùng offline sau lần mở đầu tiên.
    Đổi CACHE mỗi lần cập nhật nội dung để trình duyệt tải bản mới. */
-const CACHE = 'dgvc-v3';
+const CACHE = 'dgvc-v4';
 const ASSETS = [
   './',
   './index.html',
