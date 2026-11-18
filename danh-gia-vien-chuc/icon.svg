@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Phiếu đánh giá viên chức">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9b1c1c"/>
+      <stop offset="1" stop-color="#6f1010"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <rect x="118" y="86" width="276" height="340" rx="22" fill="#ffffff"/>
+  <rect x="196" y="62" width="120" height="48" rx="18" fill="#d4a017"/>
+  <g fill="#9b1c1c">
+    <rect x="156" y="152" width="200" height="16" rx="8" opacity=".25"/>
+    <rect x="156" y="190" width="150" height="14" rx="7" opacity=".25"/>
+  </g>
+  <g stroke="#1d4ed8" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M168 268l34 34 62-66"/>
+    <path d="M168 358l34 34 62-66"/>
+  </g>
+  <g fill="#9b1c1c">
+    <rect x="292" y="276" width="66" height="16" rx="8" opacity=".3"/>
+    <rect x="292" y="366" width="66" height="16" rx="8" opacity=".3"/>
+  </g>
+</svg>
