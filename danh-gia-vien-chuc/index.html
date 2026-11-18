@@ -162,41 +162,52 @@ table.ys tr.tot td{background:#f8fafc;font-weight:700}
 .prev .pdoc{border-bottom:1px dashed #cbd5e1;padding-bottom:18px;margin-bottom:18px}
 .prev .pdoc:last-child{border-bottom:0;margin-bottom:0}
 
-/* ---------- print ---------- */
+/* ---------- in / tài liệu ----------
+   Khổ A4. Lề: trên 1,5cm · dưới 1,5cm · phải 1,5cm · trái 2cm.
+   Mẫu 2 in khổ dọc; Mẫu 3 (17 cột) in khổ ngang. */
 #printArea{display:none}
+@page{size:A4 portrait;margin:1.5cm 1.5cm 1.5cm 2cm}
+@page land{size:A4 landscape;margin:1.5cm 1.5cm 1.5cm 2cm}
 @media print{
-  @page{size:A4;margin:14mm 12mm}
-  body{background:#fff;font-size:11pt}
-  .top,.tabs,.wrap>.panel,.footer,.noprint{display:none !important}
+  html,body{background:#fff}
+  .top,.wrap,.footer,.noprint,#toast,#modal{display:none !important}
   #printArea{display:block}
   .pdoc{page-break-after:always}
   .pdoc:last-child{page-break-after:auto}
-  table{page-break-inside:auto}
+  .pdoc.land{page:land}
   tr{page-break-inside:avoid}
+  thead{display:table-header-group}
 }
-#printArea .pdoc{font-family:"Times New Roman",Times,serif;color:#000;font-size:11pt;line-height:1.35}
-#printArea .ph{width:100%;border-collapse:collapse;margin-bottom:6pt}
-#printArea .ph td{width:50%;text-align:center;font-size:10.5pt;vertical-align:top;border:0;padding:0}
-#printArea .ph b{display:block}
-#printArea h3{text-align:center;font-size:13pt;margin:10pt 0 2pt;text-transform:uppercase}
-#printArea .pc{text-align:center;margin:0 0 8pt;font-size:11pt}
-#printArea .pinfo{margin:0 0 7pt;font-size:11pt}
-#printArea .pinfo div{margin:2pt 0}
-#printArea .psec{font-weight:bold;margin:9pt 0 4pt;font-size:11pt}
-#printArea table.pt{width:100%;border-collapse:collapse;font-size:9.5pt}
-#printArea table.pt th,#printArea table.pt td{border:.6pt solid #000;padding:2.4pt 3.5pt;vertical-align:top}
-#printArea table.pt thead th{text-align:center;font-weight:bold}
-#printArea table.pt td.c{text-align:center}
-#printArea table.pt tr.b td{font-weight:bold}
-#printArea .pres{margin-top:8pt;font-size:11pt}
-#printArea .pres div{margin:3pt 0}
-#printArea .psign{width:100%;border-collapse:collapse;margin-top:14pt;font-size:11pt}
-#printArea .psign td{border:0;text-align:center;vertical-align:top;width:50%}
-#printArea .psign i{font-size:10pt}
-#printArea .pfill{border-bottom:.6pt dotted #000;display:inline-block;min-width:60%}
-#printArea .pmarks{font-size:10.5pt}
-#printArea .wide{font-size:8.5pt}
-#printArea .wide th,#printArea .wide td{padding:1.6pt 2.4pt}
+.pdoc{font-family:"Times New Roman",Times,serif;color:#000;font-size:13pt;line-height:1.35}
+.pdoc .mau{text-align:right;font-size:12pt;font-weight:bold;margin-bottom:2pt}
+.pdoc .ph{width:100%;border-collapse:collapse;margin-bottom:6pt}
+.pdoc .ph td{width:50%;text-align:center;font-size:12pt;vertical-align:top;border:0;padding:0;line-height:1.25}
+.pdoc .ph b{display:block}
+.pdoc h3{text-align:center;font-size:14pt;margin:12pt 0 3pt;text-transform:uppercase;font-weight:bold}
+.pdoc .pc{text-align:center;margin:0 0 9pt;font-size:13pt}
+.pdoc .pinfo{margin:0 0 8pt;font-size:13pt}
+.pdoc .pinfo div{margin:2.5pt 0}
+.pdoc .psec{font-weight:bold;margin:10pt 0 5pt;font-size:13pt}
+.pdoc table.pt{width:100%;border-collapse:collapse;font-size:11pt;table-layout:fixed}
+.pdoc table.pt th,.pdoc table.pt td{border:.75pt solid #000;padding:2.6pt 3.5pt;vertical-align:top;
+  word-wrap:break-word;overflow-wrap:break-word}
+.pdoc table.pt thead th{text-align:center;font-weight:bold;vertical-align:middle}
+.pdoc table.pt td.c{text-align:center}
+.pdoc table.pt tr.b td{font-weight:bold}
+.pdoc .pres{margin-top:9pt;font-size:13pt}
+.pdoc .pres div{margin:3pt 0}
+.pdoc .psign{width:100%;border-collapse:collapse;margin-top:16pt;font-size:13pt}
+.pdoc .psign td{border:0;text-align:center;vertical-align:top;width:50%}
+.pdoc .psign i{font-size:12pt}
+.pdoc .pmarks{font-size:13pt}
+.pdoc .wide{font-size:8pt}
+.pdoc .wide th,.pdoc .wide td{padding:1.5pt 2pt}
+.pdoc .note-sm{font-size:11pt;margin-top:5pt}
+/* xem trước trong trang: mô phỏng tờ A4 đúng lề */
+.prev .pdoc{background:#fff;margin:0 auto 20px;box-shadow:0 1px 6px rgba(0,0,0,.18);
+  width:21cm;padding:1.5cm 1.5cm 1.5cm 2cm;box-sizing:border-box}
+.prev .pdoc.land{width:29.7cm}
+.prev{background:#eef1f5;padding:18px;overflow:auto}
 </style>
 </head>
 <body>
@@ -793,6 +804,7 @@ function viewQuarter(qi){
       <span class="tagv">${c.lead?'Giữ chức vụ lãnh đạo, quản lý':'Không giữ chức vụ'}</span>
       <span class="spacer"></span>
       <button class="btn" id="btnPreview">Xem trước</button>
+      <button class="btn" id="btnWord">Xuất Word</button>
       <button class="btn" id="btnDownload">Tải tệp HTML</button>
       <button class="btn p" id="btnPrint">In / Lưu PDF quý ${qi}</button>
     </h2>
@@ -943,6 +955,7 @@ function viewYear(){
       <span class="tagv">${esc(i.hoTen||'(chưa nhập họ tên)')}</span>
       <span class="tagv">${esc(i.donVi||'')}</span>
       <span class="spacer"></span>
+      <button class="btn" id="btnWordYear">Xuất Word cả 4 quý</button>
       <button class="btn p" id="btnPrintYear">In cả 4 quý</button>
     </h2>
     <div class="pad">
@@ -1092,7 +1105,7 @@ function printPhieu(qi){
   const r=c.rank;
   return `
   <div class="pdoc">
-    <div style="text-align:right;font-size:10pt"><b>Mẫu 2</b></div>
+    <div class="mau">Mẫu 2</div>
     <table class="ph"><tr>
       <td>BỘ VĂN HÓA, THỂ THAO VÀ DU LỊCH<br><b>TRƯỜNG ĐẠI HỌC TDTT BẮC NINH</b></td>
       <td><b>CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM</b><br><b>Độc lập - Tự do - Hạnh phúc</b></td>
@@ -1117,7 +1130,7 @@ function printPhieu(qi){
         ${bRows}
       </tbody>
     </table>
-    <div style="font-size:9.5pt;margin-top:4pt"><b>Ghi chú: (*) Gửi kèm theo Bảng theo dõi, đánh giá kết quả thực hiện nhiệm vụ của cá nhân</b></div>
+    <div class="note-sm"><b>Ghi chú: (*) Gửi kèm theo Bảng theo dõi, đánh giá kết quả thực hiện nhiệm vụ của cá nhân</b></div>
     <div class="pres">
       <div>1. Kết quả: &nbsp; a) Nhóm tiêu chí chung (mục A) = Tổng điểm A (${fmt(c.A,0)} × 0,3) = <b>${fmt(c.diemA,2)}</b>/30</div>
       <div style="margin-left:52pt">b) Nhóm tiêu chí về kết quả thực hiện nhiệm vụ (mục B) = <b>${c.diemB!==null?fmt(c.diemB,2):''}</b>/70</div>
@@ -1144,13 +1157,36 @@ function printPhieu(qi){
       <div style="height:42pt"></div><b>${esc(i.hoTen.toUpperCase())}</b>
     </td></tr></table>
     <div class="psec">B. NHẬN XÉT, ĐÁNH GIÁ CỦA CẤP CÓ THẨM QUYỀN</div>
-    <div style="font-size:10.5pt">
+    <div>
       <div>1.1. Nhận xét, đánh giá của người trực tiếp quản lý, phân công công việc:</div>
       <div>${dots(80)}</div><div>${dots(80)}</div>
       <div style="margin-top:4pt">1.2. Đề nghị mức xếp loại: ☐ HTXS &nbsp; ☐ HTT &nbsp; ☐ HT &nbsp; ☐ Không HT</div>
     </div>
     <table class="psign"><tr><td></td><td>
       <i>Bắc Ninh, ngày …… tháng …… năm 20……</i><br><b>TRƯỞNG ĐƠN VỊ</b><br><i>(ký và ghi rõ họ tên)</i>
+      <div style="height:40pt"></div>${dots(28)}
+    </td></tr></table>
+    <div>
+      <div>2. Ý kiến thẩm định của bộ phận tham mưu công tác tổ chức cán bộ:</div>
+      <div>2.1. Ý kiến thẩm định kết quả tự đánh giá của viên chức:</div>
+      <div>${dots(80)}</div><div>${dots(80)}</div>
+      <div>2.2. Đánh giá chất lượng sản phẩm đầu ra, hiệu quả thực hiện nhiệm vụ của viên chức:</div>
+      <div class="pmarks">☐ Chủ động tiếp cận, giải quyết hiệu quả vấn đề, có kết quả cụ thể</div>
+      <div class="pmarks">☐ Cơ bản đáp ứng yêu cầu nhưng còn hạn chế, cần tiếp tục hoàn thiện</div>
+      <div class="pmarks">☐ Không đáp ứng yêu cầu nhiệm vụ</div>
+    </div>
+    <table class="psign"><tr><td></td><td>
+      <i>Bắc Ninh, ngày …… tháng …… năm 20……</i><br><b>TRƯỞNG PHÒNG TC,PC,TV</b><br><i>(ký và ghi rõ họ tên)</i>
+      <div style="height:40pt"></div>${dots(28)}
+    </td></tr></table>
+    <div class="psec">C. KẾT QUẢ XẾP LOẠI CHẤT LƯỢNG VIÊN CHỨC</div>
+    <div>
+      <div>Hội đồng đánh giá quyết định mức xếp loại chất lượng:</div>
+      <div>${dots(80)}</div>
+      <div class="pmarks">☐ HTXS &nbsp;&nbsp; ☐ HTT &nbsp;&nbsp; ☐ HT &nbsp;&nbsp; ☐ Không HT</div>
+    </div>
+    <table class="psign"><tr><td></td><td>
+      <i>Bắc Ninh, ngày …… tháng …… năm 20……</i><br><b>HIỆU TRƯỞNG</b><br><i>(ký và ghi rõ họ tên)</i>
       <div style="height:40pt"></div>${dots(28)}
     </td></tr></table>
   </div>`;
@@ -1183,8 +1219,8 @@ function printBangTheoDoi(qi){
       '<td class="c"></td><td class="c"></td></tr>';
   });
   return `
-  <div class="pdoc">
-    <div style="text-align:right;font-size:10pt"><b>Mẫu ${khoi==='HC'?'3b - HC':'3a - GV'}</b></div>
+  <div class="pdoc land">
+    <div class="mau">Mẫu ${khoi==='HC'?'3b - HC':'3a - GV'}</div>
     <table class="ph"><tr>
       <td>BỘ VĂN HÓA, THỂ THAO VÀ DU LỊCH<br><b>TRƯỜNG ĐẠI HỌC TDTT BẮC NINH</b></td>
       <td><b>CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM</b><br><b>Độc lập - Tự do - Hạnh phúc</b></td>
@@ -1198,6 +1234,15 @@ function printBangTheoDoi(qi){
     </div>
     <div class="psec">A. KẾT QUẢ THỰC HIỆN NHIỆM VỤ DO CÁ NHÂN TỰ ĐÁNH GIÁ VÀ ĐÁNH GIÁ CỦA ĐƠN VỊ</div>
     <table class="pt wide">
+      <colgroup>
+        <col style="width:3%"><col style="width:19%">
+        <col style="width:5%"><col style="width:5%"><col style="width:4.5%">
+        <col style="width:5%"><col style="width:5%"><col style="width:4.5%">
+        <col style="width:5%"><col style="width:4.5%">
+        <col style="width:5%"><col style="width:4.5%">
+        <col style="width:5%"><col style="width:5%"><col style="width:4.5%">
+        <col style="width:5%"><col style="width:4.5%">
+      </colgroup>
       <thead>
         <tr><th rowspan="3" style="width:26px">TT</th><th rowspan="3">Nhiệm vụ</th>
           <th colspan="8">CÁ NHÂN TỰ ĐÁNH GIÁ</th><th colspan="7">ĐƠN VỊ ĐÁNH GIÁ</th></tr>
@@ -1236,7 +1281,7 @@ function printBangTheoDoi(qi){
         <tr class="b"><td></td><td>Tổng số</td><td class="c">${c.tr.s2||0}</td><td class="c">${c.tr.s1||0}</td><td></td><td></td></tr>
       </tbody>
     </table>
-    <div style="margin-top:7pt;font-size:10.5pt">Kết quả đánh giá của đơn vị: Số lượng: ……… điểm &nbsp; Chất lượng: ……… điểm &nbsp; Tiến độ: ……… điểm &nbsp; Tổng ➁: ……… &nbsp; Tổng ➀: ………</div>
+    <div style="margin-top:8pt">Kết quả đánh giá của đơn vị: Số lượng: ……… điểm &nbsp; Chất lượng: ……… điểm &nbsp; Tiến độ: ……… điểm &nbsp; Tổng ➁: ……… &nbsp; Tổng ➀: ………</div>
     <table class="psign"><tr>
       <td><i>Bắc Ninh, ngày …… tháng …… năm 20……</i><br><b>TRƯỞNG ĐƠN VỊ</b><br><i>(ký và ghi rõ họ tên)</i>
         <div style="height:40pt"></div>${dots(24)}</td>
@@ -1247,32 +1292,42 @@ function printBangTheoDoi(qi){
 }
 
 /* CSS dùng cho tệp in tải về (độc lập với trang) */
-const PRINT_CSS = `
-@page{size:A4;margin:14mm 12mm}
-body{font-family:"Times New Roman",Times,serif;color:#000;font-size:11pt;line-height:1.35;margin:0}
-.pdoc{page-break-after:always}
-.pdoc:last-child{page-break-after:auto}
-tr{page-break-inside:avoid}
-.ph{width:100%;border-collapse:collapse;margin-bottom:6pt}
-.ph td{width:50%;text-align:center;font-size:10.5pt;vertical-align:top;border:0;padding:0}
-h3{text-align:center;font-size:13pt;margin:10pt 0 2pt;text-transform:uppercase}
-.pc{text-align:center;margin:0 0 8pt}
-.pinfo{margin:0 0 7pt}.pinfo div{margin:2pt 0}
-.psec{font-weight:bold;margin:9pt 0 4pt}
-table.pt{width:100%;border-collapse:collapse;font-size:9.5pt}
-table.pt th,table.pt td{border:.6pt solid #000;padding:2.4pt 3.5pt;vertical-align:top}
-table.pt thead th{text-align:center;font-weight:bold}
-table.pt td.c{text-align:center}
-table.pt tr.b td{font-weight:bold}
-.pres{margin-top:8pt}.pres div{margin:3pt 0}
-.psign{width:100%;border-collapse:collapse;margin-top:14pt}
-.psign td{border:0;text-align:center;vertical-align:top;width:50%}
-.psign i{font-size:10pt}
-.pmarks{font-size:10.5pt}
-.wide{font-size:8.5pt}.wide th,.wide td{padding:1.6pt 2.4pt}
-@media screen{body{background:#eef1f5;padding:18px}
- .pdoc{background:#fff;max-width:200mm;margin:0 auto 18px;padding:16mm 13mm;box-shadow:0 2px 12px rgba(0,0,0,.15)}}
+const PAGE_CSS = `
+@page{size:A4 portrait;margin:1.5cm 1.5cm 1.5cm 2cm}
+@page land{size:A4 landscape;margin:1.5cm 1.5cm 1.5cm 2cm}
+.pdoc.land{page:land}
 `;
+/* Lấy đúng phần định dạng tài liệu từ style của trang, để tệp tải về
+   và bản in trong trang không bao giờ lệch nhau. */
+function docCss(){
+  let css='';
+  for(const sh of document.styleSheets){
+    let rules; try{ rules=sh.cssRules; }catch(e){ continue; }
+    if(!rules) continue;
+    for(const r of rules){
+      if(r.selectorText && /(^|,)\s*\.pdoc/.test(r.selectorText) && !/^\.prev/.test(r.selectorText.trim()))
+        css+=r.cssText+'\n';
+    }
+  }
+  return PAGE_CSS+css+`
+body{margin:0;background:#fff}
+@media screen{
+  body{background:#eef1f5;padding:16px}
+  .pdoc{background:#fff;margin:0 auto 16px;width:21cm;padding:1.5cm 1.5cm 1.5cm 2cm;
+    box-sizing:border-box;box-shadow:0 1px 8px rgba(0,0,0,.2)}
+  .pdoc.land{width:29.7cm}
+}
+@media print{
+  body{background:#fff;padding:0}
+  .pdoc{box-shadow:none;margin:0;padding:0;width:auto}
+  .pdoc.land{width:auto}
+  .pdoc{page-break-after:always}
+  .pdoc:last-child{page-break-after:auto}
+  tr{page-break-inside:avoid}
+  thead{display:table-header-group}
+}
+`;
+}
 function printTitle(list){
   const i=S.info;
   const nm=(i.hoTen||'vien-chuc').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-zA-Z0-9]+/g,'-').toLowerCase();
@@ -1282,7 +1337,7 @@ function buildPrintDoc(list){
   const i=S.info;
   return '<!DOCTYPE html><html lang="vi"><head><meta charset="utf-8">'+
     '<title>Phiếu đánh giá viên chức — '+esc(i.hoTen)+' — Quý '+list.join(', ')+'/'+esc(i.nam)+'</title>'+
-    '<style>'+PRINT_CSS+'</style></head><body>'+
+    '<style>'+docCss()+'</style></head><body>'+
     list.map(qi=>printPhieu(qi)+printBangTheoDoi(qi)).join('')+
     '</body></html>';
 }
@@ -1299,7 +1354,8 @@ function downloadPrintFile(list){
 }
 function saveFile(name, data, mime){
   try{
-    const blob=new Blob([data],{type:mime+';charset=utf-8'});
+    const isText = typeof data === 'string';
+    const blob=new Blob([data],{type:mime+(isText?';charset=utf-8':'')});
     const a=document.createElement('a');
     a.href=URL.createObjectURL(blob); a.download=name;
     document.body.appendChild(a); a.click(); a.remove();
@@ -1307,6 +1363,324 @@ function saveFile(name, data, mime){
     return true;
   }catch(e){ toast('Không tải được tệp trên thiết bị này.',true); return false; }
 }
+/* ============================================================
+   Xuất .docx thật (Office Open XML) — không dùng thư viện ngoài,
+   nên chạy được cả khi mất mạng.
+
+   Khổ A4. Lề: trên 1,5cm · dưới 1,5cm · phải 1,5cm · trái 2cm.
+   Phiếu đánh giá (Mẫu 2) khổ dọc; Bảng theo dõi (Mẫu 3) khổ ngang,
+   đúng như bộ biểu mẫu gốc của Nhà trường.
+   ============================================================ */
+
+/* --- đơn vị: 1 inch = 1440 twip; 1 cm = 566,93 twip --- */
+const TW = cm => Math.round(cm * 1440 / 2.54);
+const PAGE = {
+  portrait : {w:TW(21),   h:TW(29.7), orient:null,        content:TW(21   - 1.5 - 2)},
+  landscape: {w:TW(29.7), h:TW(21),   orient:'landscape', content:TW(29.7 - 1.5 - 2)}
+};
+const MAR = {top:TW(1.5), bottom:TW(1.5), right:TW(1.5), left:TW(2), header:TW(1), footer:TW(1)};
+
+const xe = s => String(s==null?'':s)
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+  .replace(/"/g,'&quot;').replace(/'/g,'&apos;');
+
+/* ---------- CRC32 ---------- */
+let CRCT=null;
+function crcTable(){
+  if(CRCT) return CRCT;
+  CRCT=new Uint32Array(256);
+  for(let i=0;i<256;i++){ let c=i; for(let k=0;k<8;k++) c = c&1 ? 0xEDB88320^(c>>>1) : c>>>1; CRCT[i]=c>>>0; }
+  return CRCT;
+}
+function crc32(buf){
+  const t=crcTable(); let c=0xFFFFFFFF;
+  for(let i=0;i<buf.length;i++) c = t[(c^buf[i])&0xFF] ^ (c>>>8);
+  return (c^0xFFFFFFFF)>>>0;
+}
+
+/* ---------- ZIP (store, không nén) ---------- */
+function zipStore(files){
+  const enc=new TextEncoder();
+  const parts=[], central=[];
+  let offset=0;
+  const d=new Date();
+  const dosTime=((d.getHours()&31)<<11)|((d.getMinutes()&63)<<5)|((d.getSeconds()/2)&31);
+  const dosDate=(((d.getFullYear()-1980)&127)<<9)|(((d.getMonth()+1)&15)<<5)|(d.getDate()&31);
+
+  for(const f of files){
+    const name=enc.encode(f.name);
+    const data=typeof f.data==='string'?enc.encode(f.data):f.data;
+    const crc=crc32(data);
+    const lh=new Uint8Array(30+name.length);
+    const v=new DataView(lh.buffer);
+    v.setUint32(0,0x04034b50,true);
+    v.setUint16(4,20,true); v.setUint16(6,0x0800,true); v.setUint16(8,0,true);
+    v.setUint16(10,dosTime,true); v.setUint16(12,dosDate,true);
+    v.setUint32(14,crc,true); v.setUint32(18,data.length,true); v.setUint32(22,data.length,true);
+    v.setUint16(26,name.length,true); v.setUint16(28,0,true);
+    lh.set(name,30);
+    parts.push(lh,data);
+
+    const ch=new Uint8Array(46+name.length);
+    const cv=new DataView(ch.buffer);
+    cv.setUint32(0,0x02014b50,true);
+    cv.setUint16(4,20,true); cv.setUint16(6,20,true); cv.setUint16(8,0x0800,true); cv.setUint16(10,0,true);
+    cv.setUint16(12,dosTime,true); cv.setUint16(14,dosDate,true);
+    cv.setUint32(16,crc,true); cv.setUint32(20,data.length,true); cv.setUint32(24,data.length,true);
+    cv.setUint16(28,name.length,true);
+    cv.setUint32(42,offset,true);
+    ch.set(name,46);
+    central.push(ch);
+    offset += lh.length + data.length;
+  }
+  let cdSize=0; for(const c of central) cdSize+=c.length;
+  const eo=new Uint8Array(22); const ev=new DataView(eo.buffer);
+  ev.setUint32(0,0x06054b50,true);
+  ev.setUint16(8,central.length,true); ev.setUint16(10,central.length,true);
+  ev.setUint32(12,cdSize,true); ev.setUint32(16,offset,true);
+
+  let total=0; for(const p of parts) total+=p.length; total+=cdSize+22;
+  const out=new Uint8Array(total); let o=0;
+  for(const p of parts){ out.set(p,o); o+=p.length; }
+  for(const c of central){ out.set(c,o); o+=c.length; }
+  out.set(eo,o);
+  return out;
+}
+
+/* ---------- HTML -> OOXML ---------- */
+const HALF = pt => String(Math.round(pt*2));          // cỡ chữ: nửa point
+function runs(node, st){ return runsOfNodes([...node.childNodes], st); }
+function runsOfNodes(nodes, st){
+  /* chuyển một dãy node thành các <w:r> */
+  let out='';
+  const walk=(n, s)=>{
+    if(n.nodeType===3){
+      const t=n.textContent.replace(/\s+/g,' ');
+      if(!t) return;
+      out+='<w:r><w:rPr>'+
+           '<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>'+
+           (s.b?'<w:b/>':'')+(s.i?'<w:i/>':'')+(s.caps?'<w:caps/>':'')+
+           '<w:sz w:val="'+HALF(s.sz)+'"/><w:szCs w:val="'+HALF(s.sz)+'"/>'+
+           '</w:rPr><w:t xml:space="preserve">'+xe(t)+'</w:t></w:r>';
+      return;
+    }
+    if(n.nodeType!==1) return;
+    const tag=n.tagName.toLowerCase();
+    if(tag==='br'){ out+='<w:r><w:br/></w:r>'; return; }
+    const s2={b:s.b||tag==='b'||tag==='strong', i:s.i||tag==='i'||tag==='em', sz:s.sz, caps:s.caps};
+    for(const c of n.childNodes) walk(c,s2);
+  };
+  for(const c of nodes) walk(c, st);
+  if(!out) out='<w:r><w:rPr><w:sz w:val="'+HALF(st.sz)+'"/></w:rPr><w:t xml:space="preserve"></w:t></w:r>';
+  return out;
+}
+function paraOf(nodes, st){
+  const al = st.align ? '<w:jc w:val="'+st.align+'"/>' : '';
+  const sp = '<w:spacing w:before="'+(st.before||0)+'" w:after="'+(st.after||0)+'" w:line="259" w:lineRule="auto"/>';
+  return '<w:p><w:pPr>'+sp+al+'</w:pPr>'+runsOfNodes(nodes,st)+'</w:p>';
+}
+function para(node, st){ return paraOf([...node.childNodes], st); }
+
+/* Tách nội dung một phần tử thành nhiều đoạn: mỗi div/p con là một đoạn,
+   phần chữ nằm ngoài div vẫn được giữ làm đoạn riêng (trước đây bị bỏ sót,
+   làm mất tên tiêu chí và các ô ký). */
+const BLOCK_TAGS = new Set(['div','p','h3','ul','ol','li']);
+function blocksOf(el, st){
+  const out=[]; let buf=[];
+  const flush=()=>{
+    if(buf.some(n=>(n.textContent||'').trim() || (n.nodeType===1 && n.tagName.toLowerCase()==='br'))){
+      out.push(paraOf(buf, st));
+    }
+    buf=[];
+  };
+  for(const n of el.childNodes){
+    if(n.nodeType===1 && BLOCK_TAGS.has(n.tagName.toLowerCase())){
+      flush();
+      const inner=blocksOf(n, st);
+      if(inner.length) out.push(...inner); else out.push(paraOf([], st));
+    }else buf.push(n);
+  }
+  flush();
+  return out;
+}
+function emptyPara(sz){
+  return '<w:p><w:pPr><w:spacing w:after="0"/></w:pPr><w:r><w:rPr><w:sz w:val="'+HALF(sz||13)+'"/></w:rPr></w:r></w:p>';
+}
+
+/* dựng lưới ô của bảng, xử lý colspan/rowspan */
+function gridOf(table){
+  const rows=[...table.querySelectorAll('tr')];
+  const grid=[]; const occupied={};
+  rows.forEach((tr,ri)=>{
+    const line=[]; let ci=0;
+    for(const cell of [...tr.children]){
+      while(occupied[ri+'_'+ci]) { line.push({cont:true}); ci++; }
+      const cs=parseInt(cell.getAttribute('colspan')||1,10);
+      const rs=parseInt(cell.getAttribute('rowspan')||1,10);
+      line.push({cell, cs, rs, start:true});
+      for(let r=1;r<rs;r++) for(let c=0;c<cs;c++) occupied[(ri+r)+'_'+(ci+c)]=true;
+      for(let c=1;c<cs;c++) line.push({skip:true});
+      ci+=cs;
+    }
+    grid.push(line);
+  });
+  return grid;
+}
+function tableXml(table, contentW, sz){
+  const cols=[...table.querySelectorAll('colgroup col')];
+  let widths;
+  const grid=gridOf(table);
+  const nCols=Math.max(...grid.map(r=>r.length));
+  if(cols.length===nCols){
+    const pcts=cols.map(c=>parseFloat((c.getAttribute('style')||'').replace(/[^0-9.]/g,''))||0);
+    const tot=pcts.reduce((a,b)=>a+b,0)||nCols;
+    widths=pcts.map(p=>Math.round(contentW*p/tot));
+  }else{
+    widths=Array(nCols).fill(Math.floor(contentW/nCols));
+  }
+  const bd='<w:tblBorders>'+['top','left','bottom','right','insideH','insideV']
+    .map(s=>'<w:'+s+' w:val="single" w:sz="6" w:space="0" w:color="000000"/>').join('')+'</w:tblBorders>';
+  let xml='<w:tbl><w:tblPr><w:tblW w:w="'+contentW+'" w:type="dxa"/>'+bd+
+    '<w:tblLayout w:type="fixed"/><w:tblCellMar>'+
+    '<w:top w:w="28" w:type="dxa"/><w:left w:w="57" w:type="dxa"/>'+
+    '<w:bottom w:w="28" w:type="dxa"/><w:right w:w="57" w:type="dxa"/></w:tblCellMar></w:tblPr>'+
+    '<w:tblGrid>'+widths.map(w=>'<w:gridCol w:w="'+w+'"/>').join('')+'</w:tblGrid>';
+
+  grid.forEach((line,ri)=>{
+    const isHead = !!table.querySelector('thead') && !!line.find(x=>x.cell&&x.cell.closest('thead'));
+    xml+='<w:tr>'+(isHead?'<w:trPr><w:tblHeader/></w:trPr>':'');
+    let ci=0;
+    for(const it of line){
+      if(it.skip){ ci++; continue; }
+      if(it.cont){
+        xml+='<w:tc><w:tcPr><w:tcW w:w="'+(widths[ci]||0)+'" w:type="dxa"/><w:vMerge/></w:tcPr>'+emptyPara(sz)+'</w:tc>';
+        ci++; continue;
+      }
+      const cell=it.cell;
+      let w=0; for(let k=0;k<it.cs;k++) w+=widths[ci+k]||0;
+      const bold = cell.tagName.toLowerCase()==='th' ||
+                   (cell.parentElement.className||'').includes('b') ||
+                   getComputedStyleBold(cell);
+      const center = cell.tagName.toLowerCase()==='th' || (cell.className||'').split(/\s+/).includes('c');
+      xml+='<w:tc><w:tcPr><w:tcW w:w="'+w+'" w:type="dxa"/>'+
+           (it.cs>1?'<w:gridSpan w:val="'+it.cs+'"/>':'')+
+           (it.rs>1?'<w:vMerge w:val="restart"/>':'')+
+           '<w:vAlign w:val="'+(cell.tagName.toLowerCase()==='th'?'center':'top')+'"/></w:tcPr>';
+      const ps=blocksOf(cell,{b:bold,sz,align:center?'center':null,after:0});
+      xml += ps.length ? ps.join('') : emptyPara(sz);
+      xml+='</w:tc>';
+      ci+=it.cs;
+    }
+    xml+='</w:tr>';
+  });
+  return xml+'</w:tbl>';
+}
+function getComputedStyleBold(el){
+  const st=(el.getAttribute('style')||'');
+  return /font-weight\s*:\s*(bold|[6-9]00)/.test(st);
+}
+
+function sectPr(kind){
+  const p=PAGE[kind];
+  return '<w:sectPr><w:pgSz w:w="'+p.w+'" w:h="'+p.h+'"'+(p.orient?' w:orient="'+p.orient+'"':'')+'/>'+
+    '<w:pgMar w:top="'+MAR.top+'" w:right="'+MAR.right+'" w:bottom="'+MAR.bottom+'" w:left="'+MAR.left+'"'+
+    ' w:header="'+MAR.header+'" w:footer="'+MAR.footer+'" w:gutter="0"/>'+
+    '<w:cols w:space="708"/><w:docGrid w:linePitch="360"/></w:sectPr>';
+}
+
+/* một .pdoc -> chuỗi block OOXML */
+function docBody(root, kind){
+  const wide = root.classList.contains('land');
+  const cw = PAGE[kind].content;
+  const baseSz = 13;
+  let xml='';
+  const skip = new Set(['colgroup','col','thead','tbody','tfoot','tr','td','th']);
+  const walk = el => {
+    for(const n of el.children){
+      const tag=n.tagName.toLowerCase();
+      if(tag==='table'){
+        const sz = n.classList.contains('wide') ? 8 : (n.classList.contains('ph')||n.classList.contains('psign') ? 12 : 11);
+        if(n.classList.contains('ph')||n.classList.contains('psign')){
+          /* bảng chỉ để dàn hai cột, không kẻ viền -> dựng không viền */
+          xml+=tableXml(n,cw,sz).replace(/<w:tblBorders>.*?<\/w:tblBorders>/,'');
+        }else{
+          xml+=tableXml(n,cw,sz);
+        }
+        xml+=emptyPara(baseSz);
+        continue;
+      }
+      if(skip.has(tag)) continue;
+      if(tag==='h3'){ xml+=para(n,{b:true,caps:true,sz:14,align:'center',before:160,after:60}); continue; }
+      if(n.classList.contains('mau')){ xml+=para(n,{b:true,sz:12,align:'right',after:40}); continue; }
+      if(n.classList.contains('pc')){ xml+=para(n,{sz:13,align:'center',after:120}); continue; }
+      if(n.classList.contains('psec')){ xml+=para(n,{b:true,sz:13,after:80,before:120}); continue; }
+      if(n.classList.contains('note-sm')){ xml+=para(n,{b:true,sz:11,after:60}); continue; }
+      if(n.children.length && [...n.children].some(c=>['table','h3'].includes(c.tagName.toLowerCase()))){
+        walk(n); continue;
+      }
+      const al=/text-align:\s*right/.test(n.getAttribute('style')||'')?'right':null;
+      const ps=blocksOf(n,{sz:baseSz,after:40,align:al});
+      xml += ps.length ? ps.join('') : '';
+    }
+  };
+  walk(root);
+  return xml;
+}
+
+function buildDocx(list){
+  const parser=new DOMParser();
+  let body='';
+  list.forEach((qi,idx)=>{
+    const wrap=parser.parseFromString(
+      '<div id="r">'+printPhieu(qi)+printBangTheoDoi(qi)+'</div>','text/html');
+    const docs=[...wrap.querySelectorAll('.pdoc')];
+    docs.forEach((pd,k)=>{
+      const kind = pd.classList.contains('land') ? 'landscape' : 'portrait';
+      body += docBody(pd, kind);
+      const last = (idx===list.length-1) && (k===docs.length-1);
+      if(!last) body += '<w:p><w:pPr>'+sectPr(kind)+'</w:pPr></w:p>';
+      else body += sectPr(kind);
+    });
+  });
+
+  const document_xml =
+    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+    '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">' +
+    '<w:body>' + body + '</w:body></w:document>';
+
+  const content_types =
+    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+    '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
+    '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
+    '<Default Extension="xml" ContentType="application/xml"/>' +
+    '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>' +
+    '</Types>';
+
+  const rels =
+    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+    '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+    '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>' +
+    '</Relationships>';
+
+  return zipStore([
+    {name:'[Content_Types].xml', data:content_types},
+    {name:'_rels/.rels',         data:rels},
+    {name:'word/document.xml',   data:document_xml}
+  ]);
+}
+
+function exportWord(list){
+  if(!list.length){ toast('Chưa có quý nào được nhập dữ liệu.',true); return; }
+  let bytes;
+  try{ bytes=buildDocx(list); }
+  catch(e){ toast('Không tạo được tệp Word: '+e.message,true); return; }
+  const nm=(S.info.hoTen||'vien-chuc').normalize('NFD').replace(/[̀-ͯ]/g,'')
+            .replace(/[^a-zA-Z0-9]+/g,'-').toLowerCase();
+  const fn='phieu-danh-gia-'+nm+'-quy-'+list.join('')+'-'+(S.info.nam||'')+'.docx';
+  if(saveFile(fn, bytes, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'))
+    toast('Đã tải '+fn+' — mở bằng Word, khổ A4, lề 1,5cm (trái 2cm).');
+}
+
 function showPreview(list){
   previewOpen=list;
   render();
@@ -1321,11 +1695,12 @@ function previewPanel(){
       <span class="tagv">Phiếu đánh giá (Mẫu 2) + Bảng theo dõi (Mẫu 3)</span>
       <span class="spacer"></span>
       <button class="btn p" id="btnPrintPrev">In / Lưu PDF</button>
+      <button class="btn" id="btnWordPrev">Xuất Word</button>
       <button class="btn" id="btnDlPrev">Tải tệp HTML</button>
       <button class="btn" id="btnClosePrev">Đóng</button>
     </h2>
     <div class="pad">
-      <div class="note b">Bản xem trước đúng như trang sẽ in ra giấy A4. Bấm <b>In / Lưu PDF</b> ở trên để in ngay, hoặc <b>Tải tệp HTML</b> nếu cần gửi phiếu cho người khác.</div>
+      <div class="note b">Bản xem trước mô phỏng đúng trang in: khổ <b>A4</b>, lề trên/dưới/phải <b>1,5cm</b>, lề trái <b>2cm</b>, chữ Times New Roman 13pt. Phiếu đánh giá (Mẫu 2) in khổ dọc, Bảng theo dõi (Mẫu 3) in khổ ngang vì có 17 cột. Bấm <b>In / Lưu PDF</b> để in ngay, <b>Xuất Word</b> nếu cần nộp bản mềm.</div>
       <div class="prev">${list.map(qi=>printPhieu(qi)+printBangTheoDoi(qi)).join('')}</div>
     </div>
   </div>`;
@@ -1414,7 +1789,9 @@ function bind(){
   const bp=$('#btnPrint'); if(bp) bp.onclick=()=>doPrint([Number(TAB.slice(1))]);
   const bv=$('#btnPreview'); if(bv) bv.onclick=()=>showPreview([Number(TAB.slice(1))]);
   const bd=$('#btnDownload'); if(bd) bd.onclick=()=>downloadPrintFile([Number(TAB.slice(1))]);
+  const bw=$('#btnWord'); if(bw) bw.onclick=()=>exportWord([Number(TAB.slice(1))]);
   const by=$('#btnPrintYear'); if(by) by.onclick=()=>doPrint(QS.filter(q=>calcQuarter(q).hasData));
+  const bwy=$('#btnWordYear'); if(bwy) bwy.onclick=()=>exportWord(QS.filter(q=>calcQuarter(q).hasData));
   const bb=$('#btnBackup'); if(bb) bb.onclick=backup;
   const br=$('#btnRestore'); if(br) br.onclick=()=>$('#fileIn').click();
   const fi=$('#fileIn'); if(fi) fi.onchange=restore;
@@ -1424,6 +1801,7 @@ function bind(){
   const bc=$('#btnClosePrev'); if(bc) bc.onclick=()=>{ previewOpen=null; render(); };
   const bpp=$('#btnPrintPrev'); if(bpp) bpp.onclick=()=>doPrint(previewOpen);
   const bdp=$('#btnDlPrev'); if(bdp) bdp.onclick=()=>downloadPrintFile(previewOpen);
+  const bwp=$('#btnWordPrev'); if(bwp) bwp.onclick=()=>exportWord(previewOpen);
   const bi=$('#btnInstall'); if(bi) bi.onclick=installApp;
   stamp();
 }
