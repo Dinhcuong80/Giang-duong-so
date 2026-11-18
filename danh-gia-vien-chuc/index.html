@@ -515,20 +515,27 @@ function migrate(o){
 const num = v => { const n=parseFloat(String(v).replace(',','.')); return isFinite(n)?n:null; };
 const fmt = (v,d=1) => (v===null||v===undefined||v==='')?'':Number(v).toLocaleString('vi-VN',{minimumFractionDigits:d,maximumFractionDigits:d});
 
-/* Điểm từng dòng nhiệm vụ — theo mục C.2 của Mẫu 3:
-   Số lượng  = (Hoàn thành / Được giao) × 100
-   Chất lượng= [(Mức CM + Mức khối lượng) / 10] × 100
-   Tiến độ   = (Đúng tiến độ / Được giao) × 100            */
+/* Điểm từng dòng nhiệm vụ.
+   Mỗi đơn vị sản phẩm được giao là một đầu điểm, nên n = tổng cột
+   "Được giao" và điểm từng dòng được nhân lên theo số lượng:
+
+     Số lượng   = (Hoàn thành ÷ Được giao) × 100 × Được giao   = Hoàn thành × 100
+     Chất lượng = [(Mức CM + Mức khối lượng) ÷ 10] × 100 × Hoàn thành
+     Tiến độ    = (Đúng tiến độ ÷ Được giao) × 100 × Được giao = Đúng tiến độ × 100
+
+   Nhờ vậy cả ba cột cùng thang với n: làm đủ và đạt mức 5/5 thì điểm
+   trung bình mỗi cột đúng bằng 100, không cột nào bị pha loãng. */
 function rowScore(t){
   const dg=num(t.dg), ht=num(t.ht), cm=num(t.cm), kl=num(t.kl), td=num(t.td);
   const uHt=num(t.uHt), uCm=num(t.uCm), uKl=num(t.uKl), uTd=num(t.uTd);
-  const r={counted: dg!==null && dg>0};
-  r.sl = (r.counted && ht!==null) ? ht/dg*100 : null;
-  r.cl = (cm!==null||kl!==null) ? (((cm||0)+(kl||0))/10)*100 : null;
-  r.td = (r.counted && td!==null) ? td/dg*100 : null;
-  r.uSl = (r.counted && uHt!==null) ? uHt/dg*100 : null;
-  r.uCl = (uCm!==null||uKl!==null) ? (((uCm||0)+(uKl||0))/10)*100 : null;
-  r.uTd = (r.counted && uTd!==null) ? uTd/dg*100 : null;
+  const r={counted: dg!==null && dg>0, dg};
+  const mucCL = (c,k) => (((c||0)+(k||0))/10)*100;
+  r.sl = (r.counted && ht!==null) ? ht/dg*100*dg : null;
+  r.cl = (r.counted && ht!==null && (cm!==null||kl!==null)) ? mucCL(cm,kl)*ht : null;
+  r.td = (r.counted && td!==null) ? td/dg*100*dg : null;
+  r.uSl = (r.counted && uHt!==null) ? uHt/dg*100*dg : null;
+  r.uCl = (r.counted && uHt!==null && (uCm!==null||uKl!==null)) ? mucCL(uCm,uKl)*uHt : null;
+  r.uTd = (r.counted && uTd!==null) ? uTd/dg*100*dg : null;
   return r;
 }
 
@@ -537,7 +544,7 @@ function calcTracking(q){
   const rows=q.tasks.map(rowScore);
   let n=0, sSl=0,sCl=0,sTd=0, sUSl=0,sUCl=0,sUTd=0;
   rows.forEach(r=>{
-    if(r.counted) n++;
+    if(r.counted) n += r.dg;      /* n = tổng cột "Được giao" */
     if(r.sl!==null) sSl+=r.sl;
     if(r.cl!==null) sCl+=r.cl;
     if(r.td!==null) sTd+=r.td;
@@ -834,7 +841,7 @@ function viewQuarter(qi){
       <button class="btn sm" data-add="${qi}">+ Thêm nhiệm vụ</button>
     </h2>
     <div class="pad">
-      <div class="note b">Cột <b>Điểm</b> tự động tính: Số lượng = Hoàn thành ÷ Được giao × 100 · Chất lượng = (Mức CM + Mức khối lượng) ÷ 10 × 100 · Tiến độ = Đúng tiến độ ÷ Được giao × 100. Chọn mức 1–5 để xem ngay mô tả tương ứng trong Phụ lục.</div>
+      <div class="note b">Cột <b>Điểm</b> tự động tính, nhân theo số lượng: <b>Số lượng</b> = Hoàn thành × 100 · <b>Chất lượng</b> = (Mức CM + Mức khối lượng) ÷ 10 × 100 × Hoàn thành · <b>Tiến độ</b> = Đúng tiến độ × 100. Điểm trung bình mỗi cột = Tổng điểm ÷ n, với <b>n = tổng cột “Được giao”</b>. Chọn mức 1–5 để xem ngay mô tả tương ứng trong Phụ lục.</div>
       <div class="tscroll" style="margin-top:12px">
         <table class="t">
           <thead>
@@ -877,7 +884,7 @@ function viewQuarter(qi){
           </tfoot>
         </table>
       </div>
-      <div class="hint">Theo hướng dẫn mục C.1.a của Mẫu 3: mỗi nhiệm vụ được tính <b>1</b> vào n khi cột “Được giao” có giá trị (kể cả khi được giao 30 tiết, 2 bài báo…). Số lượng được giao vẫn dùng để tính tỷ lệ % hoàn thành.</div>
+      <div class="hint">Mỗi đơn vị sản phẩm được giao là một đầu điểm: nhiệm vụ ghi “được giao 2” tính <b>2</b> vào n và điểm ba cột của dòng đó cũng nhân đôi. Nhờ vậy làm đủ và đạt mức 5/5 thì trung bình mỗi cột đúng bằng 100 điểm.</div>
     </div>
   </div>
 
@@ -1035,10 +1042,10 @@ function viewHelp(){
         <div>
           <h3 style="font-size:14px;margin:0 0 6px">Công thức phần mềm đang dùng</h3>
           <div style="font-size:13.5px;color:var(--ink2);line-height:1.8">
-            Điểm số lượng = Hoàn thành ÷ Được giao × 100<br>
-            Điểm chất lượng = (Mức CM + Mức khối lượng) ÷ 10 × 100<br>
-            Điểm tiến độ = Đúng tiến độ ÷ Được giao × 100<br>
-            Điểm trung bình mỗi cột = Tổng điểm ÷ n<br>
+            Điểm số lượng = Hoàn thành ÷ Được giao × 100 × Được giao<br>
+            Điểm chất lượng = (Mức CM + Mức khối lượng) ÷ 10 × 100 × Hoàn thành<br>
+            Điểm tiến độ = Đúng tiến độ ÷ Được giao × 100 × Được giao<br>
+            Điểm trung bình mỗi cột = Tổng điểm ÷ n, với n = tổng cột “Được giao”<br>
             <b>a)</b> = Tổng điểm A × 0,3 &nbsp;(/30)<br>
             <b>b)</b> không giữ chức vụ = Tổng B ÷ 3 × 0,7 &nbsp;(/70)<br>
             <b>b)</b> giữ chức vụ = Tổng B ÷ 6 × 0,7 &nbsp;(/70)<br>
@@ -1056,8 +1063,10 @@ function viewHelp(){
         </tbody></table>
         <div class="hint">Mức HTXS phải qua bình xét của đơn vị, mỗi nhóm N1/N2/N3 không vượt quá 20% tổng số cá nhân xếp loại HTT (có thể tới 25% với đơn vị có thành tích xuất sắc, nổi trội).</div>
       </div></details>
-      <details class="acc"><summary>Về chỉ số n (tổng số nhiệm vụ được giao)</summary><div>
-        <p style="font-size:13.5px;color:var(--ink2);line-height:1.7">Hướng dẫn mục C.1.a của Mẫu 3 ghi: “Mỗi một nhiệm vụ/nhiệm vụ thứ cấp được tính vào Tổng số nhiệm vụ được giao (n) khi cột Được giao có đơn vị tính (ví dụ: Dạy 30 tiết; Bắt buộc 1 bài báo khoa học…)”. Vì vậy phần mềm <b>đếm số nhiệm vụ</b> có giá trị ở cột “Được giao”, chứ không cộng dồn các con số đó. Cách này cho kết quả giống file Excel của trường khi mỗi nhiệm vụ ghi “1”, và vẫn đúng khi thầy/cô ghi “30 tiết” hay “2 bài báo”.</p>
+      <details class="acc"><summary>Về chỉ số n và cách nhân điểm theo số lượng</summary><div>
+        <p style="font-size:13.5px;color:var(--ink2);line-height:1.7"><b>n = tổng cột “Được giao”</b>, đúng như công thức <code>=SUM(C14:C41)</code> trong file Excel của trường. Mỗi đơn vị sản phẩm được giao là một đầu điểm, nên điểm của cả ba cột đều được nhân lên theo số lượng: nhiệm vụ ghi “được giao 2, hoàn thành 2” thì điểm số lượng, chất lượng và tiến độ của dòng đó đều nhân đôi.</p>
+        <p style="font-size:13.5px;color:var(--ink2);line-height:1.7">Điều này giữ cho ba cột cùng thang đo với n. Nếu chỉ nhân cột Số lượng và Tiến độ mà để nguyên cột Chất lượng — như công thức đang có trong một số file Excel — thì tử số của cột Chất lượng cộng theo số dòng trong khi mẫu số n lại cộng theo số lượng, làm điểm chất lượng bị pha loãng mỗi khi có nhiệm vụ được giao từ 2 trở lên.</p>
+        <p style="font-size:13.5px;color:var(--ink2);line-height:1.7">Cột Chất lượng nhân theo <b>số lượng hoàn thành</b>, nên phần việc chưa làm xong không được tính điểm chất lượng.</p>
       </div></details>
       <details class="acc"><summary>Lưu trữ và sao lưu</summary><div>
         <p style="font-size:13.5px;color:var(--ink2);line-height:1.7">Dữ liệu được lưu ngay trên trình duyệt của thiết bị đang dùng, không gửi đi đâu. Nếu xóa dữ liệu trình duyệt hoặc đổi máy thì dữ liệu sẽ không còn, nên hãy bấm <b>Sao lưu dữ liệu</b> ở tab Thông tin chung để tải tệp .json về, và dùng <b>Phục hồi từ tệp</b> khi cần mở lại.</p>

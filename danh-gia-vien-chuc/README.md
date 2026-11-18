@@ -26,9 +26,10 @@ Xây dựng theo Thông báo đánh giá, xếp loại chất lượng viên ch�
 
 | Chỉ tiêu | Công thức |
 |---|---|
-| Điểm số lượng | Hoàn thành ÷ Được giao × 100 |
-| Điểm chất lượng | (Mức CM + Mức khối lượng) ÷ 10 × 100 |
-| Điểm tiến độ | Đúng tiến độ ÷ Được giao × 100 |
+| Điểm số lượng | Hoàn thành ÷ Được giao × 100 × Được giao |
+| Điểm chất lượng | (Mức CM + Mức khối lượng) ÷ 10 × 100 × Hoàn thành |
+| Điểm tiến độ | Đúng tiến độ ÷ Được giao × 100 × Được giao |
+| n | tổng cột "Được giao" |
 | Điểm trung bình mỗi cột | Tổng điểm ÷ n |
 | a) Tiêu chí chung | Tổng điểm A × 0,3 — tối đa 30 |
 | b) Kết quả nhiệm vụ, không giữ chức vụ | Tổng điểm B ÷ 3 × 0,7 — tối đa 70 |
@@ -37,11 +38,13 @@ Xây dựng theo Thông báo đánh giá, xếp loại chất lượng viên ch�
 
 Mức xếp loại: **≥ 90** Hoàn thành xuất sắc nhiệm vụ · **90 > TĐ ≥ 70** Hoàn thành tốt nhiệm vụ · **70 > TĐ ≥ 50** Hoàn thành nhiệm vụ · **< 50** Không hoàn thành nhiệm vụ.
 
-### Về chỉ số n
+### Về chỉ số n và cách nhân điểm
 
-Hướng dẫn mục C.1.a của Mẫu 3 quy định: *“Mỗi một nhiệm vụ/nhiệm vụ thứ cấp được tính vào Tổng số nhiệm vụ được giao (n) khi cột Được giao có đơn vị tính (ví dụ: Dạy 30 tiết; Bắt buộc 1 bài báo khoa học…)”*.
+`n` là **tổng cột "Được giao"**, đúng như công thức `=SUM(C14:C41)` trong file Excel của trường. Mỗi đơn vị sản phẩm được giao là một đầu điểm, nên điểm của cả ba cột đều được nhân lên theo số lượng: nhiệm vụ ghi "được giao 2, hoàn thành 2" thì điểm số lượng, chất lượng và tiến độ của dòng đó đều nhân đôi.
 
-Vì vậy phần mềm **đếm số nhiệm vụ** có giá trị ở cột “Được giao”, không cộng dồn các con số đó. Khi mỗi nhiệm vụ ghi “1” thì kết quả trùng với công thức trong file Excel của trường; cách này còn đúng cả khi ghi “30 tiết” hay “2 bài báo”.
+Cách này giữ cho ba cột cùng thang đo với `n`: làm đủ và đạt mức 5/5 thì điểm trung bình mỗi cột đúng bằng 100. Nếu chỉ nhân cột Số lượng và Tiến độ mà để nguyên cột Chất lượng, tử số của cột Chất lượng cộng theo số dòng trong khi mẫu số `n` cộng theo số lượng, làm điểm chất lượng bị pha loãng mỗi khi có nhiệm vụ được giao từ 2 trở lên.
+
+Cột Chất lượng nhân theo **số lượng hoàn thành**, nên phần việc chưa làm xong không được tính điểm chất lượng.
 
 ## Về dữ liệu
 
