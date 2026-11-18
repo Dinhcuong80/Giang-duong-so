@@ -193,7 +193,9 @@ table.ys tr.tot td{background:#f8fafc;font-weight:700}
 .pdoc .pinfo{margin:0 0 8pt;font-size:13pt}
 .pdoc .pinfo div{margin:2.5pt 0}
 .pdoc .psec{font-weight:bold;margin:10pt 0 5pt;font-size:12pt}
-.pdoc .dots{font-size:8pt}
+/* dòng để viết tay: dùng đường kẻ nên luôn dừng đúng lề, không tràn */
+.pdoc .dots{border-bottom:.75pt dotted #000;height:0;margin:13pt 0 0;font-size:0;line-height:0}
+.pdoc .dots-sign{font-size:12pt}
 .pdoc table.pt{width:100%;border-collapse:collapse;font-size:12pt;table-layout:fixed}
 .pdoc table.pt th,.pdoc table.pt td{border:.75pt solid #000;padding:1.4pt 2.4pt;vertical-align:top;
   word-wrap:break-word;overflow-wrap:break-word}
@@ -1158,9 +1160,13 @@ function printPhieu(qi){
         : '- Viên chức KHÔNG GIỮ CHỨC VỤ = (Tổng điểm B '+fmt(c.B,1)+' : 3) × 0,7 = <b>'+(c.diemB!==null?fmt(c.diemB,2):'')+'</b>/70'}</div>
       <div style="margin-top:5pt"><b>Tổng điểm (a+b): ${c.total!==null?fmt(c.total,2):''}/100</b> &nbsp;&nbsp;&nbsp; Tổng ➁: <b>${c.tr.s2||0}</b> &nbsp;&nbsp;&nbsp; Tổng ➀: <b>${c.tr.s1||0}</b></div>
       <div style="margin-top:6pt">2. Ưu điểm:</div>
-      ${linesOf(q.uuDiem).map(x=>'<div style="margin-left:14pt">'+(x?'- '+esc(x):dots(60))+'</div>').join('')}
+      ${linesOf(q.uuDiem).map(x=> x
+        ? '<div style="margin-left:14pt">- '+esc(x)+'</div>'
+        : '<div class="dots" style="margin-left:14pt"></div>').join('')}
       <div style="margin-top:4pt">3. Hạn chế, khuyết điểm:</div>
-      ${linesOf(q.hanChe).map(x=>'<div style="margin-left:14pt">'+(x?'- '+esc(x):dots(60))+'</div>').join('')}
+      ${linesOf(q.hanChe).map(x=> x
+        ? '<div style="margin-left:14pt">- '+esc(x)+'</div>'
+        : '<div class="dots" style="margin-left:14pt"></div>').join('')}
       <div style="margin-top:5pt">4. Đề xuất mức xếp loại chất lượng:</div>
       <div class="pmarks" style="margin-left:14pt">
         <div>${mark(r.k==='xs')} Hoàn thành <b>xuất sắc</b> nhiệm vụ: Tổng điểm ≥ 90đ</div>
@@ -1178,17 +1184,17 @@ function printPhieu(qi){
     <div class="psec">B. NHẬN XÉT, ĐÁNH GIÁ CỦA CẤP CÓ THẨM QUYỀN</div>
     <div>
       <div>1.1. Nhận xét, đánh giá của người trực tiếp quản lý, phân công công việc:</div>
-      <div class="dots">${dots(80)}</div><div class="dots">${dots(80)}</div>
+      <div class="dots"></div><div class="dots"></div>
       <div style="margin-top:4pt">1.2. Đề nghị mức xếp loại: ☐ HTXS &nbsp; ☐ HTT &nbsp; ☐ HT &nbsp; ☐ Không HT</div>
     </div>
     <table class="psign"><tr><td></td><td>
       <i>Bắc Ninh, ngày …… tháng …… năm 20……</i><br><b>TRƯỞNG ĐƠN VỊ</b><br><i>(ký và ghi rõ họ tên)</i>
-      <div style="height:40pt"></div>${dots(28)}
+      <div style="height:40pt"></div><span class="dots-sign">${dots(16)}</span>
     </td></tr></table>
     <div>
       <div>2. Ý kiến thẩm định của bộ phận tham mưu công tác tổ chức cán bộ:</div>
       <div>2.1. Ý kiến thẩm định kết quả tự đánh giá của viên chức:</div>
-      <div class="dots">${dots(80)}</div><div class="dots">${dots(80)}</div>
+      <div class="dots"></div><div class="dots"></div>
       <div>2.2. Đánh giá chất lượng sản phẩm đầu ra, hiệu quả thực hiện nhiệm vụ của viên chức:</div>
       <div class="pmarks">☐ Chủ động tiếp cận, giải quyết hiệu quả vấn đề, có kết quả cụ thể</div>
       <div class="pmarks">☐ Cơ bản đáp ứng yêu cầu nhưng còn hạn chế, cần tiếp tục hoàn thiện</div>
@@ -1196,17 +1202,17 @@ function printPhieu(qi){
     </div>
     <table class="psign"><tr><td></td><td>
       <i>Bắc Ninh, ngày …… tháng …… năm 20……</i><br><b>TRƯỞNG PHÒNG TC,PC,TV</b><br><i>(ký và ghi rõ họ tên)</i>
-      <div style="height:40pt"></div>${dots(28)}
+      <div style="height:40pt"></div><span class="dots-sign">${dots(16)}</span>
     </td></tr></table>
     <div class="psec">C. KẾT QUẢ XẾP LOẠI CHẤT LƯỢNG VIÊN CHỨC</div>
     <div>
       <div>Hội đồng đánh giá quyết định mức xếp loại chất lượng:</div>
-      <div class="dots">${dots(80)}</div>
+      <div class="dots"></div>
       <div class="pmarks">☐ HTXS &nbsp;&nbsp; ☐ HTT &nbsp;&nbsp; ☐ HT &nbsp;&nbsp; ☐ Không HT</div>
     </div>
     <table class="psign"><tr><td></td><td>
       <i>Bắc Ninh, ngày …… tháng …… năm 20……</i><br><b>HIỆU TRƯỞNG</b><br><i>(ký và ghi rõ họ tên)</i>
-      <div style="height:40pt"></div>${dots(28)}
+      <div style="height:40pt"></div><span class="dots-sign">${dots(16)}</span>
     </td></tr></table>
   </div>`;
 }
@@ -1297,7 +1303,7 @@ function printBangTheoDoi(qi){
     <div style="margin-top:8pt">Kết quả đánh giá của đơn vị: Số lượng: ……… điểm &nbsp; Chất lượng: ……… điểm &nbsp; Tiến độ: ……… điểm &nbsp; Tổng ➁: ……… &nbsp; Tổng ➀: ………</div>
     <table class="psign"><tr>
       <td><i>Bắc Ninh, ngày …… tháng …… năm 20……</i><br><b>TRƯỞNG ĐƠN VỊ</b><br><i>(ký và ghi rõ họ tên)</i>
-        <div style="height:40pt"></div>${dots(24)}</td>
+        <div style="height:40pt"></div><span class="dots-sign">${dots(14)}</span></td>
       <td><i>Bắc Ninh, ngày ${esc(q.ngay)||'…… tháng …… năm 20……'}</i><br><b>VIÊN CHỨC TỰ ĐÁNH GIÁ</b><br><i>(ký và ghi rõ họ tên)</i>
         <div style="height:40pt"></div><b>${esc(i.hoTen.toUpperCase())}</b></td>
     </tr></table>
@@ -1513,6 +1519,13 @@ function para(node, st){ return paraOf([...node.childNodes], st); }
    phần chữ nằm ngoài div vẫn được giữ làm đoạn riêng (trước đây bị bỏ sót,
    làm mất tên tiêu chí và các ô ký). */
 const BLOCK_TAGS = new Set(['div','p','h3','ul','ol','li']);
+/* dòng để viết tay: đoạn trống có đường kẻ chấm bên dưới, luôn dừng đúng lề */
+function dotLine(indent){
+  return '<w:p><w:pPr><w:spacing w:before="160" w:after="0"/>'+
+    (indent?'<w:ind w:left="'+indent+'"/>':'')+
+    '<w:pBdr><w:bottom w:val="dotted" w:sz="6" w:space="1" w:color="000000"/></w:pBdr>'+
+    '</w:pPr><w:r><w:rPr><w:sz w:val="'+HALF(12)+'"/></w:rPr></w:r></w:p>';
+}
 function blocksOf(el, st){
   const out=[]; let buf=[];
   const flush=()=>{
@@ -1522,6 +1535,12 @@ function blocksOf(el, st){
     buf=[];
   };
   for(const n of el.childNodes){
+    if(n.nodeType===1 && n.classList && n.classList.contains('dots')){
+      flush();
+      const ind = /margin-left:\s*14pt/.test(n.getAttribute('style')||'') ? 280 : 0;
+      out.push(dotLine(ind));
+      continue;
+    }
     if(n.nodeType===1 && BLOCK_TAGS.has(n.tagName.toLowerCase())){
       flush();
       const inner=blocksOf(n, st);
@@ -1642,7 +1661,7 @@ function docBody(root, kind){
       if(n.classList.contains('pc')){ xml+=para(n,{sz:13,align:'center',after:120}); continue; }
       if(n.classList.contains('psec')){ xml+=para(n,{b:true,sz:12,after:80,before:120}); continue; }
       if(n.classList.contains('note-sm')){ xml+=para(n,{b:true,sz:12,after:60}); continue; }
-      if(n.classList.contains('dots')){ xml+=para(n,{sz:8,after:20}); continue; }
+      if(n.classList.contains('dots')){ xml+=dotLine(0); continue; }
       if(n.classList.contains('pinfo')||n.closest('.pinfo')){ }
       if(n.children.length && [...n.children].some(c=>['table','h3'].includes(c.tagName.toLowerCase()))){
         walk(n); continue;
