@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Đánh giá, xếp loại chất lượng viên chức — ĐH TDTT Bắc Ninh</title>
+<meta name="description" content="Phần mềm đánh giá, xếp loại chất lượng viên chức theo quý — Trường Đại học TDTT Bắc Ninh. Tự tính điểm mục A, mục B và xếp loại theo Mẫu 2, 3a-GV, 3b-HC.">
+<meta name="theme-color" content="#7a1212">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{
+  --bg:#f4f6f9; --panel:#ffffff; --ink:#15202b; --ink2:#5b6b7c; --line:#dde4ec;
+  --brand:#9b1c1c; --brand2:#b91c1c; --accent:#1d4ed8; --accent-soft:#eef2ff;
+  --ok:#15803d; --ok-soft:#ecfdf3; --warn:#b45309; --warn-soft:#fffbeb;
+  --bad:#b91c1c; --bad-soft:#fef2f2; --shadow:0 1px 2px rgba(16,24,40,.06),0 8px 24px rgba(16,24,40,.06);
+  --r:10px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--ink);
+  font:15px/1.5 "Segoe UI",system-ui,-apple-system,"Noto Sans",Arial,sans-serif;
+  -webkit-text-size-adjust:100%;
+}
+a{color:var(--accent)}
+.wrap{max-width:1280px;margin:0 auto;padding:0 16px 64px}
+
+/* ---------- header ---------- */
+.top{background:linear-gradient(180deg,#8f1717,#7a1212);color:#fff;border-bottom:3px solid #d4a017}
+.top .wrap{padding:14px 16px}
+.top .org{font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;opacity:.85}
+.top h1{margin:4px 0 0;font-size:19px;font-weight:650;letter-spacing:.01em}
+.top .sub{font-size:13px;opacity:.85;margin-top:3px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;margin-top:12px}
+.tab{
+  appearance:none;border:0;cursor:pointer;font:inherit;font-size:13.5px;font-weight:600;
+  padding:8px 14px;border-radius:8px 8px 0 0;background:rgba(255,255,255,.14);color:#fff;
+}
+.tab:hover{background:rgba(255,255,255,.24)}
+.tab.on{background:var(--bg);color:var(--brand)}
+.tab .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-left:7px;vertical-align:1px}
+.dot.g{background:#22c55e}.dot.y{background:#f59e0b}.dot.r{background:#9ca3af}
+
+/* ---------- layout ---------- */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);margin-top:16px}
+.panel>h2{margin:0;padding:12px 16px;border-bottom:1px solid var(--line);font-size:15px;font-weight:650;
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.panel>h2 .tagv{font-weight:500;font-size:12px;color:var(--ink2);background:#f1f5f9;border:1px solid var(--line);padding:2px 8px;border-radius:999px}
+.pad{padding:16px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:860px){.g2,.g3,.g4{grid-template-columns:1fr}}
+
+label.f{display:block}
+label.f>span{display:block;font-size:12.5px;font-weight:600;color:var(--ink2);margin-bottom:5px}
+input[type=text],input[type=number],select,textarea{
+  width:100%;font:inherit;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;color:var(--ink)
+}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--accent-soft);border-color:var(--accent)}
+textarea{min-height:96px;resize:vertical;line-height:1.55}
+.chk{display:inline-flex;align-items:center;gap:7px;font-size:14px;cursor:pointer;user-select:none}
+.chk input{width:16px;height:16px;accent-color:var(--brand)}
+.hint{font-size:12.5px;color:var(--ink2);margin-top:6px}
+.btn{
+  appearance:none;cursor:pointer;font:inherit;font-size:13.5px;font-weight:600;
+  padding:8px 13px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:var(--ink)
+}
+.btn:hover{background:#f8fafc}
+.btn.p{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn.p:hover{background:var(--brand2)}
+.btn.a{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.a:hover{filter:brightness(1.08)}
+.btn.sm{padding:4px 9px;font-size:12.5px}
+.btn.x{color:var(--bad);border-color:#fecaca;background:#fff;padding:3px 8px;font-size:12px}
+.btn.x:hover{background:var(--bad-soft)}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.spacer{flex:1}
+
+/* ---------- tables ---------- */
+.tscroll{overflow-x:auto}
+table.t{width:100%;border-collapse:collapse;font-size:13.5px}
+table.t th,table.t td{border:1px solid var(--line);padding:6px 8px;vertical-align:middle}
+table.t thead th{background:#f1f5f9;font-weight:650;font-size:12.5px;text-align:center;line-height:1.3}
+table.t tbody tr:hover{background:#fcfdff}
+table.t td.n{text-align:center}
+table.t tr.grp td{background:#eef2f7;font-weight:700;font-size:13px}
+table.t tr.sum td{background:#f8fafc;font-weight:700}
+table.t input,table.t select{padding:5px 6px;border-radius:6px;font-size:13px}
+table.t input.num{width:72px;text-align:center}
+table.t input.nm{min-width:260px}
+.cell-out{display:inline-block;min-width:54px;text-align:center;font-weight:650;color:var(--accent);
+  background:var(--accent-soft);border-radius:6px;padding:3px 6px}
+.cell-out.empty{color:#94a3b8;background:#f1f5f9;font-weight:500}
+.sel-lk{width:100%;min-width:104px}
+.sel-lk[data-v="1"],.sel-lk[data-v="2"]{color:#b45309}
+.sel-lk[data-v="4"],.sel-lk[data-v="5"]{color:#15803d}
+.mini{font-size:11.5px;color:var(--ink2);display:block;margin-top:3px;max-width:230px;line-height:1.35}
+
+/* ---------- result cards ---------- */
+.cards{display:grid;gap:12px;grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:860px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.card{border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;background:#fff}
+.card .k{font-size:12px;font-weight:650;color:var(--ink2);text-transform:uppercase;letter-spacing:.03em}
+.card .v{font-size:26px;font-weight:700;margin-top:4px;line-height:1.1}
+.card .u{font-size:13px;color:var(--ink2);font-weight:500}
+.card.big{grid-column:span 2}
+@media(max-width:860px){.card.big{grid-column:span 2}}
+.rank{display:inline-block;padding:5px 12px;border-radius:999px;font-weight:700;font-size:14px;margin-top:6px}
+.rank.xs{background:var(--ok-soft);color:var(--ok);border:1px solid #bbf7d0}
+.rank.t{background:var(--accent-soft);color:var(--accent);border:1px solid #c7d2fe}
+.rank.h{background:var(--warn-soft);color:var(--warn);border:1px solid #fde68a}
+.rank.k{background:var(--bad-soft);color:var(--bad);border:1px solid #fecaca}
+.rank.na{background:#f1f5f9;color:var(--ink2);border:1px solid var(--line)}
+
+.note{background:var(--warn-soft);border:1px solid #fde68a;border-radius:8px;padding:10px 12px;font-size:13px;color:#7c4a03}
+.note.b{background:var(--accent-soft);border-color:#c7d2fe;color:#1e3a8a}
+.note b{font-weight:700}
+
+details.acc{border:1px solid var(--line);border-radius:8px;margin-top:10px;background:#fff}
+details.acc>summary{cursor:pointer;padding:9px 12px;font-weight:650;font-size:13.5px}
+details.acc>div{padding:0 12px 12px}
+
+/* criteria A table */
+table.ca{width:100%;border-collapse:collapse;font-size:13.5px}
+table.ca th,table.ca td{border:1px solid var(--line);padding:7px 9px;vertical-align:top}
+table.ca thead th{background:#f1f5f9;font-size:12.5px;text-align:center}
+table.ca tr.h1 td{background:#e7ecf3;font-weight:700}
+table.ca tr.h2 td{background:#f4f7fa;font-weight:650}
+table.ca td.code{text-align:center;width:46px;font-weight:650;color:var(--ink2)}
+table.ca td.mx{text-align:center;width:66px;font-weight:650}
+table.ca td.in{width:92px;text-align:center}
+table.ca td.in input{width:70px;text-align:center}
+table.ca ul{margin:6px 0 0;padding-left:20px;color:var(--ink2);font-size:12.5px}
+table.ca ul li{margin:2px 0}
+
+/* year summary */
+table.ys{width:100%;border-collapse:collapse;font-size:14px}
+table.ys th,table.ys td{border:1px solid var(--line);padding:9px 10px;text-align:center}
+table.ys thead th{background:#f1f5f9;font-size:12.5px}
+table.ys td.q{text-align:left;font-weight:650}
+table.ys tr.tot td{background:#f8fafc;font-weight:700}
+
+.footer{margin-top:22px;font-size:12.5px;color:var(--ink2);text-align:center;line-height:1.7}
+
+/* ---------- toast / modal / preview ---------- */
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(12px);
+  background:#15202b;color:#fff;padding:11px 18px;border-radius:999px;font-size:13.5px;font-weight:600;
+  box-shadow:0 10px 30px rgba(16,24,40,.25);opacity:0;pointer-events:none;transition:.22s;z-index:90;max-width:90vw;text-align:center}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.bad{background:var(--bad)}
+#modal{position:fixed;inset:0;background:rgba(15,32,43,.5);display:none;align-items:center;justify-content:center;z-index:100;padding:18px}
+#modal.on{display:flex}
+#modal .box{background:#fff;border-radius:12px;max-width:460px;width:100%;box-shadow:0 20px 60px rgba(16,24,40,.3);overflow:hidden}
+#modal .box h3{margin:0;padding:14px 18px;font-size:15.5px;border-bottom:1px solid var(--line)}
+#modal .box p{margin:0;padding:16px 18px;font-size:14px;color:var(--ink2);line-height:1.6}
+#modal .box .bar{padding:0 18px 16px;justify-content:flex-end}
+.prev{border:1px solid var(--line);border-radius:8px;background:#fff;max-height:620px;overflow:auto;padding:18px;margin-top:12px}
+.prev .pdoc{border-bottom:1px dashed #cbd5e1;padding-bottom:18px;margin-bottom:18px}
+.prev .pdoc:last-child{border-bottom:0;margin-bottom:0}
+
+/* ---------- print ---------- */
+#printArea{display:none}
+@media print{
+  @page{size:A4;margin:14mm 12mm}
+  body{background:#fff;font-size:11pt}
+  .top,.tabs,.wrap>.panel,.footer,.noprint{display:none !important}
+  #printArea{display:block}
+  .pdoc{page-break-after:always}
+  .pdoc:last-child{page-break-after:auto}
+  table{page-break-inside:auto}
+  tr{page-break-inside:avoid}
+}
+#printArea .pdoc{font-family:"Times New Roman",Times,serif;color:#000;font-size:11pt;line-height:1.35}
+#printArea .ph{width:100%;border-collapse:collapse;margin-bottom:6pt}
+#printArea .ph td{width:50%;text-align:center;font-size:10.5pt;vertical-align:top;border:0;padding:0}
+#printArea .ph b{display:block}
+#printArea h3{text-align:center;font-size:13pt;margin:10pt 0 2pt;text-transform:uppercase}
+#printArea .pc{text-align:center;margin:0 0 8pt;font-size:11pt}
+#printArea .pinfo{margin:0 0 7pt;font-size:11pt}
+#printArea .pinfo div{margin:2pt 0}
+#printArea .psec{font-weight:bold;margin:9pt 0 4pt;font-size:11pt}
+#printArea table.pt{width:100%;border-collapse:collapse;font-size:9.5pt}
+#printArea table.pt th,#printArea table.pt td{border:.6pt solid #000;padding:2.4pt 3.5pt;vertical-align:top}
+#printArea table.pt thead th{text-align:center;font-weight:bold}
+#printArea table.pt td.c{text-align:center}
+#printArea table.pt tr.b td{font-weight:bold}
+#printArea .pres{margin-top:8pt;font-size:11pt}
+#printArea .pres div{margin:3pt 0}
+#printArea .psign{width:100%;border-collapse:collapse;margin-top:14pt;font-size:11pt}
+#printArea .psign td{border:0;text-align:center;vertical-align:top;width:50%}
+#printArea .psign i{font-size:10pt}
+#printArea .pfill{border-bottom:.6pt dotted #000;display:inline-block;min-width:60%}
+#printArea .pmarks{font-size:10.5pt}
+#printArea .wide{font-size:8.5pt}
+#printArea .wide th,#printArea .wide td{padding:1.6pt 2.4pt}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="wrap">
+    <div class="org">Bộ Văn hóa, Thể thao và Du lịch · Trường Đại học TDTT Bắc Ninh</div>
+    <h1>Phần mềm đánh giá, xếp loại chất lượng viên chức theo quý</h1>
+    <div class="sub">Mẫu 2 (Phiếu đánh giá) · Mẫu 3a-GV / 3b-HC (Bảng theo dõi kết quả thực hiện nhiệm vụ)</div>
+    <div class="tabs" id="tabs"></div>
+  </div>
+</div>
+
+<div class="wrap" id="view"></div>
+
+<div class="wrap footer noprint">
+  Trường Đại học TDTT Bắc Ninh · Số liệu lưu ngay trong trình duyệt của thiết bị này, không gửi lên mạng. Nên bấm <b>Sao lưu dữ liệu</b> định kỳ để giữ bản dự phòng.
+</div>
+
+<div id="printArea"></div>
+<div id="toast"></div>
+<div id="modal"><div class="box">
+  <h3 id="mTitle"></h3><p id="mBody"></p>
+  <div class="bar"><button class="btn" id="mNo">Hủy</button><button class="btn p" id="mYes">Đồng ý</button></div>
+</div></div>
+
+<script>
+"use strict";
+
+/* =========================================================
+   1. DỮ LIỆU GỐC (theo Thông báo đánh giá, xếp loại viên chức
+      và các Phụ lục 1–4 của Trường ĐH TDTT Bắc Ninh)
+   ========================================================= */
+
+/* --- Mục A: tiêu chí chung, tổng 100 điểm --- */
+const CRIT_A = [
+  {t:'h1', code:'I', name:'Phẩm chất chính trị, phẩm chất đạo đức, văn hóa thực thi công vụ và ý thức kỷ luật, kỷ cương trong thực thi công vụ', max:30},
+  {t:'in', code:'1', id:'a1', name:'Chính trị tư tưởng', max:10, sub:[
+    'Chấp hành chủ trương, đường lối, quy định của Đảng, chính sách, pháp luật của Nhà nước và các nguyên tắc tổ chức, kỷ luật của Đảng, nhất là nguyên tắc tập trung dân chủ, tự phê bình và phê bình.',
+    'Có quan điểm, bản lĩnh chính trị vững vàng; kiên định lập trường; không dao động trước mọi khó khăn, thách thức.',
+    'Đặt lợi ích của Đảng, quốc gia - dân tộc, nhân dân, tập thể lên trên lợi ích cá nhân.',
+    'Có ý thức nghiên cứu, học tập, vận dụng chủ nghĩa Mác - Lênin, tư tưởng Hồ Chí Minh, nghị quyết, chỉ thị, quyết định và các văn bản của Đảng.']},
+  {t:'in', code:'2', id:'a2', name:'Đạo đức, lối sống', max:10, sub:[
+    'Không tham ô, tham nhũng, tiêu cực, lãng phí, quan liêu, cơ hội, vụ lợi, hách dịch, cửa quyền; không có biểu hiện suy thoái về đạo đức, lối sống, tự diễn biến, tự chuyển hóa.',
+    'Có lối sống trung thực, khiêm tốn, chân thành, trong sáng, giản dị.',
+    'Có tinh thần đoàn kết, xây dựng cơ quan, tổ chức, đơn vị trong sạch, vững mạnh.',
+    'Không để người thân, người quen lợi dụng chức vụ, quyền hạn của mình để trục lợi.']},
+  {t:'in', code:'3', id:'a3', name:'Tác phong, lề lối làm việc', max:5, sub:[
+    'Có trách nhiệm với công việc; năng động, sáng tạo, dám nghĩ, dám làm, linh hoạt trong thực hiện nhiệm vụ.',
+    'Phương pháp làm việc khoa học, dân chủ, đúng nguyên tắc.',
+    'Có tinh thần trách nhiệm và phối hợp trong thực hiện nhiệm vụ.',
+    'Có thái độ đúng mực và phong cách ứng xử, lề lối làm việc chuẩn mực, đáp ứng yêu cầu của văn hóa công vụ.']},
+  {t:'in', code:'4', id:'a4', name:'Ý thức tổ chức kỷ luật', max:5, sub:[
+    'Chấp hành sự phân công của tổ chức.',
+    'Thực hiện các quy định, quy chế, nội quy của cơ quan, tổ chức, đơn vị nơi công tác.',
+    'Thực hiện việc kê khai và công khai tài sản, thu nhập theo quy định.',
+    'Báo cáo đầy đủ, trung thực, cung cấp thông tin chính xác, khách quan về những nội dung liên quan đến việc thực hiện chức trách, nhiệm vụ được giao và hoạt động của cơ quan, tổ chức, đơn vị với cấp trên khi được yêu cầu.']},
+  {t:'h1', code:'II', name:'Năng lực chuyên môn, nghiệp vụ theo yêu cầu của vị trí việc làm; khả năng đáp ứng yêu cầu thực thi nhiệm vụ được giao; tinh thần trách nhiệm trong thực thi nhiệm vụ; thái độ phục vụ người dân, doanh nghiệp và khả năng phối hợp với đồng nghiệp', max:30},
+  {t:'in', code:'1', id:'b1', name:'Năng lực chuyên môn, nghiệp vụ theo yêu cầu của vị trí việc làm.', max:10},
+  {t:'in', code:'2', id:'b2', name:'Khả năng đáp ứng yêu cầu thực thi nhiệm vụ được giao thường xuyên, đột xuất.', max:10},
+  {t:'in', code:'3', id:'b3', name:'Tinh thần trách nhiệm trong thực thi nhiệm vụ.', max:5},
+  {t:'in', code:'4', id:'b4', name:'Thái độ phục vụ người dân, doanh nghiệp và khả năng phối hợp với đồng nghiệp.', max:5},
+  {t:'h1', code:'III', name:'Năng lực đổi mới, sáng tạo, dám nghĩ, dám làm, dám chịu trách nhiệm vì lợi ích chung trong thực thi công vụ', max:40},
+  {t:'in', code:'1', id:'c1', name:'Có sản phẩm, giải pháp đột phá, sáng tạo đem lại giá trị, hiệu quả thiết thực, tác động tích cực đến kết quả thực hiện nhiệm vụ của cơ quan, tổ chức, đơn vị.', max:10},
+  {t:'in', code:'2', id:'c2', name:'Sẵn sàng tham gia thực hiện nhiệm vụ chính trị đặc biệt quan trọng, nhiệm vụ có tính chất đột xuất, phức tạp hoặc trong điều kiện khó khăn.', max:10},
+  {t:'in', code:'3', id:'c3', name:'Có tinh thần chịu trách nhiệm trước kết quả công việc; chủ động nhận trách nhiệm khi có sai sót và có biện pháp khắc phục rõ ràng, cụ thể.', max:10},
+  {t:'in', code:'4', id:'c4', name:'Chủ động đưa ra quyết định trong phạm vi thẩm quyền, không né tránh; có tinh thần tiên phong trong thực hiện những nhiệm vụ mới.', max:10}
+];
+const A_IDS = CRIT_A.filter(r=>r.t==='in').map(r=>r.id);
+
+/* --- Danh mục nhiệm vụ: khối giảng dạy (Mẫu 3a-GV) --- */
+const TASKS_GV = [
+  {g:'1', name:'Nhóm đào tạo và phát triển chương trình'},
+  {c:'1.1', name:'Xây dựng bài giảng điện tử'},
+  {c:'1.2', name:'Giảng dạy lý thuyết/thực hành'},
+  {c:'1.3', name:'Kiểm tra/Đánh giá lần 1'},
+  {c:'1.4', name:'Hướng dẫn khóa luận tốt nghiệp, luận văn, luận án'},
+  {c:'1.6', name:'Công tác cố vấn học tập'},
+  {c:'1.7', name:'Công tác hướng dẫn thực tập'},
+  {c:'1.8', name:'Xây dựng, phát triển chương trình đào tạo hoặc môn học'},
+  {c:'1.9', name:'Tham gia Hội giảng/Bình giảng'},
+  {g:'2', name:'Nhóm nghiên cứu khoa học và biên soạn học liệu'},
+  {c:'2.1', name:'Chủ trì/Tham gia thực hiện đề tài NCKH các cấp'},
+  {c:'2.2', name:'Công bố bài báo khoa học'},
+  {c:'2.3', name:'Chủ trì/Tham gia biên soạn sách'},
+  {c:'2.4', name:'Viết báo cáo khoa học tại hội nghị, hội thảo'},
+  {c:'2.5', name:'Hướng dẫn sinh viên NCKH'},
+  {c:'2.6', name:'Cải tiến phương pháp làm việc'},
+  {c:'2.7', name:'Sáng kiến; hoặc giải pháp về quản lý, tác nghiệp'},
+  {g:'3', name:'Nhóm phát triển tổ chức và phục vụ cộng đồng'},
+  {c:'3.1', name:'Học tập, bồi dưỡng trình độ lý luận chính trị, chuyên môn, nghiệp vụ'},
+  {c:'3.2', name:'Tham gia công tác quản lý, công tác Đảng, đoàn thể'},
+  {c:'3.3', name:'Tham gia Liên đoàn/Hiệp hội TDTT'},
+  {c:'3.4', name:'Làm trọng tài, điều hành giải đấu'},
+  {c:'3.5', name:'Huấn luyện CLB/Đội tuyển quốc gia'},
+  {c:'3.6', name:'Tham gia công tác tuyển sinh'},
+  {c:'3.7', name:'Các nhiệm vụ khác/đột xuất'}
+];
+
+/* --- Danh mục nhiệm vụ: khối hành chính (Mẫu 3b-HC) --- */
+const TASKS_HC = [
+  {g:'1', name:'Nhóm thực thi công việc chuyên môn theo vị trí việc làm'},
+  {c:'1.1', name:'Tiếp nhận, thẩm định và xử lý hồ sơ/nghiệp vụ chuyên môn'},
+  {c:'1.2', name:'Soạn thảo văn bản, tờ trình, kế hoạch và báo cáo chuyên môn'},
+  {c:'1.3', name:'Quản lý, lưu trữ, bảo mật và cập nhật hệ thống dữ liệu/tài sản chuyên trách'},
+  {c:'1.4', name:'Tiếp nhận, hướng dẫn và giải quyết các yêu cầu hỗ trợ hành chính'},
+  {g:'2', name:'Nhóm Phục vụ, Phối hợp hỗ trợ và Quản trị sự kiện'},
+  {c:'2.1', name:'Hỗ trợ công tác giảng dạy'},
+  {c:'2.2', name:'Hỗ trợ các sự kiện/Giải đấu'},
+  {c:'2.3', name:'Phối hợp liên phòng ban'},
+  {g:'3', name:'Nhóm Chấp hành kỷ luật, Cải tiến và Phát triển tổ chức'},
+  {c:'3.1', name:'Kỷ luật lao động: chấp hành giờ làm việc, đeo thẻ, văn hóa công sở'},
+  {c:'3.2', name:'Cải tiến hành chính/Phương pháp làm việc'},
+  {c:'3.3', name:'Sáng kiến; hoặc giải pháp về quản lý, tác nghiệp'},
+  {c:'3.4', name:'Học tập, chính trị: bồi dưỡng nghiệp vụ, lý luận chính trị, sinh hoạt Đảng/Đoàn thể'},
+  {c:'3.5', name:'Các nhiệm vụ khác/đột xuất'}
+];
+
+/* --- Phụ lục 1 & 2: thang Likert khối giảng dạy (rút gọn) --- */
+const LK_GV = {
+ '1.1':{cm:['Bài giảng chỉ có chữ, không ảnh/clip minh họa','Bố cục rõ, hình ảnh cơ bản, hiệu ứng thô sơ','Thiết kế khoa học, tích hợp clip giúp SV dễ tiếp thu','Chuyên nghiệp, tương tác cao, ứng dụng phần mềm/biểu đồ','Số hóa đạt chuẩn E-learning cấp Trường, HĐKH nghiệm thu'],
+       kl:['1 bài/chủ đề ngắn, dưới 15 slide','Cụm bài học, 15–30 slide','Trọn 1 chương/học phần ngắn, 31–50 slide','Cả học phần lớn, trên 50 slide','Ngân hàng học liệu số cả môn, có câu hỏi tương tác']},
+ '1.2':{cm:['Giờ giảng khô khan/thiếu an toàn sân bãi, thị phạm chưa chuẩn','Đủ nội dung theo giáo án, đúng quy trình an toàn','Chuẩn mực, tương tác tốt, thị phạm đẹp, lượng vận động hợp lý','Dùng phương pháp hiện đại, phản hồi người học ≥ 4.0/5.0','Ứng dụng công nghệ đột phá, phản hồi ≥ 4.5/5.0'],
+       kl:['Sĩ số dưới chuẩn (<15 thực hành / <30 lý thuyết)','Sĩ số tiệm cận chuẩn, sân tập nhỏ','Đạt chuẩn (15–25 thực hành / 30–50 lý thuyết)','Vượt chuẩn 21–50%, không gian rộng','Vượt chuẩn trên 50%, lớp ghép đông, nhiều nhóm đối tượng']},
+ '1.3':{cm:['Nộp đề muộn, barem chấm cảm tính','Đúng tiến độ, đề đạt chuẩn cơ bản, chưa phân hóa','Đề kết hợp lý thuyết – ứng dụng, barem công khai trước','Đổi mới hình thức, phản hồi chi tiết sai sót cho SV','Có ngân hàng đề/bộ test chuẩn hóa được Khoa phê duyệt'],
+       kl:['Dưới 20 SV, 1 đầu điểm','20–40 SV, nội dung cơ bản','41–80 SV, gồm cả lý thuyết và thực hành','81–150 SV, nhiều đợt kiểm tra thành phần','Trên 150 SV, hoặc chủ trì đợt kiểm tra thể lực lớn']},
+ '1.4':{cm:['Hướng dẫn lỏng lẻo, chậm tiến độ, đề tài không giá trị thực tiễn','Đúng tiến độ, đạt chuẩn tối thiểu để bảo vệ','Chất lượng, giải quyết bài toán cụ thể, bảo vệ Khá/Tốt','Bảo vệ xuất sắc, tính mới cao, thống kê/y sinh học sâu','Bảo vệ thành công và có bài báo đăng tạp chí khoa học'],
+       kl:['1 khóa luận đại học','2 khóa luận đại học','3–4 khóa luận ĐH hoặc 1 học viên thạc sĩ','Từ 5 khóa luận ĐH hoặc từ 2 luận văn','Từ 3 luận văn trở lên, hoặc hướng dẫn NCS']},
+ '1.6':{cm:['Không nắm tình hình lớp, không sinh hoạt định kỳ, xử lý chậm','Hoàn thành nhiệm vụ hành chính đúng thời hạn','Phân loại SV, tư vấn định hướng kịp thời','Hỗ trợ hướng nghiệp tốt, lớp đạt danh hiệu thi đua','Có sáng kiến đổi mới, lớp đạt thi đua, không SV bị cảnh báo'],
+       kl:['Dưới 20 SV hoặc lớp năm cuối đã đi thực tập','21–35 SV','36–50 SV','2 lớp chuẩn, hoặc 51–80 SV','Trên 80 SV, hoặc lớp tích lũy nhiều biến động']},
+ '1.7':{cm:['Thiếu sâu sát cơ sở, nghiệm thu hồ sơ muộn','Bàn giao đủ, kiểm tra theo lịch, hồ sơ đúng hạn','SV soạn giáo án đạt chuẩn, tương tác thường xuyên với cơ sở','Tổ chức rút kinh nghiệm tốt, SV tiến bộ vượt bậc','Thiết lập quan hệ hợp tác mới, SV làm việc được ngay'],
+       kl:['Dưới 5 SV, 1 cơ sở gần trường','5–10 SV, 1 cơ sở','11–20 SV, 1–2 cơ sở','21–40 SV, hoặc từ 3 cơ sở ở các địa phương','Trên 40 SV, nhiều cơ sở ở xa trường']},
+ '1.8':{cm:['Sao chép rập khuôn, nội dung lạc hậu','Điều chỉnh thời lượng đúng quy định, cập nhật kiến thức mới','Chủ trì đề cương chi tiết đạt chuẩn đầu ra, phục vụ kiểm định','Thiết kế đổi mới đột phá, HĐKH Trường đánh giá cao','Chủ trì xây mới CTĐT ngành đạt chuẩn kiểm định quốc tế'],
+       kl:['Sửa nội dung nhỏ, học phần 1–2 tín chỉ','Biên soạn/sửa đề cương học phần từ 3 tín chỉ','Chủ trì xây mới đề cương 1 môn học hoàn chỉnh','Chủ trì đổi mới chuyên ngành, trên 10 tín chỉ','Chủ trì CTĐT mới cho 1 mã ngành ĐH/sau ĐH']},
+ '1.9':{cm:['Không tham gia hoặc đối phó, giờ dạy không đạt','Dự giờ đầy đủ, giờ dạy đạt yêu cầu, góp ý chung chung','Bình giảng cấp BM/Khoa đạt Khá, góp ý có giá trị','Giải Nhất/Nhì/Ba cấp Khoa hoặc loại Giỏi cấp Trường','Giải Nhất/Nhì Hội giảng hoặc giải toàn quốc, chủ trì hội thảo'],
+       kl:['Dưới 3 tiết trong học kỳ','3–5 tiết','6–10 tiết cấp Bộ môn/Khoa','Thành viên BGK, dự giờ 11–20 tiết','Hội đồng chấm Hội giảng, trên 20 tiết']},
+ '2.1':{cm:['Không hoàn thành đề cương đúng hạn, đề tài bị dừng','Thành viên/thư ký đề tài cấp Cơ sở đạt nghiệm thu','Chủ trì ĐTCS, hoặc thành viên chính đề tài cấp Bộ/Tỉnh','Chủ trì đề tài cấp Bộ/Tỉnh, hoặc ĐTCS ứng dụng thực tiễn cao','Chủ trì đề tài cấp Quốc gia; hoặc nghiệm thu Xuất sắc, có bằng sáng chế'],
+       kl:['Dưới 6 tháng, dưới 20 mẫu khảo sát','20–50 đối tượng khảo sát','1 năm, 51–150 mẫu, 3–5 chuyên đề','151–300 mẫu, xử lý dữ liệu, chỉ số phức tạp','Trên 300 mẫu, theo dõi dọc dài, nhiều sản phẩm']},
+ '2.2':{cm:['Bị từ chối do đạo văn, sai phương pháp luận, tạp chí giả mạo','Bản tin KH hoặc tạp chí dưới 0.5 điểm công trình','Tạp chí uy tín trong nước 0.5–0.75 điểm','Tạp chí hàng đầu trong nước (1.0đ), hoặc Scopus/ISI Q3–Q4','Tạp chí quốc tế Scopus/ISI phân hạng Q1, Q2'],
+       kl:['Dưới 3 trang, rất ít bảng biểu','3–5 trang, dưới 3 bảng biểu','5–8 trang, 3–5 bảng số liệu, thống kê chuẩn mực','9–15 trang, hoặc chuỗi dữ liệu thực nghiệm lớn','Trên 15 trang, thuật toán đa biến, dữ liệu lớn']},
+ '2.3':{cm:['Bản thảo không được thông qua, nội dung lỗi thời','Biên soạn một phần nhỏ tài liệu tham khảo, hướng dẫn nội bộ','Tham gia giáo trình chính thức, hoặc chủ biên sách chuyên khảo','Chủ biên giáo trình chính thức dùng toàn trường','Chủ biên giáo trình cấp Quốc gia, hoặc NXB nước ngoài phát hành'],
+       kl:['Dưới 10 trang viết','1 chương, 10–25 trang','2–3 chương, hoặc 26–50 trang','51–100 trang viết','Trên 100 trang, hoặc chủ biên toàn bộ']},
+ '2.4':{cm:['Báo cáo bị từ chối do sơ sài, hoặc nộp muộn','Đăng tóm tắt/Poster tại hội thảo cấp Trường, Ngành','Đăng toàn văn kỷ yếu cấp Quốc gia, tham gia phản biện','Trực tiếp trình bày tại hội nghị Quốc gia/Quốc tế','Diễn giả chính hội thảo quốc tế, hoặc báo cáo đạt Xuất sắc'],
+       kl:['Chỉ viết tóm tắt, dưới 1 trang','Poster hoặc tham luận ngắn, dưới 3 trang','Toàn văn 4–6 trang','Trên 6 trang, kèm phụ lục số liệu','Báo cáo tổng luận phiên toàn thể hội thảo quốc tế']},
+ '2.5':{cm:['Không nhận hướng dẫn, hoặc để SV bỏ cuộc giữa chừng','SV hoàn thành đề tài cấp Khoa/Trường đạt nghiệm thu','SV đạt giải Khuyến khích hoặc giải Ba cấp Trường','SV đạt giải Nhất, Nhì cấp Trường, hoặc được gửi thi cấp Bộ','SV đạt giải cấp Bộ, hoặc sản phẩm phát triển thành bài báo'],
+       kl:['1 SV, đề tài cấp Bộ môn','2–3 SV, 1 đề tài','4–5 SV, 1 đề tài cấp Trường','Từ 2 nhóm, 6–10 SV','Trên 10 SV, điều hành CLB/nhóm nghiên cứu trọng điểm']},
+ '2.6':{cm:['Bảo thủ, duy trì phương pháp thủ công lạc hậu','Số hóa tài liệu, dùng công cụ cơ bản, báo cáo đúng hạn','Đề xuất và áp dụng thành công phương pháp quản lý mới','Xây hệ thống tự động, cắt giảm 30% thời gian xử lý','Cải tiến đột phá, Nhà trường ban hành áp dụng toàn trường'],
+       kl:['Chỉ tối ưu công việc cá nhân','Công cụ nhỏ cho nhóm, ảnh hưởng dưới 5 người','Toàn bộ môn, 6–15 người chịu tác động','Toàn khoa, trên 10 GV và hàng trăm SV','Toàn trường, tối ưu thủ tục quy mô lớn']},
+ '2.7':{cm:['Không có đề xuất, đóng góp giải pháp nào','Có đề xuất bằng văn bản, mới ở mức thử nghiệm','Được công nhận Sáng kiến cấp Cơ sở, áp dụng hiệu quả','Sáng kiến HĐKH công nhận, ảnh hưởng toàn trường','Sáng kiến cấp Bộ/Tỉnh, hoặc đổi mới công nghệ quản lý'],
+       kl:['Phạm vi hẹp: 1–2 tiết học, 1 buổi làm việc','Phạm vi nhỏ, 1 khóa học','Cấp Cơ sở: 1 ngành đào tạo hoặc 1 khoa','Huy động nhiều nguồn lực, toàn khối SV thực hành','Chiến lược, thay đổi căn bản, ảnh hưởng toàn trường']},
+ '3.1':{cm:['Không tham gia, hoặc không đủ điều kiện hoàn thành','Hoàn thành khóa bồi dưỡng ngắn hạn theo yêu cầu','Có bằng/chứng chỉ dài hạn (Trung cấp LLCT, sư phạm ĐH, NCS)','Cao cấp LLCT; chứng chỉ quốc tế; hoặc hoàn thành học vị Tiến sĩ','Được mời làm báo cáo viên cấp Quốc gia, Quốc tế'],
+       kl:['Dưới 16 tiết, hoặc dưới 3 ngày','3 ngày đến dưới 2 tuần, 16–45 tiết','2 tuần đến 1 tháng, hoặc chứng chỉ chức danh nghề nghiệp','Dài hạn, kéo dài nhiều tháng liên tục','Chính quy dài hạn tập trung (NCS, Cao cấp LLCT, học nước ngoài)']},
+ '3.2':{cm:['Thụ động, vắng sinh hoạt không lý do, né tránh nhiệm vụ','Tham gia đầy đủ, đóng phí đúng hạn, không sai sót','Cấp ủy viên, Bí thư Chi bộ, Trưởng tiểu ban đoàn thể','Chủ chốt BCH Đảng ủy/Công đoàn/Đoàn TN, đơn vị được khen','Lãnh đạo đạt thành tích xuất sắc, có sáng kiến đổi mới'],
+       kl:['Dưới 10 thành viên, sự vụ rất ít','10–20 thành viên','Thường trực cấp ủy/BCH, 21–50 người','Đơn vị lớn, 51–150 người','Toàn trường, trên 150 người']},
+ '3.3':{cm:['Không tham gia hoạt động nào','Hội viên chính thức, dự đủ đại hội/họp thường niên','Cố vấn chuyên môn, Hội đồng trọng tài, tuyển chọn VĐV','BCH hoặc ban chuyên môn Liên đoàn Quốc gia','Lãnh đạo chủ chốt Liên đoàn Quốc gia/Quốc tế'],
+       kl:['Liên đoàn cấp tỉnh, 1–2 lần/năm','Ban chuyên môn cấp tỉnh hoạt động thường xuyên','Ủy viên BCH cấp tỉnh, điều phối định kỳ theo quý','Ủy viên BCH Quốc gia, hồ sơ, giải đấu diện rộng','Thường trực lãnh đạo Liên đoàn Quốc gia/Quốc tế']},
+ '3.4':{cm:['Sai sót về luật dẫn đến khiếu nại, hoặc tự ý bỏ giải','Trọng tài, giám sát giải phong trào, HS/SV, cấp tỉnh','Trọng tài cấp Quốc gia tại giải vô địch, Đại hội TDTT','Trọng tài Quốc tế, hoặc Tổng trọng tài giải lớn trong nước','Được tổ chức quốc tế mời điều hành Olympic, ASIAD, World Cup'],
+       kl:['Dưới 2 ngày, hoặc dưới 10 trận','2–4 ngày liên tục','5–7 ngày liên tục','8–15 ngày, hoặc vị trí Tổng trọng tài','Trên 15 ngày, hoặc liên tục nhiều tháng trong năm']},
+ '3.5':{cm:['Không đảm bảo giáo án, để VĐV chấn thương do lỗi chủ quan','HLV CLB phong trào/đội tuyển trường thi giải khối đại học','HLV trưởng đội tuyển Trường có huy chương SV toàn quốc','HLV trưởng tỉnh/thành, hoặc HLV phó ĐTQG đạt HCV QG, HC SEA Games','HLV trưởng ĐTQG; VĐV đạt HCV ASIAD hoặc HC Olympic'],
+       kl:['Dưới 2 buổi/tuần, dưới 3 tháng','2–3 buổi/tuần, 3–6 tháng','3–5 buổi/tuần, 1–5 VĐV, suốt năm học','Trên 5 buổi/tuần, 6–10 VĐV, biệt phái 3–6 tháng','2 buổi/ngày, 6 ngày/tuần quanh năm, mạng lưới VĐV']},
+ '3.6':{cm:['Vi phạm quy chế thi, hoặc tự ý vắng ngày thi được phân công','Coi thi, hậu cần, thư ký, đảm bảo an toàn và bảo mật','Trực tiếp chấm thi năng khiếu, đối soát chính xác, công tâm','Trưởng bàn thi/điểm thi, hoặc đóng góp lớn trong tư vấn tuyển sinh','Thành viên HĐTS Trường, đổi mới giúp đạt 100% chỉ tiêu'],
+       kl:['1 ngày hỗ trợ, coi thi','Từ 2 ngày, ban tuyển sinh, thư ký','3–5 ngày, giám khảo 50–150 lượt thí sinh','Trưởng bàn/điểm thi, 151–500 thí sinh','Thường trực Ban điều hành, hàng nghìn thí sinh']}
+};
+
+/* --- Phụ lục 3 & 4: thang Likert khối hành chính (rút gọn) --- */
+const LK_HC = {
+ '1.1':{cm:['Chỉ kiểm tra tính đầy đủ về số lượng đầu tài liệu','Đối chiếu 1–1 với biểu mẫu hoặc phần mềm','Đòi hỏi kiến thức chuyên ngành và tổng hợp thông tin','Hồ sơ nhạy cảm pháp lý, nhiều nghị định, thông tư đan xen','Sai sót mang tính hệ thống, vụ việc chưa có tiền lệ pháp lý'],
+       kl:['Dưới 20 bộ hồ sơ/chứng từ','21–50 bộ','51–150 bộ','151–300 bộ','Trên 300 bộ, giai đoạn cao điểm']},
+ '1.2':{cm:['Chỉ thay ngày tháng, thông tin thô từ biểu mẫu có sẵn','Văn bản hành chính thông dụng của phòng ban','Kế hoạch, báo cáo định kỳ tổng hợp số liệu toàn đơn vị','Quy định, quy chế nội bộ tác động lớn đến CBGV','Đề án chiến lược toàn trường, báo cáo giải trình kiểm toán, thanh tra'],
+       kl:['Dưới 3 văn bản/tháng','3–5 văn bản','6–15 văn bản, hoặc 1–2 báo cáo tổng hợp','16–30 văn bản, dữ liệu lớn (xếp lịch thi, điều phối sân bãi)','Trên 30 văn bản, hoặc đề án, báo cáo hàng trăm trang']},
+ '1.3':{cm:['Nhập liệu thủ công, sắp xếp hồ sơ theo trật tự định sẵn','Cập nhật, bàn giao định kỳ theo quy trình chuẩn','Quản lý tài sản/dữ liệu giá trị lớn, bảo mật cao','Khắc phục xung đột dữ liệu liên phòng ban, lỗi kỹ thuật','Thiết kế CSDL mới, chuyển đổi số toàn diện'],
+       kl:['Dưới 50 trường dữ liệu/đầu tài sản','51–200 dòng','201–1.000 dòng, đầu mục hồ sơ','1.001–3.000 dòng, tổng kiểm kê đơn vị lớn','Trên 3.000 trường, số hóa toàn bộ kho hồ sơ']},
+ '1.4':{cm:['Trả lời thông tin cơ bản, cấp phát giấy tờ thông thường','Thủ tục hỗ trợ lặp lại hằng tháng, hằng quý','Giải quyết khiếu nại, sai sót nghiệp vụ tiêu chuẩn','Tình huống đột xuất, tai nạn, tranh chấp phức tạp','Vi phạm pháp luật, khủng hoảng, chưa có quy định nội bộ'],
+       kl:['Dưới 20 lượt','21–50 lượt','51–150 lượt','151–400 lượt','Trên 400 lượt']},
+ '2.1':{cm:['Chuẩn bị CSVC đơn giản, không yêu cầu kỹ thuật lắp đặt','Dụng cụ, sân bãi môn đại trà, quy trình cố định','Môn chuyên sâu, yêu cầu cao về thông số kỹ thuật','Lớp ghép đông, nhiều môn đồng thời, an toàn nghiêm ngặt','Xử lý khủng hoảng CSVC ngay trong giờ học'],
+       kl:['Dưới 5 lượt lớp thực hành/tuần','5–10 lượt lớp/tuần','11–20 lượt lớp/tuần, 201–500 lượt SV','21–35 lượt lớp/tuần, cụm sân bãi diện rộng','Trên 35 lượt lớp/tuần, trên 1.000 lượt SV']},
+ '2.2':{cm:['Lao động phổ thông, hậu cần theo chỉ thị','Vị trí hỗ trợ có tương tác trực tiếp tại sự kiện nội bộ','Phụ trách chính một mảng việc trong tiểu ban','Giải quốc gia/quốc tế, yêu cầu cao về nghi thức, tiến độ','Trưởng/Phó tiểu ban hậu cần, xử lý sự cố nghiêm trọng'],
+       kl:['1 ngày, dưới 50 người','1–2 ngày, 51–150 người','3–5 ngày, 151–400 người','5–10 ngày, 401–800 người','Trên 10 ngày, trên 800 người']},
+ '2.3':{cm:['Chuyển giao văn bản, gửi file dữ liệu thô','Đối soát một-đối-một giữa hai đơn vị','Tháo gỡ vướng mắc, lệch pha dữ liệu giữa các phòng ban','Tổ công tác liên phòng ban triển khai chiến dịch lớn','Chủ trì gỡ điểm nghẽn quy trình kéo dài, tối ưu hóa'],
+       kl:['2 đơn vị, dưới 20 trường hợp','2–3 đơn vị, 21–50 trường hợp','3–4 phòng ban, 51–200 hồ sơ','Trên 4 đầu mối, 201–500 dòng dữ liệu','Tất cả đơn vị, trên 500 hồ sơ']},
+ '3.1':{cm:['Thường xuyên đi muộn, không đeo thẻ, bị nhắc bằng văn bản','Chấp hành ở mức đối phó, còn phải nhắc nhở','Nghiêm túc giờ giấc, tác phong, giao tiếp chuẩn mực','Nêu gương, sẵn sàng làm thêm giờ, hỗ trợ đồng nghiệp','Được tuyên dương, tham gia xây dựng quy tắc ứng xử toàn trường'],
+       kl:['Ngày công thực tế dưới 80%','Đủ ngày công, tuân thủ chưa đồng đều','100% ngày công, đủ 8 tiếng/ngày','Thêm 10–25 giờ/tháng','Trên 25 giờ/tháng, trực đêm, ngày lễ']},
+ '3.2':{cm:['Duy trì thủ công lạc hậu, gây nghẽn quy trình chung','Dùng công cụ cơ bản tối ưu công việc cá nhân','Cải tiến thành công một quy trình nội bộ phòng','Tối ưu phối hợp với 2–3 đơn vị bằng công cụ số','Giải pháp đột phá được phê duyệt áp dụng toàn trường'],
+       kl:['Không có, hoặc chỉ sửa 1 thao tác nhỏ','Cải tiến 1 quy trình, dưới 2 bước thủ tục','1 quy trình cốt lõi hoặc 2–3 quy trình nhỏ, cắt 3–5 bước','Tái cấu trúc nhiều quy trình, cắt trên 5 bước','Tổng đại tu hệ thống quy trình toàn trường']},
+ '3.3':{cm:['Không có đề xuất, giải pháp nào','Đề xuất bằng văn bản, chưa triển khai thực tế','Áp dụng hiệu quả trong phòng/khoa, được nghiệm thu','Sáng kiến cấp Cơ sở, phạm vi ảnh hưởng rộng','Sáng kiến cấp Bộ/Tỉnh, làm mô hình mẫu'],
+       kl:['Không nộp sáng kiến','Thành viên hỗ trợ, dưới 20% nội dung','Tác giả chính 1 sáng kiến cấp Cơ sở/Khoa','1 sáng kiến cấp Cơ sở toàn trường, hoặc 2 cấp Khoa','Nhiều sáng kiến, khối lượng khảo sát thực nghiệm lớn']},
+ '3.4':{cm:['Vắng sinh hoạt không lý do, không hoàn thành bài thu hoạch','Dự đủ, đúng giờ, đạt yêu cầu, chưa đóng góp ý kiến','Hoàn thành khóa học đạt Khá/Giỏi, tích cực phát biểu','Ban tổ chức/nội dung, hoàn thành chương trình cao cấp','Báo cáo viên; lãnh đạo đoàn thể dẫn đầu phong trào thi đua'],
+       kl:['Dưới 5 giờ tích lũy','6–15 giờ','16–40 giờ, hoặc 1 khóa tập huấn 1–2 tuần','41–80 giờ','Trên 80 giờ, chương trình dài hạn tập trung']}
+};
+const LK_GEN = {cm:['Mức 1 (Yếu)','Mức 2 (Đạt yêu cầu)','Mức 3 (Khá)','Mức 4 (Tốt)','Mức 5 (Xuất sắc)'],
+                kl:['Mức 1 (Rất ít)','Mức 2 (Ít)','Mức 3 (Chuẩn định mức)','Mức 4 (Lớn)','Mức 5 (Đặc biệt lớn)']};
+
+/* --- Mục B: ưu tiên để xét danh hiệu --- */
+const UU_TIEN = [
+ 'Được cơ quan, đoàn thể khen thưởng trong năm học; hoặc có các hoạt động đóng góp cho tập thể',
+ 'Kết quả thi qua lần 1 của các môn học được phân công ở kỳ học chính (Lý thuyết: ≥75%; Thực hành: ≥85%)',
+ 'Tham gia Hội giảng hoặc Bình giảng cấp Trường (Đạt Xuất sắc, Giỏi, Khá; Xuất sắc bảo lưu 3 năm, Giỏi bảo lưu 2 năm để xét thi đua)',
+ 'Tham gia Bình giảng cấp Khoa (Đạt Xuất sắc được bảo lưu 2 năm để xét thi đua)',
+ 'Chủ nhiệm hoặc thành viên đề tài, đề án, dự án cấp Tỉnh, Bộ, Nhà nước (đã được nghiệm thu)',
+ 'Chủ nhiệm ĐTCS đã nghiệm thu (hoặc nghiệm thu giai đoạn 1 nếu là đề tài 2 năm); hoặc chủ nhiệm sáng kiến được Hội đồng nghiệm thu; hoặc có giải pháp về quản lý, tác nghiệp được ban hành/thẩm định',
+ 'Tham gia ĐTCS đã nghiệm thu (hoặc nghiệm thu giai đoạn 1 nếu là đề tài 2 năm); hoặc tham gia sáng kiến được Hội đồng nghiệm thu; hoặc có giải pháp về quản lý, tác nghiệp được ban hành/thẩm định',
+ 'Có 1 báo cáo ở Hội nghị, Hội thảo cấp trường trở lên; Hội nghị CBVC',
+ 'Có bài báo đã đăng tạp chí khoa học các cấp',
+ 'Chủ biên hoặc thành viên tham gia biên soạn: sách chuyên khảo, giáo trình, sách tham khảo, sách hướng dẫn được nghiệm thu (Chủ biên bảo lưu 3 năm, thành viên bảo lưu 2 năm)',
+ 'Cải tiến phương pháp làm việc (được trưởng đơn vị xác nhận)',
+ 'Chủ nhiệm sáng kiến được Hội đồng nghiệm thu; hoặc có giải pháp về quản lý, giải pháp tác nghiệp được ban hành hoặc thẩm định trình cấp trên phê duyệt'
+];
+
+const LEAD_B2 = [
+ {id:'l21', name:'Kết quả hoạt động của cơ quan, tổ chức, đơn vị hoặc lĩnh vực được giao lãnh đạo, quản lý, phụ trách',
+  o100:'100% viên chức thuộc thẩm quyền quản lý xếp loại hoàn thành nhiệm vụ trở lên',
+  o50:'Có viên chức thuộc quyền quản lý bị xếp loại không hoàn thành nhiệm vụ'},
+ {id:'l22', name:'Khả năng tổ chức triển khai thực hiện nhiệm vụ',
+  o100:'Đơn vị hoàn thành đầy đủ nhiệm vụ theo kế hoạch, đúng thời hạn, có sáng kiến/giải pháp hiệu quả',
+  o50:'Trong kỳ đánh giá có tồn tại, hạn chế, chậm trễ kéo dài'},
+ {id:'l23', name:'Năng lực tập hợp, đoàn kết công chức, viên chức thuộc phạm vi quản lý',
+  o100:'Đơn vị duy trì môi trường làm việc đoàn kết, phối hợp hiệu quả',
+  o50:'Phát sinh phản ánh, khiếu nại về mâu thuẫn, mất đoàn kết nội bộ kéo dài'}
+];
+
+/* =========================================================
+   2. TRẠNG THÁI & LƯU TRỮ
+   ========================================================= */
+const KEY='dgvc_tdttbn_v1';
+const QS=[1,2,3,4];
+
+function blankTasks(khoi){
+  const src = khoi==='HC' ? TASKS_HC : TASKS_GV;
+  return src.filter(r=>r.c).map(r=>({
+    code:r.c, name:r.name, fixed:true,
+    dg:'', ht:'', cm:'', kl:'', td:'',
+    uHt:'', uCm:'', uKl:'', uTd:''
+  }));
+}
+function blankQuarter(khoi){
+  const a={}; A_IDS.forEach(id=>a[id]='');
+  return {
+    critA:a,
+    tasks:blankTasks(khoi),
+    lead:{l21:'',l22:'',l23:''},
+    uu:UU_TIEN.map(()=>({s2:'',s1:''})),
+    uuDiem:'', hanChe:'', luuY:'', ngay:''
+  };
+}
+function blankState(){
+  const st={
+    info:{hoTen:'',chucVu:'',chucDanh:'GV',donVi:'',nam:String(new Date().getFullYear()),
+          khoi:'GV', lanhDao:false, nhom:'N3'},
+    q:{}
+  };
+  QS.forEach(q=>st.q[q]=blankQuarter('GV'));
+  return st;
+}
+let S = blankState();
+let TAB = 'info';
+
+/* --- lưu trữ: localStorage trên thiết bị của người dùng --- */
+let storeNote='Đã lưu trên máy này';
+
+function cacheSave(){
+  try{
+    localStorage.setItem(KEY, JSON.stringify(S));
+    localStorage.setItem(KEY+'_at', String(Date.now()));
+    storeNote='Đã lưu trên máy này lúc '+new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'});
+  }catch(e){ storeNote='Không lưu được — trình duyệt đang chặn bộ nhớ cục bộ'; }
+}
+function cacheLoad(){
+  try{
+    const raw=localStorage.getItem(KEY);
+    if(!raw) return null;
+    const o=JSON.parse(raw);
+    return (o&&o.info&&o.q)?o:null;
+  }catch(e){ return null; }
+}
+function save(){ cacheSave(); stamp(); }
+function stamp(){
+  const el=document.getElementById('storeNote');
+  if(el) el.textContent=storeNote;
+}
+function initStore(){
+  const local=cacheLoad();
+  if(local) S=migrate(local);
+  render();
+}
+
+function migrate(o){
+  const base=blankState();
+  base.info=Object.assign(base.info,o.info||{});
+  QS.forEach(q=>{
+    const src=(o.q||{})[q]||{};
+    const t=blankQuarter(base.info.khoi);
+    t.critA=Object.assign(t.critA, src.critA||{});
+    if(Array.isArray(src.tasks)&&src.tasks.length) t.tasks=src.tasks;
+    t.lead=Object.assign(t.lead, src.lead||{});
+    if(Array.isArray(src.uu)&&src.uu.length===UU_TIEN.length) t.uu=src.uu;
+    t.uuDiem=src.uuDiem||''; t.hanChe=src.hanChe||''; t.luuY=src.luuY||''; t.ngay=src.ngay||'';
+    base.q[q]=t;
+  });
+  return base;
+}
+
+/* =========================================================
+   3. TÍNH TOÁN
+   ========================================================= */
+const num = v => { const n=parseFloat(String(v).replace(',','.')); return isFinite(n)?n:null; };
+const fmt = (v,d=1) => (v===null||v===undefined||v==='')?'':Number(v).toLocaleString('vi-VN',{minimumFractionDigits:d,maximumFractionDigits:d});
+
+/* Điểm từng dòng nhiệm vụ — theo mục C.2 của Mẫu 3:
+   Số lượng  = (Hoàn thành / Được giao) × 100
+   Chất lượng= [(Mức CM + Mức khối lượng) / 10] × 100
+   Tiến độ   = (Đúng tiến độ / Được giao) × 100            */
+function rowScore(t){
+  const dg=num(t.dg), ht=num(t.ht), cm=num(t.cm), kl=num(t.kl), td=num(t.td);
+  const uHt=num(t.uHt), uCm=num(t.uCm), uKl=num(t.uKl), uTd=num(t.uTd);
+  const r={counted: dg!==null && dg>0};
+  r.sl = (r.counted && ht!==null) ? ht/dg*100 : null;
+  r.cl = (cm!==null||kl!==null) ? (((cm||0)+(kl||0))/10)*100 : null;
+  r.td = (r.counted && td!==null) ? td/dg*100 : null;
+  r.uSl = (r.counted && uHt!==null) ? uHt/dg*100 : null;
+  r.uCl = (uCm!==null||uKl!==null) ? (((uCm||0)+(uKl||0))/10)*100 : null;
+  r.uTd = (r.counted && uTd!==null) ? uTd/dg*100 : null;
+  return r;
+}
+
+/* Tổng hợp Bảng theo dõi của một quý */
+function calcTracking(q){
+  const rows=q.tasks.map(rowScore);
+  let n=0, sSl=0,sCl=0,sTd=0, sUSl=0,sUCl=0,sUTd=0;
+  rows.forEach(r=>{
+    if(r.counted) n++;
+    if(r.sl!==null) sSl+=r.sl;
+    if(r.cl!==null) sCl+=r.cl;
+    if(r.td!==null) sTd+=r.td;
+    if(r.uSl!==null) sUSl+=r.uSl;
+    if(r.uCl!==null) sUCl+=r.uCl;
+    if(r.uTd!==null) sUTd+=r.uTd;
+  });
+  const avg = v => n>0 ? v/n : null;
+  /* cột "Đơn vị đánh giá" chỉ hiện số khi đơn vị đã chấm ít nhất một ô */
+  const anyUSl = rows.some(r=>r.uSl!==null), anyUCl = rows.some(r=>r.uCl!==null), anyUTd = rows.some(r=>r.uTd!==null);
+  const s2 = q.uu.reduce((a,x)=>a+(num(x.s2)||0),0);
+  const s1 = q.uu.reduce((a,x)=>a+(num(x.s1)||0),0);
+  const anySl = rows.some(r=>r.sl!==null), anyCl = rows.some(r=>r.cl!==null), anyTd = rows.some(r=>r.td!==null);
+  return {rows, n,
+    tdSl:anySl?sSl:null, tdCl:anyCl?sCl:null, tdTd:anyTd?sTd:null,
+    avgSl:anySl?avg(sSl):null, avgCl:anyCl?avg(sCl):null, avgTd:anyTd?avg(sTd):null,
+    uTdSl:anyUSl?sUSl:null, uTdCl:anyUCl?sUCl:null, uTdTd:anyUTd?sUTd:null,
+    uAvgSl:anyUSl?avg(sUSl):null, uAvgCl:anyUCl?avg(sUCl):null, uAvgTd:anyUTd?avg(sUTd):null,
+    s2, s1};
+}
+
+/* Tổng hợp Phiếu đánh giá của một quý */
+function calcQuarter(qi){
+  const q=S.q[qi], tr=calcTracking(q);
+  /* Mục A */
+  let A=0, aFilled=false;
+  A_IDS.forEach(id=>{ const v=num(q.critA[id]); if(v!==null){A+=v; aFilled=true;} });
+  const diemA = A*0.3;
+
+  /* Mục B */
+  const lead = !!S.info.lanhDao;
+  const b1 = (tr.avgSl||0)+(tr.avgCl||0)+(tr.avgTd||0);     // tối đa 300
+  let b2=0, b2Filled=true;
+  LEAD_B2.forEach(x=>{ const v=num(q.lead[x.id]); if(v===null) b2Filled=false; else b2+=v; });
+  const B = lead ? b1+b2 : b1;                               // 300 hoặc 600
+  const diemB = tr.n>0 ? (lead ? B/6*0.7 : B/3*0.7) : null;
+
+  const total = (aFilled||tr.n>0) ? diemA + (diemB||0) : null;
+  return {tr, A, diemA, aFilled, lead, b1, b2, b2Filled, B, diemB, total,
+          rank: rankOf(total), hasData: aFilled || tr.n>0};
+}
+
+function rankOf(t){
+  if(t===null||t===undefined) return {k:'na', s:'Chưa có dữ liệu', short:'—'};
+  if(t>=90) return {k:'xs', s:'Hoàn thành xuất sắc nhiệm vụ', short:'HTXS'};
+  if(t>=70) return {k:'t',  s:'Hoàn thành tốt nhiệm vụ', short:'HTT'};
+  if(t>=50) return {k:'h',  s:'Hoàn thành nhiệm vụ', short:'HT'};
+  return {k:'k', s:'Không hoàn thành nhiệm vụ', short:'Không HT'};
+}
+
+function calcYear(){
+  const per=QS.map(q=>calcQuarter(q));
+  const vals=per.filter(p=>p.total!==null).map(p=>p.total);
+  const avg = vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
+  return {per, avg, done:vals.length, rank:rankOf(avg)};
+}
+
+/* =========================================================
+   4. HELPERS DỰNG HTML
+   ========================================================= */
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const $ = s => document.querySelector(s);
+
+function cellOut(v){
+  if(v===null) return '<span class="cell-out empty">–</span>';
+  return '<span class="cell-out">'+fmt(v,1)+'</span>';
+}
+function lkFor(code, kind, khoi){
+  const tbl = khoi==='HC' ? LK_HC : LK_GV;
+  return (tbl[code] && tbl[code][kind]) ? tbl[code][kind] : LK_GEN[kind];
+}
+function selLikert(val, code, kind, khoi, path){
+  const opts=lkFor(code,kind,khoi);
+  let h='<select class="sel-lk" data-v="'+esc(val||'')+'" data-path="'+path+'"><option value="">—</option>';
+  for(let i=1;i<=5;i++){
+    h+='<option value="'+i+'"'+(String(val)===String(i)?' selected':'')+'>'+i+' — '+esc(opts[i-1].split(/[,:(]/)[0].trim().slice(0,34))+'</option>';
+  }
+  h+='</select>';
+  const cur = val? '<span class="mini">'+esc(opts[Number(val)-1])+'</span>' : '';
+  return h+cur;
+}
+
+/* =========================================================
+   5. CÁC TAB
+   ========================================================= */
+function renderTabs(){
+  const y=calcYear();
+  let h='<button class="tab'+(TAB==='info'?' on':'')+'" data-tab="info">Thông tin chung</button>';
+  QS.forEach((q,i)=>{
+    const p=y.per[i];
+    const d = !p.hasData ? 'r' : (p.total!==null ? 'g':'y');
+    h+='<button class="tab'+(TAB==='q'+q?' on':'')+'" data-tab="q'+q+'">Quý '+q+
+       '<span class="dot '+d+'"></span></button>';
+  });
+  h+='<button class="tab'+(TAB==='year'?' on':'')+'" data-tab="year">Tổng hợp năm</button>';
+  h+='<button class="tab'+(TAB==='help'?' on':'')+'" data-tab="help">Hướng dẫn</button>';
+  $('#tabs').innerHTML=h;
+}
+
+/* ---------- TAB: thông tin chung ---------- */
+function viewInfo(){
+  const i=S.info, y=calcYear();
+  return `
+  <div class="panel">
+    <h2>I. Thông tin viên chức <span class="tagv">Áp dụng cho cả 4 quý</span></h2>
+    <div class="pad">
+      <div class="grid g2">
+        <label class="f"><span>Họ và tên</span>
+          <input type="text" data-path="info.hoTen" value="${esc(i.hoTen)}" placeholder="VD: Nguyễn Văn A"></label>
+        <label class="f"><span>Đơn vị công tác</span>
+          <input type="text" data-path="info.donVi" value="${esc(i.donVi)}" placeholder="VD: Khoa Cơ bản"></label>
+        <label class="f"><span>Chức vụ</span>
+          <input type="text" data-path="info.chucVu" value="${esc(i.chucVu)}" placeholder="Để trống nếu không giữ chức vụ"></label>
+        <label class="f"><span>Năm đánh giá</span>
+          <input type="text" data-path="info.nam" value="${esc(i.nam)}"></label>
+        <label class="f"><span>Chức danh</span>
+          <select data-path="info.chucDanh">
+            <option value="GV"${i.chucDanh==='GV'?' selected':''}>Giảng viên</option>
+            <option value="CB"${i.chucDanh==='CB'?' selected':''}>Cán bộ</option>
+          </select></label>
+        <label class="f"><span>Khối nhiệm vụ (quyết định danh mục Bảng theo dõi)</span>
+          <select data-path="info.khoi">
+            <option value="GV"${i.khoi==='GV'?' selected':''}>Khối giảng dạy — Mẫu 3a-GV</option>
+            <option value="HC"${i.khoi==='HC'?' selected':''}>Khối hành chính — Mẫu 3b-HC</option>
+          </select></label>
+        <label class="f"><span>Nhóm bình xét</span>
+          <select data-path="info.nhom">
+            <option value="N1"${i.nhom==='N1'?' selected':''}>N1 — Trưởng, Phó phòng và tương đương</option>
+            <option value="N2"${i.nhom==='N2'?' selected':''}>N2 — Trưởng, Phó Bộ môn và tương đương</option>
+            <option value="N3"${i.nhom==='N3'?' selected':''}>N3 — Chuyên môn nghiệp vụ (Cán bộ/GV/Giáo viên)</option>
+          </select></label>
+        <div>
+          <span style="display:block;font-size:12.5px;font-weight:600;color:var(--ink2);margin-bottom:5px">Diện đánh giá mục B</span>
+          <label class="chk"><input type="checkbox" data-path="info.lanhDao"${i.lanhDao?' checked':''}>
+            Viên chức <b>GIỮ CHỨC VỤ</b> lãnh đạo, quản lý</label>
+          <div class="hint">${i.lanhDao
+            ? 'Mục B tính trên thang <b>600</b> điểm: (Tổng điểm B : 6) × 0,7'
+            : 'Mục B tính trên thang <b>300</b> điểm: (Tổng điểm B : 3) × 0,7'}</div>
+        </div>
+      </div>
+      ${i.khoi==='HC' && i.chucDanh==='GV' ? '<div class="note" style="margin-top:14px">Thầy/cô đang chọn chức danh <b>Giảng viên</b> nhưng dùng danh mục nhiệm vụ <b>khối hành chính</b>. Hãy kiểm tra lại cho khớp với mẫu phải nộp.</div>':''}
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>II. Trạng thái đánh giá theo quý</h2>
+    <div class="pad">
+      <div class="cards">
+        ${QS.map((q,k)=>{const p=y.per[k];return `
+        <div class="card">
+          <div class="k">Quý ${q}</div>
+          <div class="v">${p.total!==null?fmt(p.total,2):'—'}<span class="u"> /100</span></div>
+          <span class="rank ${p.rank.k}">${p.rank.short}</span>
+          <div class="hint">${p.tr.n>0?('n = '+p.tr.n+' nhiệm vụ'):'Chưa nhập Bảng theo dõi'}</div>
+        </div>`}).join('')}
+      </div>
+      <div class="cards" style="margin-top:12px">
+        <div class="card big">
+          <div class="k">Trung bình cả năm ${esc(i.nam)}</div>
+          <div class="v">${y.avg!==null?fmt(y.avg,2):'—'}<span class="u"> /100</span></div>
+          <span class="rank ${y.rank.k}">${y.rank.s}</span>
+          <div class="hint">${y.done}/4 quý đã có dữ liệu</div>
+        </div>
+        <div class="card big">
+          <div class="k">Thao tác dữ liệu</div>
+          <div class="bar" style="margin-top:8px">
+            <button class="btn a" id="btnBackup">Sao lưu dữ liệu</button>
+            <button class="btn" id="btnRestore">Phục hồi từ tệp</button>
+            <button class="btn x" id="btnReset" style="padding:8px 13px">Xóa toàn bộ</button>
+          </div>
+          <div class="hint">Trạng thái: <b id="storeNote">${esc(storeNote)}</b>. Số liệu chỉ nằm trong trình duyệt của thiết bị này, không gửi lên mạng. Hãy sao lưu .json để chuyển sang máy khác.</div>
+          <div class="bar" style="margin-top:9px"><button class="btn" id="btnInstall" style="display:none">Cài làm ứng dụng trên thiết bị</button></div>
+          <input type="file" id="fileIn" accept="application/json" style="display:none">
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ---------- TAB: một quý ---------- */
+function viewQuarter(qi){
+  const q=S.q[qi], c=calcQuarter(qi), i=S.info, khoi=i.khoi;
+  const src = khoi==='HC'?TASKS_HC:TASKS_GV;
+  const groups={};
+  src.forEach(r=>{ if(r.g) groups[r.g]=r.name; });
+
+  /* --- bảng theo dõi --- */
+  let body='', lastG='';
+  q.tasks.forEach((t,idx)=>{
+    const g=String(t.code).split('.')[0];
+    if(g!==lastG && groups[g]){
+      body+='<tr class="grp"><td class="n">'+esc(g)+'</td><td colspan="16">'+esc(groups[g])+'</td></tr>';
+      lastG=g;
+    }
+    const r=c.tr.rows[idx];
+    body+='<tr>'+
+      '<td class="n">'+(t.fixed?esc(t.code):'<input type="text" class="num" style="width:52px" data-path="q.'+qi+'.tasks.'+idx+'.code" value="'+esc(t.code)+'">')+'</td>'+
+      '<td>'+(t.fixed?esc(t.name):'<input type="text" class="nm" data-path="q.'+qi+'.tasks.'+idx+'.name" value="'+esc(t.name)+'">')+
+        (t.fixed?'':' <button class="btn x" data-del="'+qi+':'+idx+'">Xóa</button>')+'</td>'+
+      '<td class="n"><input type="number" min="0" step="any" class="num" data-path="q.'+qi+'.tasks.'+idx+'.dg" value="'+esc(t.dg)+'"></td>'+
+      '<td class="n"><input type="number" min="0" step="any" class="num" data-path="q.'+qi+'.tasks.'+idx+'.ht" value="'+esc(t.ht)+'"></td>'+
+      '<td class="n">'+cellOut(r.sl)+'</td>'+
+      '<td>'+selLikert(t.cm,t.code,'cm',khoi,'q.'+qi+'.tasks.'+idx+'.cm')+'</td>'+
+      '<td>'+selLikert(t.kl,t.code,'kl',khoi,'q.'+qi+'.tasks.'+idx+'.kl')+'</td>'+
+      '<td class="n">'+cellOut(r.cl)+'</td>'+
+      '<td class="n"><input type="number" min="0" step="any" class="num" data-path="q.'+qi+'.tasks.'+idx+'.td" value="'+esc(t.td)+'"></td>'+
+      '<td class="n">'+cellOut(r.td)+'</td>'+
+      '<td class="n"><input type="number" min="0" step="any" class="num" data-path="q.'+qi+'.tasks.'+idx+'.uHt" value="'+esc(t.uHt)+'"></td>'+
+      '<td class="n">'+cellOut(r.uSl)+'</td>'+
+      '<td class="n"><input type="number" min="1" max="5" step="1" class="num" style="width:56px" data-path="q.'+qi+'.tasks.'+idx+'.uCm" value="'+esc(t.uCm)+'"></td>'+
+      '<td class="n"><input type="number" min="1" max="5" step="1" class="num" style="width:56px" data-path="q.'+qi+'.tasks.'+idx+'.uKl" value="'+esc(t.uKl)+'"></td>'+
+      '<td class="n">'+cellOut(r.uCl)+'</td>'+
+      '<td class="n"><input type="number" min="0" step="any" class="num" data-path="q.'+qi+'.tasks.'+idx+'.uTd" value="'+esc(t.uTd)+'"></td>'+
+      '<td class="n">'+cellOut(r.uTd)+'</td>'+
+    '</tr>';
+  });
+
+  /* --- mục A --- */
+  let aRows='';
+  CRIT_A.forEach(r=>{
+    if(r.t==='h1'){
+      aRows+='<tr class="h1"><td class="code">'+esc(r.code)+'</td><td>'+esc(r.name)+'</td>'+
+             '<td class="mx">'+r.max+'</td><td class="in"></td></tr>';
+    }else{
+      const sub=r.sub?'<ul>'+r.sub.map(s=>'<li>'+esc(s)+'</li>').join('')+'</ul>':'';
+      aRows+='<tr><td class="code">'+esc(r.code)+'</td><td><b>'+esc(r.name)+'</b>'+sub+'</td>'+
+             '<td class="mx">'+r.max+'</td>'+
+             '<td class="in"><input type="number" min="0" max="'+r.max+'" step="any" data-path="q.'+qi+'.critA.'+r.id+'" value="'+esc(q.critA[r.id])+'"></td></tr>';
+    }
+  });
+
+  /* --- ưu tiên danh hiệu --- */
+  let uuRows='';
+  UU_TIEN.forEach((txt,k)=>{
+    uuRows+='<tr><td class="n">'+(k+1)+'</td><td>'+esc(txt)+'</td>'+
+      '<td class="n"><input type="number" min="0" step="1" class="num" style="width:64px" data-path="q.'+qi+'.uu.'+k+'.s2" value="'+esc(q.uu[k].s2)+'"></td>'+
+      '<td class="n"><input type="number" min="0" step="1" class="num" style="width:64px" data-path="q.'+qi+'.uu.'+k+'.s1" value="'+esc(q.uu[k].s1)+'"></td></tr>';
+  });
+
+  const leadBlock = c.lead ? `
+    <div class="panel">
+      <h2>Mục B.II.2 — Nhiệm vụ chỉ đạo, điều hành, tổ chức thực hiện <span class="tagv">Tối đa 300 điểm</span></h2>
+      <div class="pad">
+        <div class="grid">
+        ${LEAD_B2.map(x=>`
+          <div style="border:1px solid var(--line);border-radius:8px;padding:11px 13px">
+            <div style="font-weight:650;font-size:13.5px">${esc(x.name)}<span class="tagv" style="margin-left:8px">100 đ</span></div>
+            <div class="bar" style="margin-top:9px">
+              <label class="chk"><input type="radio" name="${x.id}_${qi}" data-path="q.${qi}.lead.${x.id}" data-val="100"${String(q.lead[x.id])==='100'?' checked':''}> <span><b>100 điểm</b> — ${esc(x.o100)}</span></label>
+            </div>
+            <div class="bar" style="margin-top:6px">
+              <label class="chk"><input type="radio" name="${x.id}_${qi}" data-path="q.${qi}.lead.${x.id}" data-val="50"${String(q.lead[x.id])==='50'?' checked':''}> <span><b>50 điểm</b> — ${esc(x.o50)}</span></label>
+            </div>
+          </div>`).join('')}
+        </div>
+        <div class="hint" style="margin-top:10px">Tổng mục B.II.2: <b>${fmt(c.b2,1)}</b> / 300 điểm${c.b2Filled?'':' — chưa chọn đủ 3 tiêu chí'}</div>
+      </div>
+    </div>`:'';
+
+  return `
+  <div class="panel">
+    <h2>Quý ${qi} / Năm ${esc(i.nam)} — Kết quả tổng hợp
+      <span class="tagv">${esc(i.hoTen||'(chưa nhập họ tên)')}</span>
+      <span class="tagv">${c.lead?'Giữ chức vụ lãnh đạo, quản lý':'Không giữ chức vụ'}</span>
+      <span class="spacer"></span>
+      <button class="btn" id="btnPreview">Xem trước</button>
+      <button class="btn" id="btnDownload">Tải tệp HTML</button>
+      <button class="btn p" id="btnPrint">In / Lưu PDF quý ${qi}</button>
+    </h2>
+    <div class="pad">
+      <div class="cards">
+        <div class="card"><div class="k">a) Tiêu chí chung (A)</div>
+          <div class="v">${c.aFilled?fmt(c.diemA,2):'—'}<span class="u"> /30</span></div>
+          <div class="hint">Tổng điểm A = ${fmt(c.A,1)} / 100 → × 0,3</div></div>
+        <div class="card"><div class="k">b) Kết quả thực hiện nhiệm vụ (B)</div>
+          <div class="v">${c.diemB!==null?fmt(c.diemB,2):'—'}<span class="u"> /70</span></div>
+          <div class="hint">Tổng điểm B = ${fmt(c.B,1)} / ${c.lead?600:300} → : ${c.lead?6:3} × 0,7</div></div>
+        <div class="card big" style="background:linear-gradient(180deg,#fff,#f8fafc)">
+          <div class="k">Tổng điểm (a + b)</div>
+          <div class="v" style="font-size:34px">${c.total!==null?fmt(c.total,2):'—'}<span class="u"> /100</span></div>
+          <span class="rank ${c.rank.k}">${c.rank.s}</span>
+          <div class="hint">Sao ➁: <b>${c.tr.s2||0}</b> · Sao ➀: <b>${c.tr.s1||0}</b> · n = <b>${c.tr.n}</b></div>
+        </div>
+      </div>
+      ${c.tr.n===0?'<div class="note" style="margin-top:14px">Chưa có nhiệm vụ nào được tính vào <b>n</b>. Hãy nhập cột <b>“Được giao”</b> ở Bảng theo dõi bên dưới — mỗi nhiệm vụ có số được giao sẽ được tính 1 vào n.</div>':''}
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>A. Bảng theo dõi, đánh giá kết quả thực hiện nhiệm vụ
+      <span class="tagv">${khoi==='HC'?'Mẫu 3b-HC':'Mẫu 3a-GV'}</span>
+      <span class="spacer"></span>
+      <button class="btn sm" data-add="${qi}">+ Thêm nhiệm vụ</button>
+    </h2>
+    <div class="pad">
+      <div class="note b">Cột <b>Điểm</b> tự động tính: Số lượng = Hoàn thành ÷ Được giao × 100 · Chất lượng = (Mức CM + Mức khối lượng) ÷ 10 × 100 · Tiến độ = Đúng tiến độ ÷ Được giao × 100. Chọn mức 1–5 để xem ngay mô tả tương ứng trong Phụ lục.</div>
+      <div class="tscroll" style="margin-top:12px">
+        <table class="t">
+          <thead>
+            <tr>
+              <th rowspan="3" style="width:46px">TT</th><th rowspan="3">Nhiệm vụ</th>
+              <th colspan="8">CÁ NHÂN TỰ ĐÁNH GIÁ</th>
+              <th colspan="7">ĐƠN VỊ ĐÁNH GIÁ</th>
+            </tr>
+            <tr>
+              <th colspan="3">Số lượng</th><th colspan="3">Chất lượng</th><th colspan="2">Tiến độ</th>
+              <th colspan="2">Số lượng</th><th colspan="3">Chất lượng</th><th colspan="2">Tiến độ</th>
+            </tr>
+            <tr>
+              <th>Được giao</th><th>Hoàn thành</th><th>Điểm</th>
+              <th>Mức độ CM<br>(1–5)</th><th>Mức khối lượng<br>(1–5)</th><th>Điểm</th>
+              <th>Đúng tiến độ</th><th>Điểm</th>
+              <th>Hoàn thành</th><th>Điểm</th>
+              <th>CM</th><th>KL</th><th>Điểm</th>
+              <th>Đúng tiến độ</th><th>Điểm</th>
+            </tr>
+          </thead>
+          <tbody>${body}</tbody>
+          <tfoot>
+            <tr class="sum"><td></td><td>Tổng số nhiệm vụ được giao (n)</td>
+              <td class="n" colspan="2">${c.tr.n}</td><td colspan="13"></td></tr>
+            <tr class="sum"><td></td><td>Tổng điểm (TĐ)</td>
+              <td class="n"></td><td class="n"></td><td class="n">${fmt(c.tr.tdSl,1)}</td>
+              <td></td><td></td><td class="n">${fmt(c.tr.tdCl,1)}</td>
+              <td class="n"></td><td class="n">${fmt(c.tr.tdTd,1)}</td>
+              <td class="n"></td><td class="n">${fmt(c.tr.uTdSl,1)}</td>
+              <td></td><td></td><td class="n">${fmt(c.tr.uTdCl,1)}</td>
+              <td class="n"></td><td class="n">${fmt(c.tr.uTdTd,1)}</td></tr>
+            <tr class="sum"><td></td><td>Điểm trung bình = TĐ / n</td>
+              <td class="n"></td><td class="n"></td><td class="n">${c.tr.avgSl!==null?fmt(c.tr.avgSl,1):'–'}</td>
+              <td></td><td></td><td class="n">${c.tr.avgCl!==null?fmt(c.tr.avgCl,1):'–'}</td>
+              <td class="n"></td><td class="n">${c.tr.avgTd!==null?fmt(c.tr.avgTd,1):'–'}</td>
+              <td class="n"></td><td class="n">${c.tr.uAvgSl!==null?fmt(c.tr.uAvgSl,1):'–'}</td>
+              <td></td><td></td><td class="n">${c.tr.uAvgCl!==null?fmt(c.tr.uAvgCl,1):'–'}</td>
+              <td class="n"></td><td class="n">${c.tr.uAvgTd!==null?fmt(c.tr.uAvgTd,1):'–'}</td></tr>
+          </tfoot>
+        </table>
+      </div>
+      <div class="hint">Theo hướng dẫn mục C.1.a của Mẫu 3: mỗi nhiệm vụ được tính <b>1</b> vào n khi cột “Được giao” có giá trị (kể cả khi được giao 30 tiết, 2 bài báo…). Số lượng được giao vẫn dùng để tính tỷ lệ % hoàn thành.</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>B. Ưu tiên để xét danh hiệu <span class="tagv">Nộp kèm minh chứng ở lần đánh giá cả năm</span></h2>
+    <div class="pad">
+      <div class="tscroll">
+        <table class="t">
+          <thead><tr><th style="width:46px">TT</th><th>Kết quả / Nội dung đạt mức khen thưởng</th>
+            <th style="width:110px">Số lượng ➁</th><th style="width:110px">Số lượng ➀</th></tr></thead>
+          <tbody>${uuRows}</tbody>
+          <tfoot><tr class="sum"><td></td><td>Tổng số</td>
+            <td class="n">${c.tr.s2||0} ➁</td><td class="n">${c.tr.s1||0} ➀</td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Mục A — Tiêu chí chung <span class="tagv">Tối đa 100 điểm → × 0,3</span>
+      <span class="spacer"></span>
+      <button class="btn sm" data-amax="${qi}">Điền điểm tối đa</button>
+      <button class="btn sm" data-aclr="${qi}">Xóa điểm mục A</button>
+    </h2>
+    <div class="pad">
+      <div class="tscroll">
+        <table class="ca">
+          <thead><tr><th style="width:46px">TT</th><th>Tiêu chí đánh giá</th><th style="width:66px">Tối đa</th><th style="width:92px">Tự ĐG</th></tr></thead>
+          <tbody>${aRows}
+            <tr class="h2"><td></td><td style="text-align:right">TỔNG ĐIỂM A</td>
+              <td class="mx">100</td><td class="mx" style="color:var(--accent)">${fmt(c.A,1)}</td></tr>
+          </tbody>
+        </table>
+      </div>
+      ${c.A>100?'<div class="note" style="margin-top:12px">Tổng điểm mục A đang <b>vượt 100</b>. Hãy kiểm tra lại từng tiêu chí.</div>':''}
+    </div>
+  </div>
+
+  ${leadBlock}
+
+  <div class="panel">
+    <h2>Nhận xét và đề xuất xếp loại</h2>
+    <div class="pad">
+      <div class="grid">
+        <label class="f"><span>2. Ưu điểm</span>
+          <textarea data-path="q.${qi}.uuDiem" placeholder="Mỗi ý một dòng, bắt đầu bằng dấu “-”">${esc(q.uuDiem)}</textarea></label>
+        <label class="f"><span>3. Hạn chế, khuyết điểm</span>
+          <textarea data-path="q.${qi}.hanChe" placeholder="Mỗi ý một dòng, bắt đầu bằng dấu “-”">${esc(q.hanChe)}</textarea></label>
+        <div class="grid g2">
+          <div>
+            <span style="display:block;font-size:12.5px;font-weight:600;color:var(--ink2);margin-bottom:5px">4. Đề xuất mức xếp loại chất lượng</span>
+            <div class="card" style="padding:11px 13px">
+              <span class="rank ${c.rank.k}" style="margin:0">${c.rank.s}</span>
+              <div class="hint">Phần mềm tự xác định theo tổng điểm: ≥ 90 HTXS · 90 > TĐ ≥ 70 HTT · 70 > TĐ ≥ 50 HT · < 50 Không HT.
+              Lưu ý: mức HTXS còn phải qua bình xét của đơn vị, không vượt quá 20% số cá nhân xếp loại HTT trong nhóm ${esc(S.info.nhom)}.</div>
+            </div>
+          </div>
+          <label class="f"><span>5. Lưu ý khác (NCS kéo dài, kỷ luật, bài báo…)</span>
+            <textarea data-path="q.${qi}.luuY" style="min-height:86px" placeholder="VD: NCS đúng tiến độ; không bị kỷ luật trong kỳ đánh giá">${esc(q.luuY)}</textarea></label>
+        </div>
+        <label class="f" style="max-width:320px"><span>Ngày ký phiếu</span>
+          <input type="text" data-path="q.${qi}.ngay" value="${esc(q.ngay)}" placeholder="VD: 18/11/2026"></label>
+      </div>
+      <div class="note" style="margin-top:14px">Các mức hạ bậc theo quy định: NCS bị kéo dài hoặc TS không có bài báo → hạ một mức; không hoàn thành nhiệm vụ NCS → “Không hoàn thành nhiệm vụ”; viên chức bị kỷ luật → “Không hoàn thành nhiệm vụ”. Phần mềm <b>không</b> tự hạ mức, thầy/cô cần tự đối chiếu.</div>
+    </div>
+  </div>`;
+}
+
+/* ---------- TAB: tổng hợp năm ---------- */
+function viewYear(){
+  const y=calcYear(), i=S.info;
+  return `
+  <div class="panel">
+    <h2>Tổng hợp kết quả đánh giá năm ${esc(i.nam)}
+      <span class="tagv">${esc(i.hoTen||'(chưa nhập họ tên)')}</span>
+      <span class="tagv">${esc(i.donVi||'')}</span>
+      <span class="spacer"></span>
+      <button class="btn p" id="btnPrintYear">In cả 4 quý</button>
+    </h2>
+    <div class="pad">
+      <div class="tscroll">
+        <table class="ys">
+          <thead><tr><th style="text-align:left">Quý</th><th>Điểm mục A<br>(/30)</th><th>Điểm mục B<br>(/70)</th>
+            <th>Tổng điểm<br>(/100)</th><th>Xếp loại chất lượng</th><th>n</th><th>➁</th><th>➀</th><th>Trạng thái</th></tr></thead>
+          <tbody>
+            ${QS.map((q,k)=>{const p=y.per[k];return `
+            <tr><td class="q">Quý ${q}</td>
+              <td>${p.aFilled?fmt(p.diemA,2):'—'}</td>
+              <td>${p.diemB!==null?fmt(p.diemB,2):'—'}</td>
+              <td><b>${p.total!==null?fmt(p.total,2):'—'}</b></td>
+              <td><span class="rank ${p.rank.k}">${p.rank.short}</span></td>
+              <td>${p.tr.n||'—'}</td><td>${p.tr.s2||0}</td><td>${p.tr.s1||0}</td>
+              <td>${p.hasData?(p.tr.n>0?'Đã nhập dữ liệu':'Thiếu Bảng theo dõi'):'Chưa nhập dữ liệu'}</td></tr>`}).join('')}
+            <tr class="tot"><td class="q">TRUNG BÌNH CẢ NĂM</td><td></td><td></td>
+              <td>${y.avg!==null?fmt(y.avg,2):'—'}</td>
+              <td><span class="rank ${y.rank.k}">${y.rank.short}</span></td>
+              <td colspan="3"></td>
+              <td>${y.done}/4 quý đã nhập</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note b" style="margin-top:14px">
+        Hồ sơ đánh giá <b>Quý IV</b> gồm: Biên bản họp đơn vị (Mẫu 1b), Phiếu đánh giá (Mẫu 2), Tổng hợp kết quả (Mẫu 4).
+        Hồ sơ đánh giá <b>cả năm</b> gồm: Biên bản họp đơn vị (Mẫu 1a), Phiếu đánh giá năm (Mẫu 2) và cập nhật kết quả 4 quý.
+        Đơn vị lưu Mẫu 3a-GV / 3b-HC của từng cá nhân.
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Diễn biến điểm theo quý</h2>
+    <div class="pad">${sparkline(y)}</div>
+  </div>`;
+}
+
+function sparkline(y){
+  const W=760,H=220,pl=44,pr=16,pt=16,pb=34;
+  const pts=QS.map((q,k)=>({q, v:y.per[k].total}));
+  const x = k => pl + k*((W-pl-pr)/3);
+  const yy = v => pt + (100-v)/100*(H-pt-pb);
+  const line = pts.filter(p=>p.v!==null);
+  let path='';
+  line.forEach((p,n)=>{ const k=pts.indexOf(p); path+=(n?' L':'M')+x(k)+' '+yy(p.v); });
+  const bands=[{a:90,b:100,c:'#ecfdf3'},{a:70,b:90,c:'#eef2ff'},{a:50,b:70,c:'#fffbeb'},{a:0,b:50,c:'#fef2f2'}];
+  return '<div class="tscroll"><svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:'+W+'px;height:auto;font:12px system-ui">'+
+    bands.map(b=>'<rect x="'+pl+'" y="'+yy(b.b)+'" width="'+(W-pl-pr)+'" height="'+(yy(b.a)-yy(b.b))+'" fill="'+b.c+'"/>').join('')+
+    [0,50,70,90,100].map(v=>'<g><line x1="'+pl+'" y1="'+yy(v)+'" x2="'+(W-pr)+'" y2="'+yy(v)+'" stroke="#cbd5e1" stroke-dasharray="3 3"/>'+
+      '<text x="'+(pl-8)+'" y="'+(yy(v)+4)+'" text-anchor="end" fill="#5b6b7c">'+v+'</text></g>').join('')+
+    (path?'<path d="'+path+'" fill="none" stroke="#9b1c1c" stroke-width="2.5"/>':'')+
+    pts.map((p,k)=>'<g>'+(p.v!==null?'<circle cx="'+x(k)+'" cy="'+yy(p.v)+'" r="5" fill="#9b1c1c"/>'+
+      '<text x="'+x(k)+'" y="'+(yy(p.v)-12)+'" text-anchor="middle" fill="#15202b" font-weight="700">'+fmt(p.v,2)+'</text>':'')+
+      '<text x="'+x(k)+'" y="'+(H-10)+'" text-anchor="middle" fill="#5b6b7c">Quý '+p.q+'</text></g>').join('')+
+    '</svg></div>'+
+    '<div class="hint">Các dải màu tương ứng bốn mức xếp loại: ≥ 90 HTXS · 70–90 HTT · 50–70 HT · < 50 Không HT.</div>';
+}
+
+/* ---------- TAB: hướng dẫn ---------- */
+function viewHelp(){
+  return `
+  <div class="panel">
+    <h2>Hướng dẫn sử dụng</h2>
+    <div class="pad">
+      <div class="grid g2">
+        <div>
+          <h3 style="font-size:14px;margin:0 0 6px">Trình tự nhập liệu</h3>
+          <ol style="margin:0;padding-left:20px;color:var(--ink2);font-size:13.5px;line-height:1.75">
+            <li>Nhập <b>Thông tin chung</b> một lần, dùng cho cả 4 quý.</li>
+            <li>Mở tab quý cần đánh giá, nhập <b>Bảng theo dõi</b>: cột “Được giao”, “Hoàn thành”, mức CM, mức khối lượng, “Đúng tiến độ”.</li>
+            <li>Nhập điểm <b>mục A</b> (có nút điền nhanh điểm tối đa rồi trừ lại từng tiêu chí).</li>
+            <li>Viết <b>Ưu điểm</b>, <b>Hạn chế</b>; xếp loại tự hiện theo tổng điểm.</li>
+            <li>Bấm <b>In / Lưu PDF</b> để xuất Phiếu đánh giá (Mẫu 2) và Bảng theo dõi (Mẫu 3) đúng thứ tự nộp.</li>
+          </ol>
+        </div>
+        <div>
+          <h3 style="font-size:14px;margin:0 0 6px">Công thức phần mềm đang dùng</h3>
+          <div style="font-size:13.5px;color:var(--ink2);line-height:1.8">
+            Điểm số lượng = Hoàn thành ÷ Được giao × 100<br>
+            Điểm chất lượng = (Mức CM + Mức khối lượng) ÷ 10 × 100<br>
+            Điểm tiến độ = Đúng tiến độ ÷ Được giao × 100<br>
+            Điểm trung bình mỗi cột = Tổng điểm ÷ n<br>
+            <b>a)</b> = Tổng điểm A × 0,3 &nbsp;(/30)<br>
+            <b>b)</b> không giữ chức vụ = Tổng B ÷ 3 × 0,7 &nbsp;(/70)<br>
+            <b>b)</b> giữ chức vụ = Tổng B ÷ 6 × 0,7 &nbsp;(/70)<br>
+            <b>Tổng điểm</b> = a + b &nbsp;(/100)
+          </div>
+        </div>
+      </div>
+      <details class="acc" open><summary>Thang xếp loại</summary><div>
+        <table class="ys"><thead><tr><th style="text-align:left">Mức xếp loại</th><th>Tổng điểm</th></tr></thead>
+        <tbody>
+          <tr><td class="q">Hoàn thành xuất sắc nhiệm vụ</td><td>≥ 90 điểm</td></tr>
+          <tr><td class="q">Hoàn thành tốt nhiệm vụ</td><td>90 > TĐ ≥ 70</td></tr>
+          <tr><td class="q">Hoàn thành nhiệm vụ</td><td>70 > TĐ ≥ 50</td></tr>
+          <tr><td class="q">Không hoàn thành nhiệm vụ</td><td>< 50 điểm, hoặc thuộc các trường hợp vi phạm theo quy định</td></tr>
+        </tbody></table>
+        <div class="hint">Mức HTXS phải qua bình xét của đơn vị, mỗi nhóm N1/N2/N3 không vượt quá 20% tổng số cá nhân xếp loại HTT (có thể tới 25% với đơn vị có thành tích xuất sắc, nổi trội).</div>
+      </div></details>
+      <details class="acc"><summary>Về chỉ số n (tổng số nhiệm vụ được giao)</summary><div>
+        <p style="font-size:13.5px;color:var(--ink2);line-height:1.7">Hướng dẫn mục C.1.a của Mẫu 3 ghi: “Mỗi một nhiệm vụ/nhiệm vụ thứ cấp được tính vào Tổng số nhiệm vụ được giao (n) khi cột Được giao có đơn vị tính (ví dụ: Dạy 30 tiết; Bắt buộc 1 bài báo khoa học…)”. Vì vậy phần mềm <b>đếm số nhiệm vụ</b> có giá trị ở cột “Được giao”, chứ không cộng dồn các con số đó. Cách này cho kết quả giống file Excel của trường khi mỗi nhiệm vụ ghi “1”, và vẫn đúng khi thầy/cô ghi “30 tiết” hay “2 bài báo”.</p>
+      </div></details>
+      <details class="acc"><summary>Lưu trữ và sao lưu</summary><div>
+        <p style="font-size:13.5px;color:var(--ink2);line-height:1.7">Dữ liệu được lưu ngay trên trình duyệt của thiết bị đang dùng, không gửi đi đâu. Nếu xóa dữ liệu trình duyệt hoặc đổi máy thì dữ liệu sẽ không còn, nên hãy bấm <b>Sao lưu dữ liệu</b> ở tab Thông tin chung để tải tệp .json về, và dùng <b>Phục hồi từ tệp</b> khi cần mở lại.</p>
+      </div></details>
+    </div>
+  </div>`;
+}
+
+/* =========================================================
+   6. IN / XUẤT PDF
+   ========================================================= */
+function dots(n){return '…'.repeat(n);}
+function mark(on){return on?'☑':'☐';}
+function linesOf(s){
+  const a=String(s||'').split('\n').map(x=>x.trim()).filter(Boolean);
+  return a.length?a:[''];
+}
+function printPhieu(qi){
+  const q=S.q[qi], c=calcQuarter(qi), i=S.info, lead=c.lead;
+  let aRows='';
+  CRIT_A.forEach(r=>{
+    if(r.t==='h1'){
+      aRows+='<tr class="b"><td class="c">'+esc(r.code)+'</td><td>'+esc(r.name)+'</td><td class="c">'+r.max+'</td><td></td><td></td><td></td></tr>';
+    }else{
+      const sub=r.sub?r.sub.map((s,k)=>'<div>'+'abcd'[k]+') '+esc(s)+'</div>').join(''):'';
+      const v=num(q.critA[r.id]);
+      aRows+='<tr><td class="c">'+esc(r.code)+'</td><td><b>'+esc(r.name)+'</b>'+sub+'</td>'+
+        '<td class="c">'+r.max+'</td><td class="c">'+(v!==null?fmt(v,0):'')+'</td><td></td><td></td></tr>';
+    }
+  });
+  const bRows = lead ? `
+    <tr class="b"><td class="c">II</td><td>Đối với viên chức GIỮ CHỨC VỤ lãnh đạo, quản lý</td><td class="c">600</td><td class="c">${fmt(c.B,1)}</td><td></td><td></td></tr>
+    <tr><td class="c">1</td><td><b>Nhiệm vụ được giao trực tiếp thực hiện (*)</b></td><td class="c">300</td><td class="c">${fmt(c.b1,1)}</td><td></td><td></td></tr>
+    <tr><td class="c">a</td><td>Tiêu chí đánh giá về số lượng</td><td class="c">100</td><td class="c">${c.tr.avgSl!==null?fmt(c.tr.avgSl,1):''}</td><td></td><td></td></tr>
+    <tr><td class="c">b</td><td>Tiêu chí đánh giá về chất lượng</td><td class="c">100</td><td class="c">${c.tr.avgCl!==null?fmt(c.tr.avgCl,1):''}</td><td></td><td></td></tr>
+    <tr><td class="c">c</td><td>Tiêu chí đánh giá về tiến độ</td><td class="c">100</td><td class="c">${c.tr.avgTd!==null?fmt(c.tr.avgTd,1):''}</td><td></td><td></td></tr>
+    <tr><td class="c">2</td><td><b>Nhiệm vụ chỉ đạo, điều hành, tổ chức thực hiện nhiệm vụ, hướng dẫn, kiểm tra, giám sát, giải quyết vướng mắc</b></td><td class="c">300</td><td class="c">${fmt(c.b2,1)}</td><td></td><td></td></tr>
+    ${LEAD_B2.map((x,k)=>'<tr><td class="c">2.'+(k+1)+'</td><td>'+esc(x.name)+'</td><td class="c">100</td><td class="c">'+esc(q.lead[x.id]||'')+'</td><td></td><td></td></tr>').join('')}
+  ` : `
+    <tr class="b"><td class="c">I</td><td>Đối với viên chức KHÔNG GIỮ CHỨC VỤ lãnh đạo, quản lý (*)</td><td class="c">300</td><td class="c">${fmt(c.B,1)}</td><td></td><td></td></tr>
+    <tr><td class="c">1</td><td>Tiêu chí đánh giá về số lượng: Xác định bằng điểm tỷ lệ % giữa số lượng sản phẩm hoàn thành với số lượng sản phẩm được giao trong kỳ theo dõi, đánh giá</td><td class="c">100</td><td class="c">${c.tr.avgSl!==null?fmt(c.tr.avgSl,1):''}</td><td></td><td></td></tr>
+    <tr><td class="c">2</td><td>Tiêu chí đánh giá về chất lượng: Xác định trên cơ sở mức độ phức tạp công việc và khối lượng công việc (Mức 1–5) giữa số lượng sản phẩm hoàn thành với số lượng sản phẩm được giao</td><td class="c">100</td><td class="c">${c.tr.avgCl!==null?fmt(c.tr.avgCl,1):''}</td><td></td><td></td></tr>
+    <tr><td class="c">3</td><td>Tiêu chí đánh giá về tiến độ: Xác định bằng điểm tỷ lệ % giữa số lượng sản phẩm hoàn thành đạt tiến độ trở lên so với số lượng sản phẩm được giao</td><td class="c">100</td><td class="c">${c.tr.avgTd!==null?fmt(c.tr.avgTd,1):''}</td><td></td><td></td></tr>`;
+
+  const r=c.rank;
+  return `
+  <div class="pdoc">
+    <div style="text-align:right;font-size:10pt"><b>Mẫu 2</b></div>
+    <table class="ph"><tr>
+      <td>BỘ VĂN HÓA, THỂ THAO VÀ DU LỊCH<br><b>TRƯỜNG ĐẠI HỌC TDTT BẮC NINH</b></td>
+      <td><b>CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM</b><br><b>Độc lập - Tự do - Hạnh phúc</b></td>
+    </tr></table>
+    <h3>Phiếu đánh giá, xếp loại chất lượng viên chức</h3>
+    <div class="pc">Tháng/Quý: <b>${qi}</b> &nbsp;&nbsp; Năm: <b>${esc(i.nam)}</b></div>
+    <div class="pinfo">
+      <div>Họ tên: <b>${esc(i.hoTen.toUpperCase())}</b></div>
+      <div>Chức vụ: ${esc(i.chucVu)||dots(28)} &nbsp;&nbsp; Chức danh: ${mark(i.chucDanh==='GV')} Giảng viên &nbsp; ${mark(i.chucDanh==='CB')} Cán bộ</div>
+      <div>Đơn vị công tác: ${esc(i.donVi)||dots(40)}</div>
+    </div>
+    <div class="psec">A. NỘI DUNG TỰ ĐÁNH GIÁ, XẾP LOẠI</div>
+    <table class="pt">
+      <thead>
+        <tr><th rowspan="2" style="width:30px">TT</th><th rowspan="2">Tiêu chí đánh giá</th><th colspan="4">Điểm</th></tr>
+        <tr><th style="width:42px">Tối đa</th><th style="width:42px">Tự ĐG</th><th style="width:42px">Đơn vị</th><th style="width:42px">Trường</th></tr>
+      </thead>
+      <tbody>
+        <tr class="b"><td class="c">A</td><td>TIÊU CHÍ CHUNG</td><td class="c">100</td><td class="c">${fmt(c.A,0)}</td><td></td><td></td></tr>
+        ${aRows}
+        <tr class="b"><td class="c">B</td><td>TIÊU CHÍ ĐÁNH GIÁ KẾT QUẢ THỰC HIỆN NHIỆM VỤ</td><td class="c"></td><td class="c"></td><td></td><td></td></tr>
+        ${bRows}
+      </tbody>
+    </table>
+    <div style="font-size:9.5pt;margin-top:4pt"><b>Ghi chú: (*) Gửi kèm theo Bảng theo dõi, đánh giá kết quả thực hiện nhiệm vụ của cá nhân</b></div>
+    <div class="pres">
+      <div>1. Kết quả: &nbsp; a) Nhóm tiêu chí chung (mục A) = Tổng điểm A (${fmt(c.A,0)} × 0,3) = <b>${fmt(c.diemA,2)}</b>/30</div>
+      <div style="margin-left:52pt">b) Nhóm tiêu chí về kết quả thực hiện nhiệm vụ (mục B) = <b>${c.diemB!==null?fmt(c.diemB,2):''}</b>/70</div>
+      <div style="margin-left:52pt">${lead
+        ? '- Viên chức GIỮ CHỨC VỤ = (Tổng điểm B '+fmt(c.B,1)+' : 6) × 0,7 = <b>'+(c.diemB!==null?fmt(c.diemB,2):'')+'</b>/70'
+        : '- Viên chức KHÔNG GIỮ CHỨC VỤ = (Tổng điểm B '+fmt(c.B,1)+' : 3) × 0,7 = <b>'+(c.diemB!==null?fmt(c.diemB,2):'')+'</b>/70'}</div>
+      <div style="margin-top:5pt"><b>Tổng điểm (a+b): ${c.total!==null?fmt(c.total,2):''}/100</b> &nbsp;&nbsp;&nbsp; Tổng ➁: <b>${c.tr.s2||0}</b> &nbsp;&nbsp;&nbsp; Tổng ➀: <b>${c.tr.s1||0}</b></div>
+      <div style="margin-top:6pt">2. Ưu điểm:</div>
+      ${linesOf(q.uuDiem).map(x=>'<div style="margin-left:14pt">'+(x?'- '+esc(x):dots(60))+'</div>').join('')}
+      <div style="margin-top:4pt">3. Hạn chế, khuyết điểm:</div>
+      ${linesOf(q.hanChe).map(x=>'<div style="margin-left:14pt">'+(x?'- '+esc(x):dots(60))+'</div>').join('')}
+      <div style="margin-top:5pt">4. Đề xuất mức xếp loại chất lượng:</div>
+      <div class="pmarks" style="margin-left:14pt">
+        <div>${mark(r.k==='xs')} Hoàn thành <b>xuất sắc</b> nhiệm vụ: Tổng điểm ≥ 90đ</div>
+        <div>${mark(r.k==='t')} Hoàn thành <b>tốt</b> nhiệm vụ: 90đ > Tổng điểm ≥ 70đ</div>
+        <div>${mark(r.k==='h')} <b>Hoàn thành</b> nhiệm vụ: 70đ > Tổng điểm ≥ 50đ</div>
+        <div>${mark(r.k==='k')} <b>Không</b> hoàn thành nhiệm vụ: Tổng điểm < 50đ hoặc thuộc các trường hợp vi phạm theo quy định</div>
+      </div>
+      ${String(q.luuY||'').trim()?'<div style="margin-top:5pt">5. Lưu ý khác: '+esc(q.luuY)+'</div>':''}
+    </div>
+    <table class="psign"><tr><td></td><td>
+      <i>Bắc Ninh, ngày ${esc(q.ngay)||'…… tháng …… năm 20……'}</i><br>
+      <b>VIÊN CHỨC TỰ ĐÁNH GIÁ</b><br><i>(ký và ghi rõ họ tên)</i>
+      <div style="height:42pt"></div><b>${esc(i.hoTen.toUpperCase())}</b>
+    </td></tr></table>
+    <div class="psec">B. NHẬN XÉT, ĐÁNH GIÁ CỦA CẤP CÓ THẨM QUYỀN</div>
+    <div style="font-size:10.5pt">
+      <div>1.1. Nhận xét, đánh giá của người trực tiếp quản lý, phân công công việc:</div>
+      <div>${dots(80)}</div><div>${dots(80)}</div>
+      <div style="margin-top:4pt">1.2. Đề nghị mức xếp loại: ☐ HTXS &nbsp; ☐ HTT &nbsp; ☐ HT &nbsp; ☐ Không HT</div>
+    </div>
+    <table class="psign"><tr><td></td><td>
+      <i>Bắc Ninh, ngày …… tháng …… năm 20……</i><br><b>TRƯỞNG ĐƠN VỊ</b><br><i>(ký và ghi rõ họ tên)</i>
+      <div style="height:40pt"></div>${dots(28)}
+    </td></tr></table>
+  </div>`;
+}
+
+function printBangTheoDoi(qi){
+  const q=S.q[qi], c=calcQuarter(qi), i=S.info, khoi=i.khoi;
+  const src = khoi==='HC'?TASKS_HC:TASKS_GV;
+  const groups={}; src.forEach(r=>{ if(r.g) groups[r.g]=r.name; });
+  let body='', lastG='';
+  q.tasks.forEach((t,idx)=>{
+    const g=String(t.code).split('.')[0];
+    if(g!==lastG && groups[g]){
+      body+='<tr class="b"><td class="c">'+esc(g)+'</td><td colspan="16">'+esc(groups[g])+'</td></tr>'; lastG=g;
+    }
+    const r=c.tr.rows[idx];
+    const o=v=>v===null?'':fmt(v,0);
+    body+='<tr><td class="c">'+esc(t.code)+'</td><td>'+esc(t.name)+'</td>'+
+      '<td class="c">'+esc(t.dg)+'</td><td class="c">'+esc(t.ht)+'</td><td class="c">'+o(r.sl)+'</td>'+
+      '<td class="c">'+esc(t.cm)+'</td><td class="c">'+esc(t.kl)+'</td><td class="c">'+o(r.cl)+'</td>'+
+      '<td class="c">'+esc(t.td)+'</td><td class="c">'+o(r.td)+'</td>'+
+      '<td class="c">'+esc(t.uHt)+'</td><td class="c">'+o(r.uSl)+'</td>'+
+      '<td class="c">'+esc(t.uCm)+'</td><td class="c">'+esc(t.uKl)+'</td><td class="c">'+o(r.uCl)+'</td>'+
+      '<td class="c">'+esc(t.uTd)+'</td><td class="c">'+o(r.uTd)+'</td></tr>';
+  });
+  let uu='';
+  UU_TIEN.forEach((txt,k)=>{
+    uu+='<tr><td class="c">'+(k+1)+'</td><td>'+esc(txt)+'</td>'+
+      '<td class="c">'+esc(q.uu[k].s2)+'</td><td class="c">'+esc(q.uu[k].s1)+'</td>'+
+      '<td class="c"></td><td class="c"></td></tr>';
+  });
+  return `
+  <div class="pdoc">
+    <div style="text-align:right;font-size:10pt"><b>Mẫu ${khoi==='HC'?'3b - HC':'3a - GV'}</b></div>
+    <table class="ph"><tr>
+      <td>BỘ VĂN HÓA, THỂ THAO VÀ DU LỊCH<br><b>TRƯỜNG ĐẠI HỌC TDTT BẮC NINH</b></td>
+      <td><b>CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM</b><br><b>Độc lập - Tự do - Hạnh phúc</b></td>
+    </tr></table>
+    <h3>Bảng theo dõi, đánh giá kết quả thực hiện nhiệm vụ</h3>
+    <div class="pc">(DÀNH CHO VIÊN CHỨC KHỐI ${khoi==='HC'?'HÀNH CHÍNH':'GIẢNG DẠY'})<br>
+      Tháng/Quý: <b>${qi}</b> &nbsp;&nbsp; Năm: <b>${esc(i.nam)}</b></div>
+    <div class="pinfo">
+      <div>Họ tên: <b>${esc(i.hoTen.toUpperCase())}</b> &nbsp;&nbsp; Chức danh: ${mark(i.chucDanh==='GV')} Giảng viên &nbsp; ${mark(i.chucDanh==='CB')} Cán bộ</div>
+      <div>Chức vụ: ${esc(i.chucVu)||dots(24)} &nbsp;&nbsp; Đơn vị công tác: ${esc(i.donVi)||dots(30)}</div>
+    </div>
+    <div class="psec">A. KẾT QUẢ THỰC HIỆN NHIỆM VỤ DO CÁ NHÂN TỰ ĐÁNH GIÁ VÀ ĐÁNH GIÁ CỦA ĐƠN VỊ</div>
+    <table class="pt wide">
+      <thead>
+        <tr><th rowspan="3" style="width:26px">TT</th><th rowspan="3">Nhiệm vụ</th>
+          <th colspan="8">CÁ NHÂN TỰ ĐÁNH GIÁ</th><th colspan="7">ĐƠN VỊ ĐÁNH GIÁ</th></tr>
+        <tr><th colspan="3">Số lượng</th><th colspan="3">Chất lượng</th><th colspan="2">Tiến độ</th>
+            <th colspan="2">Số lượng</th><th colspan="3">Chất lượng</th><th colspan="2">Tiến độ</th></tr>
+        <tr><th>Được giao</th><th>Hoàn thành</th><th>Điểm</th><th>Mức CM</th><th>Mức KL</th><th>Điểm</th>
+            <th>Đúng TĐ</th><th>Điểm</th><th>Hoàn thành</th><th>Điểm</th><th>Mức CM</th><th>Mức KL</th><th>Điểm</th>
+            <th>Đúng TĐ</th><th>Điểm</th></tr>
+        <tr class="b"><td class="c">1</td><td class="c">2</td><td class="c">3</td><td class="c">4</td><td class="c">5</td>
+            <td class="c">6</td><td class="c">7</td><td class="c">8</td><td class="c">9</td><td class="c">10</td>
+            <td class="c">11</td><td class="c">12</td><td class="c">13</td><td class="c">14</td><td class="c">15</td>
+            <td class="c">16</td><td class="c">17</td></tr>
+      </thead>
+      <tbody>${body}
+        <tr class="b"><td></td><td>Tổng số nhiệm vụ được giao (n)</td><td class="c">${c.tr.n}</td>
+          <td colspan="14"></td></tr>
+        <tr class="b"><td></td><td>Tổng điểm (TĐ)</td><td></td><td></td><td class="c">${fmt(c.tr.tdSl,0)}</td>
+          <td></td><td></td><td class="c">${fmt(c.tr.tdCl,0)}</td><td></td><td class="c">${fmt(c.tr.tdTd,0)}</td>
+          <td></td><td class="c">${fmt(c.tr.uTdSl,0)}</td><td></td><td></td><td class="c">${fmt(c.tr.uTdCl,0)}</td>
+          <td></td><td class="c">${fmt(c.tr.uTdTd,0)}</td></tr>
+        <tr class="b"><td></td><td>Điểm trung bình = TĐ/n</td><td></td><td></td>
+          <td class="c">${c.tr.avgSl!==null?fmt(c.tr.avgSl,1):''}</td><td></td><td></td>
+          <td class="c">${c.tr.avgCl!==null?fmt(c.tr.avgCl,1):''}</td><td></td>
+          <td class="c">${c.tr.avgTd!==null?fmt(c.tr.avgTd,1):''}</td><td></td>
+          <td class="c">${c.tr.uAvgSl!==null?fmt(c.tr.uAvgSl,1):''}</td><td></td><td></td>
+          <td class="c">${c.tr.uAvgCl!==null?fmt(c.tr.uAvgCl,1):''}</td><td></td>
+          <td class="c">${c.tr.uAvgTd!==null?fmt(c.tr.uAvgTd,1):''}</td></tr>
+      </tbody>
+    </table>
+    <div class="psec">B. ƯU TIÊN ĐỂ XÉT DANH HIỆU (Yêu cầu nộp kèm theo minh chứng ở lần đánh giá cả năm)</div>
+    <table class="pt">
+      <thead><tr><th rowspan="2" style="width:26px">TT</th><th rowspan="2">Kết quả/Nội dung đạt mức khen thưởng</th>
+        <th colspan="2">CÁ NHÂN TỰ ĐÁNH GIÁ</th><th colspan="2">ĐƠN VỊ ĐÁNH GIÁ</th></tr>
+        <tr><th style="width:46px">SL ➁</th><th style="width:46px">SL ➀</th><th style="width:46px">SL ➁</th><th style="width:46px">SL ➀</th></tr></thead>
+      <tbody>${uu}
+        <tr class="b"><td></td><td>Tổng số</td><td class="c">${c.tr.s2||0}</td><td class="c">${c.tr.s1||0}</td><td></td><td></td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:7pt;font-size:10.5pt">Kết quả đánh giá của đơn vị: Số lượng: ……… điểm &nbsp; Chất lượng: ……… điểm &nbsp; Tiến độ: ……… điểm &nbsp; Tổng ➁: ……… &nbsp; Tổng ➀: ………</div>
+    <table class="psign"><tr>
+      <td><i>Bắc Ninh, ngày …… tháng …… năm 20……</i><br><b>TRƯỞNG ĐƠN VỊ</b><br><i>(ký và ghi rõ họ tên)</i>
+        <div style="height:40pt"></div>${dots(24)}</td>
+      <td><i>Bắc Ninh, ngày ${esc(q.ngay)||'…… tháng …… năm 20……'}</i><br><b>VIÊN CHỨC TỰ ĐÁNH GIÁ</b><br><i>(ký và ghi rõ họ tên)</i>
+        <div style="height:40pt"></div><b>${esc(i.hoTen.toUpperCase())}</b></td>
+    </tr></table>
+  </div>`;
+}
+
+/* CSS dùng cho tệp in tải về (độc lập với trang) */
+const PRINT_CSS = `
+@page{size:A4;margin:14mm 12mm}
+body{font-family:"Times New Roman",Times,serif;color:#000;font-size:11pt;line-height:1.35;margin:0}
+.pdoc{page-break-after:always}
+.pdoc:last-child{page-break-after:auto}
+tr{page-break-inside:avoid}
+.ph{width:100%;border-collapse:collapse;margin-bottom:6pt}
+.ph td{width:50%;text-align:center;font-size:10.5pt;vertical-align:top;border:0;padding:0}
+h3{text-align:center;font-size:13pt;margin:10pt 0 2pt;text-transform:uppercase}
+.pc{text-align:center;margin:0 0 8pt}
+.pinfo{margin:0 0 7pt}.pinfo div{margin:2pt 0}
+.psec{font-weight:bold;margin:9pt 0 4pt}
+table.pt{width:100%;border-collapse:collapse;font-size:9.5pt}
+table.pt th,table.pt td{border:.6pt solid #000;padding:2.4pt 3.5pt;vertical-align:top}
+table.pt thead th{text-align:center;font-weight:bold}
+table.pt td.c{text-align:center}
+table.pt tr.b td{font-weight:bold}
+.pres{margin-top:8pt}.pres div{margin:3pt 0}
+.psign{width:100%;border-collapse:collapse;margin-top:14pt}
+.psign td{border:0;text-align:center;vertical-align:top;width:50%}
+.psign i{font-size:10pt}
+.pmarks{font-size:10.5pt}
+.wide{font-size:8.5pt}.wide th,.wide td{padding:1.6pt 2.4pt}
+@media screen{body{background:#eef1f5;padding:18px}
+ .pdoc{background:#fff;max-width:200mm;margin:0 auto 18px;padding:16mm 13mm;box-shadow:0 2px 12px rgba(0,0,0,.15)}}
+`;
+function printTitle(list){
+  const i=S.info;
+  const nm=(i.hoTen||'vien-chuc').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-zA-Z0-9]+/g,'-').toLowerCase();
+  return 'danh-gia-'+nm+'-quy-'+list.join('')+'-'+(i.nam||'')+'.html';
+}
+function buildPrintDoc(list){
+  const i=S.info;
+  return '<!DOCTYPE html><html lang="vi"><head><meta charset="utf-8">'+
+    '<title>Phiếu đánh giá viên chức — '+esc(i.hoTen)+' — Quý '+list.join(', ')+'/'+esc(i.nam)+'</title>'+
+    '<style>'+PRINT_CSS+'</style></head><body>'+
+    list.map(qi=>printPhieu(qi)+printBangTheoDoi(qi)).join('')+
+    '</body></html>';
+}
+let previewOpen=null;
+function doPrint(list){
+  if(!list.length){ toast('Chưa có quý nào được nhập dữ liệu.',true); return; }
+  $('#printArea').innerHTML = list.map(qi=>printPhieu(qi)+printBangTheoDoi(qi)).join('');
+  setTimeout(()=>{ window.print(); }, 80);
+}
+function downloadPrintFile(list){
+  if(!list.length){ toast('Chưa có quý nào được nhập dữ liệu.',true); return; }
+  if(saveFile(printTitle(list), buildPrintDoc(list), 'text/html'))
+    toast('Đã tải tệp HTML của phiếu. Mở tệp rồi bấm Ctrl + P để in hoặc lưu PDF.');
+}
+function saveFile(name, data, mime){
+  try{
+    const blob=new Blob([data],{type:mime+';charset=utf-8'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob); a.download=name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+    return true;
+  }catch(e){ toast('Không tải được tệp trên thiết bị này.',true); return false; }
+}
+function showPreview(list){
+  previewOpen=list;
+  render();
+  setTimeout(()=>{ const el=document.getElementById('prevBox'); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); },80);
+}
+function previewPanel(){
+  if(!previewOpen) return '';
+  const list=previewOpen;
+  return `
+  <div class="panel" id="prevBox">
+    <h2>Bản in — Quý ${list.join(', ')}
+      <span class="tagv">Phiếu đánh giá (Mẫu 2) + Bảng theo dõi (Mẫu 3)</span>
+      <span class="spacer"></span>
+      <button class="btn p" id="btnPrintPrev">In / Lưu PDF</button>
+      <button class="btn" id="btnDlPrev">Tải tệp HTML</button>
+      <button class="btn" id="btnClosePrev">Đóng</button>
+    </h2>
+    <div class="pad">
+      <div class="note b">Bản xem trước đúng như trang sẽ in ra giấy A4. Bấm <b>In / Lưu PDF</b> ở trên để in ngay, hoặc <b>Tải tệp HTML</b> nếu cần gửi phiếu cho người khác.</div>
+      <div class="prev">${list.map(qi=>printPhieu(qi)+printBangTheoDoi(qi)).join('')}</div>
+    </div>
+  </div>`;
+}
+
+/* --- toast & hộp thoại xác nhận (thay cho alert/confirm) --- */
+let toastT=null;
+function toast(msg, bad){
+  const el=document.getElementById('toast'); if(!el) return;
+  el.textContent=msg; el.className='on'+(bad?' bad':'');
+  clearTimeout(toastT);
+  toastT=setTimeout(()=>{ el.className=''; }, 4200);
+}
+let modalYes=null;
+function ask(title, body, onYes){
+  document.getElementById('mTitle').textContent=title;
+  document.getElementById('mBody').textContent=body;
+  modalYes=onYes;
+  document.getElementById('modal').classList.add('on');
+}
+function closeModal(){ document.getElementById('modal').classList.remove('on'); modalYes=null; }
+
+/* =========================================================
+   7. ĐIỀU KHIỂN
+   ========================================================= */
+function setPath(path, val){
+  const parts=path.split('.');
+  let o=S;
+  for(let k=0;k<parts.length-1;k++){
+    const p=parts[k];
+    o = Array.isArray(o)? o[Number(p)] : o[p];
+    if(o===undefined) return;
+  }
+  o[parts[parts.length-1]]=val;
+}
+
+function render(){
+  renderTabs();
+  const v=$('#view');
+  let h;
+  if(TAB==='info') h=viewInfo();
+  else if(TAB==='year') h=viewYear();
+  else if(TAB==='help') h=viewHelp();
+  else h=viewQuarter(Number(TAB.slice(1)));
+  v.innerHTML = h + previewPanel();
+  bind();
+}
+
+/* nhập liệu: cập nhật nhẹ (không render lại) để không mất con trỏ,
+   rồi làm mới các ô tính toán bằng cách render lại khi rời ô           */
+function bind(){
+  document.querySelectorAll('[data-path]').forEach(el=>{
+    if(el.type==='checkbox'){
+      el.onchange=()=>{ setPath(el.dataset.path, el.checked); save(); render(); };
+    }else if(el.type==='radio'){
+      el.onchange=()=>{ if(el.checked){ setPath(el.dataset.path, el.dataset.val); save(); render(); } };
+    }else if(el.tagName==='SELECT'){
+      el.onchange=()=>{ setPath(el.dataset.path, el.value); save(); render(); };
+    }else if(el.tagName==='TEXTAREA'){
+      el.oninput=()=>{ setPath(el.dataset.path, el.value); save(); };
+    }else{
+      el.oninput=()=>{ setPath(el.dataset.path, el.value); save(); liveRefresh(); };
+      el.onchange=()=>{ setPath(el.dataset.path, el.value); save(); render(); };
+    }
+  });
+  document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{
+    TAB=b.dataset.tab; previewOpen=null; window.scrollTo(0,0); render(); });
+  document.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{
+    const qi=Number(b.dataset.add);
+    S.q[qi].tasks.push({code:'3.7', name:'', fixed:false, dg:'',ht:'',cm:'',kl:'',td:'',uHt:'',uCm:'',uKl:'',uTd:''});
+    save(); render();
+  });
+  document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
+    const [qi,idx]=b.dataset.del.split(':').map(Number);
+    S.q[qi].tasks.splice(idx,1); save(); render();
+  });
+  document.querySelectorAll('[data-amax]').forEach(b=>b.onclick=()=>{
+    const qi=Number(b.dataset.amax);
+    CRIT_A.filter(r=>r.t==='in').forEach(r=>S.q[qi].critA[r.id]=String(r.max));
+    save(); render();
+  });
+  document.querySelectorAll('[data-aclr]').forEach(b=>b.onclick=()=>{
+    const qi=Number(b.dataset.aclr);
+    A_IDS.forEach(id=>S.q[qi].critA[id]=''); save(); render();
+  });
+  const bp=$('#btnPrint'); if(bp) bp.onclick=()=>doPrint([Number(TAB.slice(1))]);
+  const bv=$('#btnPreview'); if(bv) bv.onclick=()=>showPreview([Number(TAB.slice(1))]);
+  const bd=$('#btnDownload'); if(bd) bd.onclick=()=>downloadPrintFile([Number(TAB.slice(1))]);
+  const by=$('#btnPrintYear'); if(by) by.onclick=()=>doPrint(QS.filter(q=>calcQuarter(q).hasData));
+  const bb=$('#btnBackup'); if(bb) bb.onclick=backup;
+  const br=$('#btnRestore'); if(br) br.onclick=()=>$('#fileIn').click();
+  const fi=$('#fileIn'); if(fi) fi.onchange=restore;
+  const bx=$('#btnReset'); if(bx) bx.onclick=()=>ask('Xóa toàn bộ dữ liệu?',
+    'Toàn bộ số liệu 4 quý đã nhập sẽ bị xóa. Hãy bấm Sao lưu dữ liệu trước nếu thầy/cô còn cần.',
+    ()=>{ S=blankState(); save(); TAB='info'; previewOpen=null; render(); toast('Đã xóa toàn bộ dữ liệu.'); });
+  const bc=$('#btnClosePrev'); if(bc) bc.onclick=()=>{ previewOpen=null; render(); };
+  const bpp=$('#btnPrintPrev'); if(bpp) bpp.onclick=()=>doPrint(previewOpen);
+  const bdp=$('#btnDlPrev'); if(bdp) bdp.onclick=()=>downloadPrintFile(previewOpen);
+  const bi=$('#btnInstall'); if(bi) bi.onclick=installApp;
+  stamp();
+}
+
+/* cập nhật nhanh các ô điểm trong lúc đang gõ */
+function liveRefresh(){
+  if(!/^q\d$/.test(TAB)) return;
+  const qi=Number(TAB.slice(1)), c=calcQuarter(qi);
+  const outs=document.querySelectorAll('#view table.t tbody .cell-out');
+  let k=0;
+  c.tr.rows.forEach(r=>{
+    [r.sl,r.cl,r.td,r.uSl,r.uCl,r.uTd].forEach(v=>{
+      const el=outs[k++]; if(!el) return;
+      if(v===null){ el.textContent='–'; el.className='cell-out empty'; }
+      else { el.textContent=fmt(v,1); el.className='cell-out'; }
+    });
+  });
+}
+
+function backup(){
+  const data=JSON.stringify(S,null,2);
+  const nm=(S.info.hoTen||'vien-chuc').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]+/g,'-').toLowerCase();
+  const fn='danh-gia-'+nm+'-'+(S.info.nam||'')+'.json';
+  if(saveFile(fn, data, 'application/json')) toast('Đã tải tệp sao lưu '+fn);
+}
+function restore(e){
+  const f=e.target.files&&e.target.files[0]; if(!f) return;
+  const rd=new FileReader();
+  rd.onload=()=>{
+    try{
+      const o=JSON.parse(String(rd.result));
+      if(!o||!o.info||!o.q) throw 0;
+      S=migrate(o); save(); TAB='info'; previewOpen=null; render();
+      toast('Đã phục hồi dữ liệu từ tệp sao lưu.');
+    }catch(err){ toast('Tệp không đúng định dạng sao lưu của phần mềm.',true); }
+  };
+  rd.readAsText(f);
+  e.target.value='';
+}
+
+/* đổi khối nhiệm vụ → dựng lại danh mục cho các quý chưa nhập */
+let lastKhoi=null;
+function watchKhoi(){
+  if(lastKhoi===null){ lastKhoi=S.info.khoi; return; }
+  if(lastKhoi!==S.info.khoi){
+    QS.forEach(q=>{
+      const t=S.q[q].tasks;
+      const touched=t.some(x=>x.dg!==''||x.ht!==''||x.cm!==''||x.kl!==''||x.td!=='');
+      if(!touched) S.q[q].tasks=blankTasks(S.info.khoi);
+    });
+    lastKhoi=S.info.khoi; save();
+  }
+}
+const _render=render;
+render=function(){ watchKhoi(); _render(); };
+
+/* --- cài làm ứng dụng trên thiết bị (PWA) --- */
+let installEvt=null;
+window.addEventListener('beforeinstallprompt', e=>{
+  e.preventDefault(); installEvt=e;
+  const b=document.getElementById('btnInstall'); if(b) b.style.display='';
+});
+async function installApp(){
+  if(!installEvt){
+    toast('Trên iPhone/iPad: bấm nút Chia sẻ của Safari rồi chọn “Thêm vào MH chính”.');
+    return;
+  }
+  installEvt.prompt();
+  try{ await installEvt.userChoice; }catch(e){}
+  installEvt=null;
+  const b=document.getElementById('btnInstall'); if(b) b.style.display='none';
+}
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+
+document.getElementById('mNo').onclick=closeModal;
+document.getElementById('mYes').onclick=()=>{ const f=modalYes; closeModal(); if(f) f(); };
+document.getElementById('modal').onclick=e=>{ if(e.target.id==='modal') closeModal(); };
+
+initStore();
+</script>
+</body>
+</html>
